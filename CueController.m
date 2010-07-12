@@ -32,6 +32,7 @@ CueController * cueController;
 	[cueTable registerForDraggedTypes:[NSArray arrayWithObjects:DemoItemsDropType, nil]];
 	cueController = self;
 	
+	
 }
 
 - (NSArray*) selectedCues{

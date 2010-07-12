@@ -19,8 +19,10 @@
 @property (nonatomic, retain) NSSet* addresses;
 
 @property (retain) NSArray * addressesToken;
+@property (readonly, retain) NSString * fullName;
 
 -(DevicePropertyModel*) getProperty:(NSString*)name;
+-(NSString*) fullName;
 
 @end
 

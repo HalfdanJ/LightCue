@@ -11,8 +11,8 @@
 			<string key="com.brandonwalkin.BWToolkit">1.2.5</string>
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="100428"/>
 			<integer value="100203"/>
+			<integer value="100426"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -541,6 +541,7 @@
 																	<int key="NSsFlags">1</int>
 																	<reference key="NSTarget" ref="793987195"/>
 																	<string key="NSAction">_doScroller:</string>
+																	<double key="NSCurValue">0.0012804097311139564</double>
 																	<double key="NSPercent">0.99872122762148341</double>
 																</object>
 																<object class="NSClipView" id="472738686">
@@ -628,7 +629,6 @@
 																							</object>
 																							<int key="NSResizingMask">3</int>
 																							<bool key="NSIsResizeable">YES</bool>
-																							<bool key="NSIsEditable">YES</bool>
 																							<reference key="NSTableView" ref="758272248"/>
 																						</object>
 																					</array>
@@ -2507,9 +2507,11 @@ A</bytes>
 			<object class="NSCustomObject" id="107634021">
 				<string key="NSClassName">CueController</string>
 			</object>
-			<object class="NSArrayController" id="567965754">
+			<object class="NSArrayController" id="231269386">
 				<array class="NSMutableArray" key="NSDeclaredKeys">
 					<string>device.name</string>
+					<string>device.deviceNumber</string>
+					<string>device.fullName</string>
 				</array>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -3147,6 +3149,58 @@ A</bytes>
 						</object>
 					</object>
 					<int key="connectionID">100657</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">managedObjectContext: managedObjectContext</string>
+						<reference key="source" ref="231269386"/>
+						<reference key="destination" ref="488872867"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="231269386"/>
+							<reference key="NSDestination" ref="488872867"/>
+							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSBinding">managedObjectContext</string>
+							<string key="NSKeyPath">managedObjectContext</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100668</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentSet: selection.deviceRelations</string>
+						<reference key="source" ref="231269386"/>
+						<reference key="destination" ref="565582112"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="231269386"/>
+							<reference key="NSDestination" ref="565582112"/>
+							<string key="NSLabel">contentSet: selection.deviceRelations</string>
+							<string key="NSBinding">contentSet</string>
+							<string key="NSKeyPath">selection.deviceRelations</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100680</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.device.fullName</string>
+						<reference key="source" ref="98368723"/>
+						<reference key="destination" ref="231269386"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="98368723"/>
+							<reference key="NSDestination" ref="231269386"/>
+							<string key="NSLabel">value: arrangedObjects.device.fullName</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.device.fullName</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSConditionallySetsEditable</string>
+								<boolean value="YES" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100682</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4206,7 +4260,7 @@ A</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100658</int>
-						<reference key="object" ref="567965754"/>
+						<reference key="object" ref="231269386"/>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">CueDeviceRelation Array Controller</string>
 					</object>
@@ -4279,9 +4333,9 @@ A</bytes>
 				<string key="100162.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100163.IBEditorWindowLastContentRect">{{329, 1038}, {50, 50}}</string>
 				<string key="100163.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100202.IBEditorWindowLastContentRect">{{385, 138}, {708, 549}}</string>
+				<string key="100202.IBEditorWindowLastContentRect">{{385, 193}, {708, 549}}</string>
 				<string key="100202.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100202.IBWindowTemplateEditedContentRect">{{385, 138}, {708, 549}}</string>
+				<string key="100202.IBWindowTemplateEditedContentRect">{{385, 193}, {708, 549}}</string>
 				<boolean value="NO" key="100202.NSWindowTemplate.visibleAtLaunch"/>
 				<string key="100203.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100204.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4434,9 +4488,9 @@ A</bytes>
 				<string key="100637.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100639.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100658.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBEditorWindowLastContentRect">{{330, 102}, {1110, 754}}</string>
+				<string key="5.IBEditorWindowLastContentRect">{{508, 184}, {1110, 754}}</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBWindowTemplateEditedContentRect">{{330, 102}, {1110, 754}}</string>
+				<string key="5.IBWindowTemplateEditedContentRect">{{508, 184}, {1110, 754}}</string>
 				<integer value="1" key="5.ImportedFromIB2"/>
 				<integer value="1" key="5.windowTemplate.hasMinSize"/>
 				<string key="5.windowTemplate.minSize">{131.131, 86}</string>
@@ -4447,7 +4501,7 @@ A</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">100665</int>
+			<int key="maxID">100682</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

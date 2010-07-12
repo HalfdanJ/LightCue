@@ -51,6 +51,16 @@
 	return _dimmerStore;
 }
 
+-(NSString*) fullName{
+	NSString * ret;
+	if([[self valueForKey:@"name"] length] == 0){
+		ret = [NSString stringWithFormat:@"%@",[self valueForKey:@"deviceNumber"]];
+	} else {
+		ret = [NSString stringWithFormat:@"%@: %@",[self valueForKey:@"deviceNumber"],[self valueForKey:@"name"]];	
+	}
+	return ret;
+}
+
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 }
 
