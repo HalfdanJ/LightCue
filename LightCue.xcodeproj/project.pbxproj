@@ -1,0 +1,537 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2F7446AB0DB6BCF400F9684A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7446A70DB6BCF400F9684A /* MainMenu.xib */; };
+		2F7446AC0DB6BCF400F9684A /* ShowDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7446A90DB6BCF400F9684A /* ShowDocument.xib */; };
+		775BDEF1067A8BF0009058FE /* ShowDocument.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 775BDEF0067A8BF0009058FE /* ShowDocument.xcdatamodel */; };
+		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
+		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		8D15AC310486D014006FF6A4 /* ShowDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		DD009C4911C97AE60011552A /* ThemedScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = DD009C4811C97AE60011552A /* ThemedScroller.m */; };
+		DD009C6111C97CDB0011552A /* TransparentScrollerKnobBottom.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5511C97CDB0011552A /* TransparentScrollerKnobBottom.tif */; };
+		DD009C6211C97CDB0011552A /* TransparentScrollerKnobHorizontalFill.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5611C97CDB0011552A /* TransparentScrollerKnobHorizontalFill.tif */; };
+		DD009C6311C97CDB0011552A /* TransparentScrollerKnobLeft.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5711C97CDB0011552A /* TransparentScrollerKnobLeft.tif */; };
+		DD009C6411C97CDB0011552A /* TransparentScrollerKnobRight.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5811C97CDB0011552A /* TransparentScrollerKnobRight.tif */; };
+		DD009C6511C97CDB0011552A /* TransparentScrollerKnobTop.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5911C97CDB0011552A /* TransparentScrollerKnobTop.tif */; };
+		DD009C6611C97CDB0011552A /* TransparentScrollerKnobVerticalFill.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5A11C97CDB0011552A /* TransparentScrollerKnobVerticalFill.tif */; };
+		DD009C6711C97CDB0011552A /* TransparentScrollerSlotBottom.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5B11C97CDB0011552A /* TransparentScrollerSlotBottom.tif */; };
+		DD009C6811C97CDB0011552A /* TransparentScrollerSlotHorizontalFill.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5C11C97CDB0011552A /* TransparentScrollerSlotHorizontalFill.tif */; };
+		DD009C6911C97CDB0011552A /* TransparentScrollerSlotLeft.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5D11C97CDB0011552A /* TransparentScrollerSlotLeft.tif */; };
+		DD009C6A11C97CDB0011552A /* TransparentScrollerSlotRight.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5E11C97CDB0011552A /* TransparentScrollerSlotRight.tif */; };
+		DD009C6B11C97CDB0011552A /* TransparentScrollerSlotTop.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5F11C97CDB0011552A /* TransparentScrollerSlotTop.tif */; };
+		DD009C6C11C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C6011C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif */; };
+		DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1861A011E65095008B4F27 /* CueTimeCell.m */; };
+		DD18642011E73700008B4F27 /* CueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18641F11E73700008B4F27 /* CueModel.m */; };
+		DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2E85D011C572EF00B3EFF3 /* CueTableView.m */; };
+		DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
+		DDA7030611C2764100132DB5 /* BWToolkitFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
+		DDA7031A11C276C200132DB5 /* DeviceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7031911C276C200132DB5 /* DeviceView.m */; };
+		DDA7031F11C276D200132DB5 /* GroupsCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7031C11C276D200132DB5 /* GroupsCollectionView.m */; };
+		DDA7032011C276D200132DB5 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7031E11C276D200132DB5 /* GroupView.m */; };
+		DDA7032611C276F300132DB5 /* SelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7032311C276F300132DB5 /* SelectionController.m */; };
+		DDA7032711C276F300132DB5 /* DimmerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7032511C276F300132DB5 /* DimmerView.m */; };
+		DDA703A111C27E9100132DB5 /* DeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA703A011C27E9100132DB5 /* DeviceModel.m */; };
+		DDA703A411C27EA300132DB5 /* DeviceGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA703A311C27EA300132DB5 /* DeviceGroupModel.m */; };
+		DDA7043711C2829200132DB5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7043611C2829200132DB5 /* ViewController.m */; };
+		DDA7051611C28C2100132DB5 /* DevicesController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7051511C28C2100132DB5 /* DevicesController.m */; };
+		DDA7055811C2908C00132DB5 /* DevicePropertyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */; };
+		DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */; };
+		DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC035A811CBD49B005EBCC6 /* CueController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DDA7030D11C2764800132DB5 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DDA7030611C2764100132DB5 /* BWToolkitFramework.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowDocument.m; sourceTree = "<group>"; };
+		2A37F4AEFDCFA73011CA2CEA /* ShowDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowDocument.h; sourceTree = "<group>"; };
+		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		2F7446A80DB6BCF400F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		2F7446AA0DB6BCF400F9684A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ShowDocument.xib; sourceTree = "<group>"; };
+		32DBCF750370BD2300C91783 /* LightCue_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightCue_Prefix.pch; sourceTree = "<group>"; };
+		775BDEF0067A8BF0009058FE /* ShowDocument.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = ShowDocument.xcdatamodel; sourceTree = "<group>"; };
+		7788DA0506752A1600599AAD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		8D15AC360486D014006FF6A4 /* LightCue-Info.plist */ = {isa = PBXFileReference; explicitFileType = text.plist.xml; fileEncoding = 4; path = "LightCue-Info.plist"; sourceTree = "<group>"; };
+		8D15AC370486D014006FF6A4 /* LightCue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightCue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD009C4711C97AE60011552A /* ThemedScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemedScroller.h; sourceTree = "<group>"; };
+		DD009C4811C97AE60011552A /* ThemedScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemedScroller.m; sourceTree = "<group>"; };
+		DD009C5511C97CDB0011552A /* TransparentScrollerKnobBottom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobBottom.tif; path = Resources/TransparentScrollerKnobBottom.tif; sourceTree = "<group>"; };
+		DD009C5611C97CDB0011552A /* TransparentScrollerKnobHorizontalFill.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobHorizontalFill.tif; path = Resources/TransparentScrollerKnobHorizontalFill.tif; sourceTree = "<group>"; };
+		DD009C5711C97CDB0011552A /* TransparentScrollerKnobLeft.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobLeft.tif; path = Resources/TransparentScrollerKnobLeft.tif; sourceTree = "<group>"; };
+		DD009C5811C97CDB0011552A /* TransparentScrollerKnobRight.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobRight.tif; path = Resources/TransparentScrollerKnobRight.tif; sourceTree = "<group>"; };
+		DD009C5911C97CDB0011552A /* TransparentScrollerKnobTop.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobTop.tif; path = Resources/TransparentScrollerKnobTop.tif; sourceTree = "<group>"; };
+		DD009C5A11C97CDB0011552A /* TransparentScrollerKnobVerticalFill.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerKnobVerticalFill.tif; path = Resources/TransparentScrollerKnobVerticalFill.tif; sourceTree = "<group>"; };
+		DD009C5B11C97CDB0011552A /* TransparentScrollerSlotBottom.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotBottom.tif; path = Resources/TransparentScrollerSlotBottom.tif; sourceTree = "<group>"; };
+		DD009C5C11C97CDB0011552A /* TransparentScrollerSlotHorizontalFill.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotHorizontalFill.tif; path = Resources/TransparentScrollerSlotHorizontalFill.tif; sourceTree = "<group>"; };
+		DD009C5D11C97CDB0011552A /* TransparentScrollerSlotLeft.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotLeft.tif; path = Resources/TransparentScrollerSlotLeft.tif; sourceTree = "<group>"; };
+		DD009C5E11C97CDB0011552A /* TransparentScrollerSlotRight.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotRight.tif; path = Resources/TransparentScrollerSlotRight.tif; sourceTree = "<group>"; };
+		DD009C5F11C97CDB0011552A /* TransparentScrollerSlotTop.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotTop.tif; path = Resources/TransparentScrollerSlotTop.tif; sourceTree = "<group>"; };
+		DD009C6011C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotVerticalFill.tif; path = Resources/TransparentScrollerSlotVerticalFill.tif; sourceTree = "<group>"; };
+		DD18619F11E65095008B4F27 /* CueTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTimeCell.h; sourceTree = "<group>"; };
+		DD1861A011E65095008B4F27 /* CueTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTimeCell.m; sourceTree = "<group>"; };
+		DD18641E11E73700008B4F27 /* CueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueModel.h; sourceTree = "<group>"; };
+		DD18641F11E73700008B4F27 /* CueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueModel.m; sourceTree = "<group>"; };
+		DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableView.h; sourceTree = "<group>"; };
+		DD2E85D011C572EF00B3EFF3 /* CueTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableView.m; sourceTree = "<group>"; };
+		DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BWToolkitFramework.framework; sourceTree = "<group>"; };
+		DDA7031811C276C200132DB5 /* DeviceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceView.h; sourceTree = "<group>"; };
+		DDA7031911C276C200132DB5 /* DeviceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceView.m; sourceTree = "<group>"; };
+		DDA7031B11C276D100132DB5 /* GroupsCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsCollectionView.h; sourceTree = "<group>"; };
+		DDA7031C11C276D200132DB5 /* GroupsCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsCollectionView.m; sourceTree = "<group>"; };
+		DDA7031D11C276D200132DB5 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
+		DDA7031E11C276D200132DB5 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
+		DDA7032211C276F300132DB5 /* SelectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionController.h; sourceTree = "<group>"; };
+		DDA7032311C276F300132DB5 /* SelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionController.m; sourceTree = "<group>"; };
+		DDA7032411C276F300132DB5 /* DimmerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DimmerView.h; sourceTree = "<group>"; };
+		DDA7032511C276F300132DB5 /* DimmerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DimmerView.m; sourceTree = "<group>"; };
+		DDA7039F11C27E9100132DB5 /* DeviceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceModel.h; sourceTree = "<group>"; };
+		DDA703A011C27E9100132DB5 /* DeviceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceModel.m; sourceTree = "<group>"; };
+		DDA703A211C27EA300132DB5 /* DeviceGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceGroupModel.h; sourceTree = "<group>"; };
+		DDA703A311C27EA300132DB5 /* DeviceGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceGroupModel.m; sourceTree = "<group>"; };
+		DDA7043511C2829200132DB5 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		DDA7043611C2829200132DB5 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		DDA7051411C28C2000132DB5 /* DevicesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesController.h; sourceTree = "<group>"; };
+		DDA7051511C28C2100132DB5 /* DevicesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesController.m; sourceTree = "<group>"; };
+		DDA7055611C2908C00132DB5 /* DevicePropertyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicePropertyModel.h; sourceTree = "<group>"; };
+		DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicePropertyModel.m; sourceTree = "<group>"; };
+		DDA7058A11C2946200132DB5 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
+		DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeFormatter.m; sourceTree = "<group>"; };
+		DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFormatter.h; sourceTree = "<group>"; };
+		DDC035A711CBD49B005EBCC6 /* CueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueController.h; sourceTree = "<group>"; };
+		DDC035A811CBD49B005EBCC6 /* CueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D15AC330486D014006FF6A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
+				DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
+				7788DA0506752A1600599AAD /* CoreData.framework */,
+				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB0FE9D524F11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D15AC370486D014006FF6A4 /* LightCue.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A37F4AAFDCFA73011CA2CEA /* LightCue */ = {
+			isa = PBXGroup;
+			children = (
+				E1B74B1A0667B4A90069E3BA /* Models */,
+				2A37F4ABFDCFA73011CA2CEA /* Classes */,
+				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
+				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
+				19C28FB0FE9D524F11CA2CBB /* Products */,
+			);
+			name = LightCue;
+			sourceTree = "<group>";
+		};
+		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4AEFDCFA73011CA2CEA /* ShowDocument.h */,
+				2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */,
+				DDA7043511C2829200132DB5 /* ViewController.h */,
+				DDA7043611C2829200132DB5 /* ViewController.m */,
+				DDA7051411C28C2000132DB5 /* DevicesController.h */,
+				DDA7051511C28C2100132DB5 /* DevicesController.m */,
+				DD18641C11E736D1008B4F27 /* Cue */,
+				DDA7031711C276B800132DB5 /* DeviceGroup */,
+				DDA7031611C276B000132DB5 /* Device */,
+				DDA7032111C276F300132DB5 /* Operation */,
+				DDA7058A11C2946200132DB5 /* Helper.h */,
+				DD009C4711C97AE60011552A /* ThemedScroller.h */,
+				DD009C4811C97AE60011552A /* ThemedScroller.m */,
+				DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */,
+				DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF750370BD2300C91783 /* LightCue_Prefix.pch */,
+				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD009C5411C97CD30011552A /* Scroller */,
+				2F7446A70DB6BCF400F9684A /* MainMenu.xib */,
+				2F7446A90DB6BCF400F9684A /* ShowDocument.xib */,
+				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
+				8D15AC360486D014006FF6A4 /* LightCue-Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */,
+				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
+				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD009C5411C97CD30011552A /* Scroller */ = {
+			isa = PBXGroup;
+			children = (
+				DD009C5511C97CDB0011552A /* TransparentScrollerKnobBottom.tif */,
+				DD009C5611C97CDB0011552A /* TransparentScrollerKnobHorizontalFill.tif */,
+				DD009C5711C97CDB0011552A /* TransparentScrollerKnobLeft.tif */,
+				DD009C5811C97CDB0011552A /* TransparentScrollerKnobRight.tif */,
+				DD009C5911C97CDB0011552A /* TransparentScrollerKnobTop.tif */,
+				DD009C5A11C97CDB0011552A /* TransparentScrollerKnobVerticalFill.tif */,
+				DD009C5B11C97CDB0011552A /* TransparentScrollerSlotBottom.tif */,
+				DD009C5C11C97CDB0011552A /* TransparentScrollerSlotHorizontalFill.tif */,
+				DD009C5D11C97CDB0011552A /* TransparentScrollerSlotLeft.tif */,
+				DD009C5E11C97CDB0011552A /* TransparentScrollerSlotRight.tif */,
+				DD009C5F11C97CDB0011552A /* TransparentScrollerSlotTop.tif */,
+				DD009C6011C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif */,
+			);
+			name = Scroller;
+			sourceTree = "<group>";
+		};
+		DD18641C11E736D1008B4F27 /* Cue */ = {
+			isa = PBXGroup;
+			children = (
+				DDC035A711CBD49B005EBCC6 /* CueController.h */,
+				DDC035A811CBD49B005EBCC6 /* CueController.m */,
+				DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */,
+				DD2E85D011C572EF00B3EFF3 /* CueTableView.m */,
+				DD18619F11E65095008B4F27 /* CueTimeCell.h */,
+				DD1861A011E65095008B4F27 /* CueTimeCell.m */,
+				DD18641E11E73700008B4F27 /* CueModel.h */,
+				DD18641F11E73700008B4F27 /* CueModel.m */,
+			);
+			name = Cue;
+			sourceTree = "<group>";
+		};
+		DDA7031611C276B000132DB5 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				DDA7031811C276C200132DB5 /* DeviceView.h */,
+				DDA7031911C276C200132DB5 /* DeviceView.m */,
+				DDA7039F11C27E9100132DB5 /* DeviceModel.h */,
+				DDA703A011C27E9100132DB5 /* DeviceModel.m */,
+				DDA7055611C2908C00132DB5 /* DevicePropertyModel.h */,
+				DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */,
+			);
+			name = Device;
+			sourceTree = "<group>";
+		};
+		DDA7031711C276B800132DB5 /* DeviceGroup */ = {
+			isa = PBXGroup;
+			children = (
+				DDA7031B11C276D100132DB5 /* GroupsCollectionView.h */,
+				DDA7031C11C276D200132DB5 /* GroupsCollectionView.m */,
+				DDA7031D11C276D200132DB5 /* GroupView.h */,
+				DDA7031E11C276D200132DB5 /* GroupView.m */,
+				DDA703A211C27EA300132DB5 /* DeviceGroupModel.h */,
+				DDA703A311C27EA300132DB5 /* DeviceGroupModel.m */,
+			);
+			name = DeviceGroup;
+			sourceTree = "<group>";
+		};
+		DDA7032111C276F300132DB5 /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				DDA7032211C276F300132DB5 /* SelectionController.h */,
+				DDA7032311C276F300132DB5 /* SelectionController.m */,
+				DDA7032411C276F300132DB5 /* DimmerView.h */,
+				DDA7032511C276F300132DB5 /* DimmerView.m */,
+			);
+			name = Operation;
+			sourceTree = "<group>";
+		};
+		E1B74B1A0667B4A90069E3BA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				775BDEF0067A8BF0009058FE /* ShowDocument.xcdatamodel */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D15AC270486D014006FF6A4 /* LightCue */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26FC0AA50875C8B900E6366F /* Build configuration list for PBXNativeTarget "LightCue" */;
+			buildPhases = (
+				8D15AC2B0486D014006FF6A4 /* Resources */,
+				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC330486D014006FF6A4 /* Frameworks */,
+				DDA7030D11C2764800132DB5 /* Copy Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LightCue;
+			productInstallPath = "$(HOME)/Applications";
+			productName = LightCue;
+			productReference = 8D15AC370486D014006FF6A4 /* LightCue.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "LightCue" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LightCue */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D15AC270486D014006FF6A4 /* LightCue */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D15AC2B0486D014006FF6A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
+				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				2F7446AB0DB6BCF400F9684A /* MainMenu.xib in Resources */,
+				2F7446AC0DB6BCF400F9684A /* ShowDocument.xib in Resources */,
+				DD009C6111C97CDB0011552A /* TransparentScrollerKnobBottom.tif in Resources */,
+				DD009C6211C97CDB0011552A /* TransparentScrollerKnobHorizontalFill.tif in Resources */,
+				DD009C6311C97CDB0011552A /* TransparentScrollerKnobLeft.tif in Resources */,
+				DD009C6411C97CDB0011552A /* TransparentScrollerKnobRight.tif in Resources */,
+				DD009C6511C97CDB0011552A /* TransparentScrollerKnobTop.tif in Resources */,
+				DD009C6611C97CDB0011552A /* TransparentScrollerKnobVerticalFill.tif in Resources */,
+				DD009C6711C97CDB0011552A /* TransparentScrollerSlotBottom.tif in Resources */,
+				DD009C6811C97CDB0011552A /* TransparentScrollerSlotHorizontalFill.tif in Resources */,
+				DD009C6911C97CDB0011552A /* TransparentScrollerSlotLeft.tif in Resources */,
+				DD009C6A11C97CDB0011552A /* TransparentScrollerSlotRight.tif in Resources */,
+				DD009C6B11C97CDB0011552A /* TransparentScrollerSlotTop.tif in Resources */,
+				DD009C6C11C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D15AC300486D014006FF6A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC310486D014006FF6A4 /* ShowDocument.m in Sources */,
+				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+				775BDEF1067A8BF0009058FE /* ShowDocument.xcdatamodel in Sources */,
+				DDA7031A11C276C200132DB5 /* DeviceView.m in Sources */,
+				DDA7031F11C276D200132DB5 /* GroupsCollectionView.m in Sources */,
+				DDA7032011C276D200132DB5 /* GroupView.m in Sources */,
+				DDA7032611C276F300132DB5 /* SelectionController.m in Sources */,
+				DDA7032711C276F300132DB5 /* DimmerView.m in Sources */,
+				DDA703A111C27E9100132DB5 /* DeviceModel.m in Sources */,
+				DDA703A411C27EA300132DB5 /* DeviceGroupModel.m in Sources */,
+				DDA7043711C2829200132DB5 /* ViewController.m in Sources */,
+				DDA7051611C28C2100132DB5 /* DevicesController.m in Sources */,
+				DDA7055811C2908C00132DB5 /* DevicePropertyModel.m in Sources */,
+				DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */,
+				DD009C4911C97AE60011552A /* ThemedScroller.m in Sources */,
+				DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */,
+				DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */,
+				DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */,
+				DD18642011E73700008B4F27 /* CueModel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1660FE840EACC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A37F4BAFDCFA73011CA2CEA /* English */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		2F7446A70DB6BCF400F9684A /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F7446A80DB6BCF400F9684A /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		2F7446A90DB6BCF400F9684A /* ShowDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2F7446AA0DB6BCF400F9684A /* English */,
+			);
+			name = ShowDocument.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		26FC0AA60875C8B900E6366F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LightCue_Prefix.pch;
+				INFOPLIST_FILE = "LightCue-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = LightCue;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		26FC0AA70875C8B900E6366F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = LightCue_Prefix.pch;
+				INFOPLIST_FILE = "LightCue-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = LightCue;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		26FC0AAA0875C8B900E6366F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		26FC0AAB0875C8B900E6366F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		26FC0AA50875C8B900E6366F /* Build configuration list for PBXNativeTarget "LightCue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26FC0AA60875C8B900E6366F /* Debug */,
+				26FC0AA70875C8B900E6366F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "LightCue" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26FC0AAA0875C8B900E6366F /* Debug */,
+				26FC0AAB0875C8B900E6366F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+}
