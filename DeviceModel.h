@@ -8,10 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class CueModel;
 @class DevicePropertyModel;
 
 @interface DeviceModel : NSManagedObject {
 	DevicePropertyModel * _dimmerStore;
+	
+	//For easy binding, simply a link to the selected cue in the cue list
+	CueModel * selectedCue;
 }
 @property (nonatomic, retain) NSSet* properties;
 @property (nonatomic, retain) NSNumber * deviceNumber;
@@ -20,15 +24,22 @@
 
 @property (retain) NSArray * addressesToken;
 @property (readonly, retain) NSString * fullName;
+@property (readwrite, retain) CueModel * selectedCue;
+@property (readonly) BOOL propertySetInSelectedCue;
+
 
 -(DevicePropertyModel*) getProperty:(NSString*)name;
 -(NSString*) fullName;
+-(DevicePropertyModel *) dimmer;
+-(void) clearDimmer;
+
+- (BOOL) propertySetInCue:(CueModel*)cue;
 
 @end
 
 
 
-// coalesce these into one @interface DeviceModel (CoreDataGeneratedAccessors) section
+
 @interface DeviceModel (CoreDataGeneratedAccessors)
 - (void)addPropertiesObject:(NSManagedObject *)value;
 - (void)removePropertiesObject:(NSManagedObject *)value;

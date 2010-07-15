@@ -17,6 +17,8 @@
 	IBOutlet NSArrayController * devicesArrayController;
 	IBOutlet NSArrayController * groupsArrayController;
 	
+	IBOutlet NSArrayController * cueArrayController;
+	
 	BOOL silentClear; //internal usage
 }
 

@@ -9,6 +9,7 @@
 #import "CueController.h"
 #include "CueTimeCell.h"
 #include "CueModel.h"
+#import "DevicePropertyModel.h"
 
 NSString *DemoItemsDropType = @"CueDropType";
 
@@ -32,12 +33,73 @@ CueController * cueController;
 	[cueTable registerForDraggedTypes:[NSArray arrayWithObjects:DemoItemsDropType, nil]];
 	cueController = self;
 	
+	[NSEvent addLocalMonitorForEventsMatchingMask:(NSKeyDownMask) handler:^(NSEvent *incomingEvent) {
+        NSEvent *result = incomingEvent;
+//		NSLog(@"Events: %@",incomingEvent);
+		
+		//Escape
+		if([incomingEvent keyCode] == 53){
+			[self stop:self];
+		}
+		return result;
+
+	}];
+	
+}
+
+	 
+
+- (IBAction)go:(id)sender{
+	[self applyPropertiesForCue:[self cueBeforeCue:[[self selectedCues] lastObject]]];
+	
+	[[[cueArrayController selectedObjects] lastObject] go];
+	[cueArrayController selectNext:self];
+}
+
+- (IBAction)stop:(id)sender{
+	for(CueModel * cue in [cueArrayController arrangedObjects]){
+		[cue stop];
+	}
+}
+
+-(void) applyPropertiesForCue:(CueModel *)cue{
+	NSManagedObjectContext *moc = [document managedObjectContext];
+	NSEntityDescription *entityDescription = [NSEntityDescription
+											  entityForName:@"DeviceProperty" inManagedObjectContext:moc];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	[request setEntity:entityDescription];
+	
+	NSError *error;
+	NSArray *array = [moc executeFetchRequest:request error:&error];
+	if (array == nil)
+	{
+	}	
+	for(DevicePropertyModel * prop in array){
+		NSNumber * val = [prop valueInCue:cue];
+		[prop setValue:val forKey:@"outputValue"];
+	}
 	
 }
 
 - (NSArray*) selectedCues{
 	return [cueArrayController selectedObjects];
 }
+
+- (CueModel*)cueBeforeCue:(CueModel*)cue{
+	int index = [[cueArrayController arrangedObjects] indexOfObject:cue];
+	if(index > 0)
+		return [[cueArrayController arrangedObjects] objectAtIndex:index-1];
+	else 
+		return nil;
+}
+- (CueModel*)cueAfterCue:(CueModel*)cue{
+	int index = [[cueArrayController arrangedObjects] indexOfObject:cue];
+	if(index < [[cueArrayController arrangedObjects] count] - 1)
+		return [[cueArrayController arrangedObjects] objectAtIndex:index+1];
+	else 
+		return nil;	
+}
+
 
 
 - (IBAction)addNewItem:(id)sender
@@ -72,6 +134,10 @@ CueController * cueController;
 		_sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lineNumber" ascending:YES]];
 	}
 	return _sortDescriptors;
+}
+
+- (NSArrayController *) cueArrayController{
+	return cueArrayController;
 }
 
 
@@ -167,6 +233,7 @@ CueController * cueController;
 
 
 #pragma mark TableController
+
 -(CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row{
 	return 20;	
 }
@@ -177,14 +244,22 @@ CueController * cueController;
 		if ([[aTableColumn identifier] isEqualToString:@"preWait"] || [[aTableColumn identifier] isEqualToString:@"postWait"] || [[aTableColumn identifier] isEqualToString:@"fadeTime"] || [[aTableColumn identifier] isEqualToString:@"fadeDownTime"]) {
 			
 //			if([[aTableColumn identifier] isEqualToString:@"preWait"])
+			CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
+
 			{
-				CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
 				[aCell setRunning:([[cue valueForKey:[NSString stringWithFormat:@"%@RunningTime",[aTableColumn identifier]]] doubleValue] > 0)?YES:NO];
 				[aCell setRunningTime:[[cue valueForKey:[NSString stringWithFormat:@"%@RunningTime",[aTableColumn identifier]]] doubleValue]];
 				[aCell setTotalTime:[[cue valueForKey:[aTableColumn identifier]] doubleValue]];
 			}
 			
-			if ([[aCell objectValue] floatValue] > 0) { // if it is YES
+			if( [[aTableColumn identifier] isEqualToString:@"fadeDownTime"]){
+				if([[aCell objectValue] floatValue] == [[cue valueForKey:@"fadeTime"] floatValue]){
+					[aCell setTextColor:[[NSColor whiteColor] colorWithAlphaComponent:0.6]];
+				} else {
+					[aCell setTextColor:[NSColor whiteColor]];			
+				}
+			}
+			else if ([[aCell objectValue] floatValue] > 0) { // if it is YES
 				[aCell setTextColor:[NSColor whiteColor]];			
 			} else {
 				[aCell setTextColor:[[NSColor whiteColor] colorWithAlphaComponent:0.6]];
@@ -197,6 +272,8 @@ CueController * cueController;
 			[aCell setTextColor:[NSColor blackColor]];	
 		}
 	}
+	
+	[aCell setBackgroundStyle:NSBackgroundStyleDark];
 }
 
 - (BOOL)tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard

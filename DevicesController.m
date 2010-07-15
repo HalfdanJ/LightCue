@@ -9,29 +9,18 @@
 
 #import "DeviceModel.h"
 #import "DeviceGroupModel.h"
+#import "DevicePropertyModel.h"
 
 @implementation DevicesController
 
 -(void) awakeFromNib{
 	[devicesArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"deviceSelection"];
 	[groupsArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"groupsSelection"];
-
-/*		
-		NSMutableArray * tmpg = [NSMutableArray array];
-		
-		for(int i=0;i<36;i++){
-			[tmpg addObject:[[GroupModel alloc] init]];
-			
-		}
-		[[tmpg objectAtIndex:0] setDevices:[NSMutableSet setWithObjects:[devices objectAtIndex:0],[devices objectAtIndex:2],[devices objectAtIndex:3],nil]];
-		
-		[self setGroups:tmpg];
-		
-		
-	}*/
+	
+	[cueArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"cueSelection"];
 	
 	devicesSelectedByGroup = [NSMutableArray array];
-
+	
 }
 
 
@@ -85,5 +74,31 @@
 		
 		
 	} 
+	
+	if([((NSString*)context) isEqualToString:@"cueSelection"]){
+		NSArray * selectedCues = [cueArrayController selectedObjects];
+	
+		if([selectedCues count] == 1 ){
+			for(DeviceModel * device in [devicesArrayController arrangedObjects]){
+				NSManagedObject* cueDeviceProperty = [[device dimmer] devicePropertyInCue:[selectedCues lastObject]];
+				if(cueDeviceProperty != nil){
+					[[device dimmer]  bind:@"value" toObject:cueDeviceProperty withKeyPath:@"value" options:nil];	
+				} else {
+					[device clearDimmer];						
+				}
+				[device setSelectedCue:[selectedCues lastObject]];
+			}
+			
+			
+		} else {
+			for(DeviceModel * device in [devicesArrayController arrangedObjects]){
+				[device  clearDimmer];	
+				[device setSelectedCue:nil];
+			}	
+		
+		}
+		
+		
+	}
 }
 @end

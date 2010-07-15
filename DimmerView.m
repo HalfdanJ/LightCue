@@ -166,70 +166,7 @@
 									 xRadius:roundedRadius 
 									 yRadius:roundedRadius] stroke];
 	[ctx restoreGraphicsState];   
-	/*
-	 [NSGraphicsContext saveGraphicsState];	
-	 
-	 NSShadow* theShadow = [[NSShadow alloc] init];
-	 [theShadow setShadowOffset:NSMakeSize(1.0, -1.0)];
-	 [theShadow setShadowBlurRadius:3.0];	
-	 [theShadow setShadowColor:[[NSColor blackColor]
-	 colorWithAlphaComponent:0.9]];	
-	 //	[theShadow set];
-	 
-	 
-	 NSBezierPath* thePath = [NSBezierPath bezierPath];	
-	 [thePath appendBezierPathWithRoundedRect:[self bounds] xRadius:5 yRadius:5];
-	 //	[thePath setLineWidth:2.0];
-	 
-	 //Fill
-	 [[NSColor blackColor] set];	
-	 [thePath fill];
-	 [NSGraphicsContext restoreGraphicsState];
-	 
-	 
-	 
-	 //
-	 //Dimmer levels
-	 //
-	 
-	 NSBezierPath* aPath = [NSBezierPath bezierPath];
-	 for(DeviceModel* device in selection){
-	 DevicePropertyModel * dimmerProperty = [device getProperty:@"DIM"];
-	 if (dimmerProperty != nil) {
-	 float dimValue = [[dimmerProperty valueForKey:@"value"] floatValue];
-	 
-	 [aPath moveToPoint:NSMakePoint(0.0, height*dimValue/255.0 )];
-	 [aPath lineToPoint:NSMakePoint(width, height*dimValue/255.0)];
-	 [aPath setLineJoinStyle:NSRoundLineJoinStyle];
-	 
-	 }
-	 }
-	 
-	 [[[NSColor whiteColor]colorWithAlphaComponent:1.0] set];	
-	 [aPath stroke];
-	 
-	 
-	 
-	 //
-	 //Gloss
-	 //
-	 
-	 NSGradient* aGradient = [[[NSGradient alloc]
-	 initWithColorsAndLocations:
-	 [[NSColor whiteColor] colorWithAlphaComponent:0.0], (CGFloat)0.0,
-	 [[NSColor whiteColor] colorWithAlphaComponent:0.3], (CGFloat)0.7,
-	 [[NSColor whiteColor] colorWithAlphaComponent:0.5], (CGFloat)1.0,
-	 nil] autorelease];
-	 
-	 [aGradient drawInBezierPath:thePath angle:0.0];
-	 
-	 
-	 //
-	 //Black stroke
-	 //
-	 [[NSColor blackColor] set];	
-	 [thePath stroke];*/
-	
+
 	
 }
 
@@ -238,11 +175,14 @@
 	
 	float deltaDim = -[theEvent deltaY]/height;
 	
+	int i=0;
 	for(DeviceModel* device in selection){
 		DevicePropertyModel * dimmerProperty = [device dimmer];
 		if (dimmerProperty != nil) {
-			float dimValue = [[dimmerProperty valueForKey:@"value"] floatValue];
-			[[device dimmer] setValue:[NSNumber numberWithFloat:255.0*MIN(1,MAX(0,dimValue/255.0+deltaDim))]];
+			float dimValue = [[valueCache objectAtIndex:i]  floatValue];
+			[[device dimmer] setValue:[NSNumber numberWithFloat:255.0*MAX(0,MIN(1,(dimValue/255.0+deltaDim)))]];
+			[valueCache replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:255.0*(dimValue/255.0+deltaDim)]];
+			i++;
 		}
 	}
 	
@@ -251,6 +191,15 @@
 }
 
 -(void) mouseDown:(NSEvent *)theEvent{
+	valueCache = [NSMutableArray arrayWithCapacity:[selection count]];
+	for(DeviceModel* device in selection){
+		DevicePropertyModel * dimmerProperty = [device dimmer];
+		if (dimmerProperty != nil) {
+			[valueCache addObject:[dimmerProperty valueForKey:@"value"]];
+		}
+	}
+	
+	
 	DeviceModel* device = [selection objectAtIndex:0];
 	if(device != nil)
 		[[[[device dimmer] managedObjectContext] undoManager] beginUndoGrouping];
@@ -264,9 +213,27 @@
 		[[[[device dimmer] managedObjectContext] undoManager] endUndoGrouping];	
 }
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if([(NSString*)context isEqualToString:@"dimmerValue"])
+		[self setNeedsDisplay:YES];
+}
+
 
 -(void) setSelection:(NSArray *)_selection{
+	if(selection != nil){
+		for(DeviceModel* device in selection){
+			[device removeObserver:self forKeyPath:@"dimmer.value"];
+		}
+	}
+	
 	selection = _selection;
+	
+	if(selection != nil){
+		for(DeviceModel* device in selection){
+			[device  addObserver:self forKeyPath:@"dimmer.value" options:nil context:@"dimmerValue"];
+		}
+	}
+	
 	[self setNeedsDisplay:YES];
 }	
 

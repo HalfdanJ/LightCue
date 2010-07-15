@@ -8,18 +8,43 @@
 
 #import "CueModel.h"
 
+//
+//--------
+//
+
+
 @interface CueModel (CoreDataGeneratedPrimitiveAccessors)
 
 - (NSMutableSet*)primitiveDeviceRelations;
 - (void)setPrimitiveDeviceRelations:(NSMutableSet*)value;
 
+
+- (NSNumber *)primitiveFadeTime;
+- (void)setPrimitiveFadeTime:(NSNumber *)value;
+
+
 @end
 
+//
+//--------
+//
+
+@interface CueModel (MyPrivate)
+- (void) updateOutput;
+
+@end
+
+
+//
+//--------
+//
 
 
 @implementation CueModel
 
 @dynamic deviceRelations;
+@dynamic fadeTime;
+@dynamic lineNumber;
 
 @synthesize preWaitRunningTime, preWaitVisualRep;
 @synthesize fadeTimeRunningTime, fadeTimeVisualRep;
@@ -31,7 +56,100 @@
 	[self startPreWait];
 }
 
+- (IBAction) stop{
+	[self willChangeValueForKey:@"running"];
+
+	[preWaitTimer invalidate];
+	[fadeTimer invalidate];
+	[fadeDownTimer invalidate];
+	[postWaitTimer invalidate];
+	
+	[self willChangeValueForKey:@"preWaitVisualRep"];
+	[self willChangeValueForKey:@"fadeTimeVisualRep"];
+	[self willChangeValueForKey:@"fadeDownTimeVisualRep"];
+	[self willChangeValueForKey:@"postWaitVisualRep"];
+
+	preWaitRunningTime = 0;
+	fadeTimeRunningTime = 0;
+	fadeDownTimeRunningTime = 0;
+	postWaitRunningTime = 0;
+	
+	[self didChangeValueForKey:@"preWaitVisualRep"];
+	[self didChangeValueForKey:@"fadeTimeVisualRep"];
+	[self didChangeValueForKey:@"fadeDownTimeVisualRep"];
+	[self didChangeValueForKey:@"postWaitVisualRep"];
+	
+	fadePercent = 0;
+	fadeDownPercent = 0;
+	
+	[self didChangeValueForKey:@"running"];
+
+	
+	for(NSManagedObject * deviceRelation in [self deviceRelations]){
+		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+			if([[propertyRelation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"] == propertyRelation){
+				[[propertyRelation valueForKey:@"deviceProperty"]  setValue:nil forKey:@"mutexHolder"];
+				[[propertyRelation valueForKey:@"deviceProperty"]  setValue:nil forKey:@"lastModifier"];
+			}
+		}
+	}
+
+}
+
+- (BOOL) running{
+	if([preWaitTimer isValid] || [fadeTimer isValid] || [fadeDownTimer isValid] || [postWaitTimer isValid]){
+		return YES;	
+	} 
+	return NO;
+}
+
++ (NSSet*) keyPathsForValuesAffectingStatusImage {
+    return [NSSet setWithObjects:@"running", nil];
+}
+
+- (NSImage *) statusImage{
+	if([self running])
+		return  [NSImage imageNamed:@"NSSlideshowTemplate"];
+	return nil;
+}
+
+- (void) updateOutput{
+	double percent = fadePercent;
+	
+	for(NSManagedObject * deviceRelation in [self deviceRelations]){
+		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+			CueDevicePropertyRelationModel * lastRelation = [propertyRelation trackBackwardsCached];
+			double fadeFrom;
+			if(lastRelation == nil){
+				fadeFrom = 0;
+			} else {
+				fadeFrom = [[lastRelation valueForKey:@"value"] doubleValue];
+			}	
+			[[propertyRelation valueForKey:@"deviceProperty"] setValue:[NSNumber numberWithFloat:percent*[[propertyRelation valueForKey:@"value"] doubleValue]  + (1-percent)*fadeFrom] forKey:@"outputValue"];
+		}
+	}
+}
+
 -(void) startPreWait{
+	fadePercent = 0;
+	fadeDownPercent = 0;
+	
+	[self willChangeValueForKey:@"running"];
+	
+	NSSet * cueDeviceRelations = [self deviceRelations];
+	for(NSManagedObject * obj in cueDeviceRelations){
+		for(CueDevicePropertyRelationModel * relation in [obj valueForKey:@"devicePropertyRelations"]){
+//			CueDevicePropertyRelationModel * lastProperty = [relation trackBackwards];
+			
+			CueDevicePropertyRelationModel * lastModifier = [[relation valueForKey:@"deviceProperty"] valueForKey:@"lastModifier"];
+			if(lastModifier == nil || [[[lastModifier cue] lineNumber] intValue] < [[self lineNumber] intValue] ){
+				[[relation valueForKey:@"deviceProperty"]  setValue:relation forKey:@"mutexHolder"];
+			} else {
+				NSLog(@"Was not able to get mutex");
+			}
+		}
+	}
+	
 	if([[self valueForKey:@"preWait"] doubleValue] > 0 ){
 		preWaitTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
 														target:self selector:@selector(preWaitTimerFired:)
@@ -41,16 +159,25 @@
 		[self startFade];
 		[self startFadeDown];
 		[self startPostWait];
-
+		
 	}
+	
+	[self didChangeValueForKey:@"running"];
 	
 }
 
 -(void) startFade{
+	//Update cache of tracking
+	for(NSManagedObject * deviceRelation in [self deviceRelations]){
+		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+			[propertyRelation trackBackwards];
+		}
+	}
+	
 	if([[self valueForKey:@"fadeTime"] doubleValue] > 0 ){
 		fadeTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-														target:self selector:@selector(fadeTimerFired:)
-													  userInfo:[NSNumber numberWithInt:1] repeats:YES];
+													 target:self selector:@selector(fadeTimerFired:)
+												   userInfo:[NSNumber numberWithInt:1] repeats:YES];
 		fadeTimerStartDate = [NSDate date];
 	} else {
 	}
@@ -59,8 +186,8 @@
 -(void) startFadeDown{
 	if([[self valueForKey:@"fadeDownTime"] doubleValue] > 0 ){
 		fadeDownTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-													 target:self selector:@selector(fadeDownTimerFired:)
-												   userInfo:[NSNumber numberWithInt:1] repeats:YES];
+														 target:self selector:@selector(fadeDownTimerFired:)
+													   userInfo:[NSNumber numberWithInt:1] repeats:YES];
 		fadeDownTimerStartDate = [NSDate date];
 	} else {
 		if([[self valueForKey:@"fadeTime"] doubleValue] == 0){
@@ -76,7 +203,30 @@
 													   userInfo:[NSNumber numberWithInt:1] repeats:YES];
 		postWaitTimerStartDate = [NSDate date];
 	} else {
+		[self finishedRunning];
 	}
+}
+
+-(void) finishedRunning{
+	[self willChangeValueForKey:@"running"];
+	[self didChangeValueForKey:@"running"];
+
+	
+	NSSet * cueDeviceRelations = [self deviceRelations];
+	for(NSManagedObject * obj in cueDeviceRelations){
+		for(CueDevicePropertyRelationModel * relation in [obj valueForKey:@"devicePropertyRelations"]){
+			//			CueDevicePropertyRelationModel * lastProperty = [relation trackBackwards];
+			
+			CueDevicePropertyRelationModel * mutexHolder = [[relation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"];
+			if(mutexHolder == relation){
+				[[relation valueForKey:@"deviceProperty"]  setValue:nil forKey:@"mutexHolder"];
+				NSLog(@"Did have mutex in finish, was set to nil");
+			} else {
+				NSLog(@"Did not have mutex in finish");
+			}
+		}
+	}
+	
 }
 
 - (void)preWaitTimerFired:(NSTimer*)theTimer{
@@ -89,7 +239,7 @@
 		[self startFade];
 		[self startFadeDown];
 		[self startPostWait];
-
+		
 	}
 	[self didChangeValueForKey:@"preWaitVisualRep"];
 }
@@ -98,18 +248,31 @@
 	[self willChangeValueForKey:@"fadeTimeVisualRep"];
 	fadeTimeRunningTime = [[theTimer fireDate] timeIntervalSinceDate:fadeTimerStartDate];
 	
+	fadePercent = fadeTimeRunningTime/[[self valueForKey:@"fadeTime"] doubleValue];
+	if(fadePercent > 1)
+		fadePercent = 1;
+	
 	if (fadeTimeRunningTime >= [[self valueForKey:@"fadeTime"] doubleValue]) {
 		[fadeTimer invalidate];
 		if(![fadeDownTimer isValid]){
+			[self startPostWait];
 		}
 		fadeTimeRunningTime = 0;
 	}
 	[self didChangeValueForKey:@"fadeTimeVisualRep"];
+	
+	[self updateOutput ];
+	
+	
 }
 
 - (void)fadeDownTimerFired:(NSTimer*)theTimer{
 	[self willChangeValueForKey:@"fadeDownTimeVisualRep"];
 	fadeDownTimeRunningTime = [[theTimer fireDate] timeIntervalSinceDate:fadeDownTimerStartDate];
+	fadeDownPercent = fadeDownTimeRunningTime/[[self valueForKey:@"fadeTime"] doubleValue];
+	if(fadeDownPercent > 1)
+		fadeDownPercent = 1;
+	
 	
 	if (fadeDownTimeRunningTime >= [[self valueForKey:@"fadeDownTime"] doubleValue]) {
 		[fadeDownTimer invalidate];
@@ -129,6 +292,7 @@
 	if (postWaitRunningTime >= [[self valueForKey:@"postWait"] doubleValue]) {
 		[postWaitTimer invalidate];
 		postWaitRunningTime = 0;
+		[self finishedRunning];
 	}
 	[self didChangeValueForKey:@"postWaitVisualRep"];
 }
@@ -205,9 +369,64 @@
     [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
 }
 
+- (void)setFadeTime:(NSNumber *)value 
+{
+	if([[self valueForKey:@"fadeDownTime"] isEqualToNumber:[self primitiveFadeTime]]){
+		[self setValue:value forKey:@"fadeDownTime"];
+	}
+	
+    [self willChangeValueForKey:@"fadeTime"];
+    [self setPrimitiveFadeTime:value];
+    [self didChangeValueForKey:@"fadeTime"];
+}
 
 
 @end
+
+
+
+
+#if 0
+/*
+ *
+ * You do not need any of these.  
+ * These are templates for writing custom functions that override the default CoreData functionality.
+ * You should delete all the methods that you do not customize.
+ * Optimized versions will be provided dynamically by the framework.
+ *
+ *
+ */
+
+
+// coalesce these into one @interface CueModel (CoreDataGeneratedPrimitiveAccessors) section
+@interface CueModel (CoreDataGeneratedPrimitiveAccessors)
+@end
+
+- (NSNumber *)fadeTime 
+{
+    NSNumber * tmpValue;
+    
+    [self willAccessValueForKey:@"fadeTime"];
+    tmpValue = [self primitiveFadeTime];
+    [self didAccessValueForKey:@"fadeTime"];
+    
+    return tmpValue;
+}
+
+- (void)setFadeTime:(NSNumber *)value 
+{
+    [self willChangeValueForKey:@"fadeTime"];
+    [self setPrimitiveFadeTime:value];
+    [self didChangeValueForKey:@"fadeTime"];
+}
+
+- (BOOL)validateFadeTime:(id *)valueRef error:(NSError **)outError 
+{
+    // Insert custom validation logic here.
+    return YES;
+}
+
+#endif
 
 
 

@@ -8,7 +8,7 @@
 #import "DeviceView.h"
 
 #define VIEW_SIZE 50
-
+#define PADDING 4
 //------------------------------------------------------------
 //	DeviceView
 //------------------------------------------------------------
@@ -16,7 +16,7 @@
 
 @implementation DeviceView
 
-@synthesize dimmerValue, deviceName;
+@synthesize dimmerValue, dimmerOutputValue, deviceName, selectedCue, inSelectedCue;
 
 -(void) awakeFromNib{
 	[self setFrame:NSMakeRect(0, 0, VIEW_SIZE, VIEW_SIZE)];
@@ -43,58 +43,119 @@
 	//
 	//Boundry 
 	//
+	
+	NSColor * dimColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:0.5];
+	
 	[NSGraphicsContext saveGraphicsState];
 	
 	
 	
 	NSShadow* theShadow = [[NSShadow alloc] init];
-	[theShadow setShadowOffset:NSMakeSize(1.0, -1.0)];
-	[theShadow setShadowBlurRadius:3.0];	
-	[theShadow setShadowColor:[[NSColor blackColor]
-							   colorWithAlphaComponent:0.9]];	
+	[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
+	[theShadow setShadowBlurRadius:15];	
+	if(selected){
+		[theShadow setShadowColor:[[NSColor whiteColor]
+								   colorWithAlphaComponent:1.0]];	
+	} else {
+		[theShadow setShadowColor:[[NSColor blackColor]
+								   colorWithAlphaComponent:0.9]];	
+		
+	}
 	[theShadow set];
 	
 	
 	NSBezierPath* thePath = [NSBezierPath bezierPath];	
-    [thePath appendBezierPathWithRoundedRect:NSMakeRect(3, 3, VIEW_SIZE-6, VIEW_SIZE-6) xRadius:5 yRadius:5];
-	[thePath setLineWidth:2.0];
+    [thePath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, VIEW_SIZE-PADDING*2) xRadius:5 yRadius:5];
+	[thePath setLineWidth:1.5];
 	
 	//Fill
-	[[[NSColor whiteColor]colorWithAlphaComponent:0.4] set];	
-//	NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
-//	[barColor set];
+	[[NSColor colorWithCalibratedWhite:0.2 alpha:1.0] set];	
+	//	NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
+	//	[barColor set];
 	[thePath fill];
 	[NSGraphicsContext restoreGraphicsState];
 	
-	//Stroke
-	[[NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.0] set];		
-	if(selected){
-		//		[[NSColor colorWithCalibratedRed:29/255.0 green:89/255.0 blue:180/255.0 alpha:1.0] set];
-		[[NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0] set];	
-//		NSColor * barColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:1.0];
-//		[barColor set];
-	} else if(mouseOver){
-		[[NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.5] set];			
-	}
-	[thePath stroke];
-
 	
 	
 	//
 	//Device dim
 	//
 	
-	if(dimmerValue != nil){
+	if(dimmerOutputValue != nil){
 		NSBezierPath* dimPath = [NSBezierPath bezierPath];	
-		[dimPath appendBezierPathWithRoundedRect:NSMakeRect(3, 3, VIEW_SIZE-6, (VIEW_SIZE-6)*[dimmerValue floatValue]/255) xRadius:5 yRadius:5];
+		[dimPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerOutputValue floatValue]/255) xRadius:5 yRadius:5];
 		[dimPath setLineWidth:2.0];
 		
 		//Fill
-		[[[NSColor whiteColor]colorWithAlphaComponent:0.4] set];	
-//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
-//		[barColor set];
+		[[[NSColor whiteColor]colorWithAlphaComponent:0.3] set];	
+		//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
+		//		[barColor set];
 		[dimPath fill];
 	}
+	
+	
+	if(dimmerValue != nil){
+		NSBezierPath* dimPath = [NSBezierPath bezierPath];	
+		[dimPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerValue floatValue]/255) xRadius:5 yRadius:5];
+		[dimPath setLineWidth:1.0];
+		
+		//Stroke
+		[[[NSColor whiteColor]colorWithAlphaComponent:0.8] set];	
+		//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
+		//		[barColor set];
+		[dimPath stroke];
+		
+		
+		//Fill
+		if(inSelectedCue)
+			[[dimColor colorWithAlphaComponent:0.7] set];	
+		else {
+			[[[NSColor whiteColor]colorWithAlphaComponent:0.2] set];	
+		}
+
+		[dimPath fill];
+	}
+	
+	
+	//Stroke
+	NSColor * strokeColor = [NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.2];
+	float baseAlpha = 0.2;
+	float overAlpa = 0.5;
+	float selectedAlpha = 0.5;
+	
+	if(inSelectedCue){
+		strokeColor = dimColor;
+		baseAlpha = 0.8;
+		overAlpa = 0.9;
+		selectedAlpha = 1.0;
+	}
+	[[strokeColor colorWithAlphaComponent:baseAlpha] set];		
+	if(selected){
+		//		[[NSColor colorWithCalibratedRed:29/255.0 green:89/255.0 blue:180/255.0 alpha:1.0] set];
+		
+		[[strokeColor colorWithAlphaComponent:selectedAlpha] set];		
+		
+		//		NSColor * barColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:1.0];
+		//		[barColor set];
+	} else if(mouseOver){
+		[[strokeColor colorWithAlphaComponent:overAlpa] set];		
+ 	} 
+	[thePath setLineWidth:2.0];
+	
+	[thePath stroke];
+	
+	
+	//Selection Stroke
+	if(selected){
+		NSBezierPath* selectionPath = [NSBezierPath bezierPath];	
+		[selectionPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING-1, PADDING-1, VIEW_SIZE-(PADDING-1)*2, VIEW_SIZE-(PADDING-1)*2) xRadius:5 yRadius:5];
+		[selectionPath setLineWidth:1];
+		
+		NSColor * strokeColor = [NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0];
+		[strokeColor set];
+		[selectionPath stroke];
+	}
+	
 	
 	
 	
@@ -120,11 +181,11 @@
 	[theShadow set];
 	
 	[[NSString stringWithFormat:@"%i",deviceNumber] drawAtPoint:NSMakePoint(5, VIEW_SIZE-17) withAttributes:attsDict];
-
+	
 	if(deviceName != nil){
 		[[NSString stringWithFormat:@"%@",deviceName] drawAtPoint:NSMakePoint(5, 4) withAttributes:attsDict];
 	}
-
+	
 	
 	[NSGraphicsContext restoreGraphicsState];
 	
@@ -145,6 +206,12 @@
 	[self setNeedsDisplay:YES];
 }
 
+
+-(void) setDimmerOutputValue:(NSNumber *)v{
+	dimmerOutputValue = v ;
+	[self setNeedsDisplay:YES];
+}
+
 -(void) mouseEntered:(NSEvent *)theEvent{
 	mouseOver = YES;
 	[self setNeedsDisplay:YES];
@@ -159,6 +226,11 @@
 -(void) setDeviceName:(NSString *)_name{
 	deviceName = _name;
 	[self setNeedsDisplay:YES];
+}
+
+-(void) setInSelectedCue:(BOOL)b{
+	inSelectedCue = b;
+	[self setNeedsDisplay:YES];	
 }
 
 
@@ -178,15 +250,17 @@
 
 -(void) setRepresentedObject:(id)representedObject{
 	if(representedObject == nil)
-		return
-		[super setRepresentedObject:representedObject];
+		return;
+	[super setRepresentedObject:representedObject];
 	
 	DeviceView * devview = (DeviceView*)[self view];
 	
 	[devview bind:@"deviceNumber" toObject:representedObject withKeyPath:@"deviceNumber" options:nil];
-	[devview bind:@"dimmerValue" toObject:representedObject withKeyPath:@"dimmer.value" options:nil];
+	[devview bind:@"dimmerValue" toObject:representedObject withKeyPath:@"dimmer.valueInSelectedCue" options:nil];
+	[devview bind:@"dimmerOutputValue" toObject:representedObject withKeyPath:@"dimmer.outputValue" options:nil];
 	[devview bind:@"deviceName" toObject:representedObject withKeyPath:@"name" options:nil];
-
+	[devview bind:@"selectedCue" toObject:representedObject withKeyPath:@"selectedCue" options:nil];
+	[devview bind:@"inSelectedCue" toObject:representedObject withKeyPath:@"propertySetInSelectedCue" options:nil];
 	
 }
 

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "CueModel.h"
 
 @interface CueController : NSObject <NSTableViewDelegate, NSTableViewDataSource> {
 	IBOutlet NSArrayController * cueArrayController;
@@ -16,10 +17,19 @@
 	IBOutlet NSTableView * cueTable;
 }
 
+- (NSArrayController *) cueArrayController;
+
+- (CueModel*)cueBeforeCue:(CueModel*)cue;
+- (CueModel*)cueAfterCue:(CueModel*)cue;
 
 - (NSArray*) selectedCues;
+- (IBAction)go:(id)sender;
+- (IBAction)stop:(id)sender;
+- (void) applyPropertiesForCue:(CueModel*)cue;
+
+
 - (IBAction)addNewItem:(id)sender;
-- (IBAction)removeSelectedItems:(id)sender;
+- (IBAction)removeSelectedItems:(id)szender;
 - (NSArray *)sortDescriptors;
 - (void)renumberViewPositions;
 

@@ -12,7 +12,7 @@
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<integer value="100203"/>
-			<integer value="100426"/>
+			<integer value="100639"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1682,7 +1682,7 @@
 						<object class="NSButton" id="514991912">
 							<reference key="NSNextResponder" ref="317955023"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{211, 706}, {59, 48}}</string>
+							<string key="NSFrame">{{204, 706}, {59, 48}}</string>
 							<reference key="NSSuperview" ref="317955023"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="500486705">
@@ -1699,6 +1699,30 @@
 								<int key="NSButtonFlags2">134</int>
 								<string key="NSAlternateContents"/>
 								<string type="base64-UTF8" key="NSKeyEquivalent">IA</string>
+								<int key="NSPeriodicDelay">400</int>
+								<int key="NSPeriodicInterval">75</int>
+							</object>
+						</object>
+						<object class="NSButton" id="858682990">
+							<reference key="NSNextResponder" ref="317955023"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{848, 715}, {34, 35}}</string>
+							<reference key="NSSuperview" ref="317955023"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="313196383">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">134217728</int>
+								<string key="NSContents">S</string>
+								<object class="NSFont" key="NSSupport">
+									<string key="NSName">LucidaGrande</string>
+									<double key="NSSize">18</double>
+									<int key="NSfFlags">16</int>
+								</object>
+								<reference key="NSControlView" ref="858682990"/>
+								<int key="NSButtonFlags">-2033434369</int>
+								<int key="NSButtonFlags2">134</int>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent"/>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
 							</object>
@@ -2490,6 +2514,7 @@ A</bytes>
 					<string>postWaitVisualRep</string>
 					<string>fadeDownTimeVisualRep</string>
 					<string>deviceRelations</string>
+					<string>statusImage</string>
 				</array>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -2507,16 +2532,37 @@ A</bytes>
 			<object class="NSCustomObject" id="107634021">
 				<string key="NSClassName">CueController</string>
 			</object>
-			<object class="NSArrayController" id="231269386">
+			<object class="NSArrayController" id="335572779">
 				<array class="NSMutableArray" key="NSDeclaredKeys">
 					<string>device.name</string>
 					<string>device.deviceNumber</string>
 					<string>device.fullName</string>
+					<string>devicePropertyRelations</string>
 				</array>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy">
 					<string key="NSEntityName">CueDeviceRelation</string>
+				</object>
+				<bool key="_NSIsUsingManagedProxy">YES</bool>
+				<bool key="NSAvoidsEmptySelection">YES</bool>
+				<bool key="NSPreservesSelection">YES</bool>
+				<bool key="NSSelectsInsertedObjects">YES</bool>
+				<bool key="NSFilterRestrictsInsertion">YES</bool>
+				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
+				<bool key="NSAutomaticallyRearrangesObjects">YES</bool>
+			</object>
+			<object class="NSArrayController" id="866422922">
+				<array class="NSMutableArray" key="NSDeclaredKeys">
+					<string>device.name</string>
+					<string>device.deviceNumber</string>
+					<string>device.fullName</string>
+					<string>deviceProperty.name</string>
+				</array>
+				<bool key="NSEditable">YES</bool>
+				<bool key="NSAutomaticallyPreparesContent">YES</bool>
+				<object class="_NSManagedProxy" key="_NSManagedProxy">
+					<string key="NSEntityName">CueDevicePropertyRelation</string>
 				</object>
 				<bool key="_NSIsUsingManagedProxy">YES</bool>
 				<bool key="NSAvoidsEmptySelection">YES</bool>
@@ -3060,26 +3106,6 @@ A</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">target: selection</string>
-						<reference key="source" ref="514991912"/>
-						<reference key="destination" ref="565582112"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="514991912"/>
-							<reference key="NSDestination" ref="565582112"/>
-							<string key="NSLabel">target: selection</string>
-							<string key="NSBinding">target</string>
-							<string key="NSKeyPath">selection</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSSelectorName</string>
-								<string key="NS.object.0">go</string>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">100650</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: arrangedObjects.preWaitVisualRep</string>
 						<reference key="source" ref="115688445"/>
 						<reference key="destination" ref="565582112"/>
@@ -3153,10 +3179,10 @@ A</bytes>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">managedObjectContext: managedObjectContext</string>
-						<reference key="source" ref="231269386"/>
+						<reference key="source" ref="335572779"/>
 						<reference key="destination" ref="488872867"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="231269386"/>
+							<reference key="NSSource" ref="335572779"/>
 							<reference key="NSDestination" ref="488872867"/>
 							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
 							<string key="NSBinding">managedObjectContext</string>
@@ -3169,10 +3195,10 @@ A</bytes>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">contentSet: selection.deviceRelations</string>
-						<reference key="source" ref="231269386"/>
+						<reference key="source" ref="335572779"/>
 						<reference key="destination" ref="565582112"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="231269386"/>
+							<reference key="NSSource" ref="335572779"/>
 							<reference key="NSDestination" ref="565582112"/>
 							<string key="NSLabel">contentSet: selection.deviceRelations</string>
 							<string key="NSBinding">contentSet</string>
@@ -3186,10 +3212,10 @@ A</bytes>
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: arrangedObjects.device.fullName</string>
 						<reference key="source" ref="98368723"/>
-						<reference key="destination" ref="231269386"/>
+						<reference key="destination" ref="335572779"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="98368723"/>
-							<reference key="NSDestination" ref="231269386"/>
+							<reference key="NSDestination" ref="335572779"/>
 							<string key="NSLabel">value: arrangedObjects.device.fullName</string>
 							<string key="NSBinding">value</string>
 							<string key="NSKeyPath">arrangedObjects.device.fullName</string>
@@ -3201,6 +3227,94 @@ A</bytes>
 						</object>
 					</object>
 					<int key="connectionID">100682</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">managedObjectContext: managedObjectContext</string>
+						<reference key="source" ref="866422922"/>
+						<reference key="destination" ref="488872867"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="866422922"/>
+							<reference key="NSDestination" ref="488872867"/>
+							<string key="NSLabel">managedObjectContext: managedObjectContext</string>
+							<string key="NSBinding">managedObjectContext</string>
+							<string key="NSKeyPath">managedObjectContext</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100687</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentSet: selection.devicePropertyRelations</string>
+						<reference key="source" ref="866422922"/>
+						<reference key="destination" ref="335572779"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="866422922"/>
+							<reference key="NSDestination" ref="335572779"/>
+							<string key="NSLabel">contentSet: selection.devicePropertyRelations</string>
+							<string key="NSBinding">contentSet</string>
+							<string key="NSKeyPath">selection.devicePropertyRelations</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100690</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.deviceProperty.name</string>
+						<reference key="source" ref="787964705"/>
+						<reference key="destination" ref="866422922"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="787964705"/>
+							<reference key="NSDestination" ref="866422922"/>
+							<string key="NSLabel">value: arrangedObjects.deviceProperty.name</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.deviceProperty.name</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100695</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">cueArrayController</string>
+						<reference key="source" ref="125446143"/>
+						<reference key="destination" ref="565582112"/>
+					</object>
+					<int key="connectionID">100696</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">go:</string>
+						<reference key="source" ref="107634021"/>
+						<reference key="destination" ref="514991912"/>
+					</object>
+					<int key="connectionID">100697</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">stop:</string>
+						<reference key="source" ref="107634021"/>
+						<reference key="destination" ref="858682990"/>
+					</object>
+					<int key="connectionID">100701</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.statusImage</string>
+						<reference key="source" ref="114037228"/>
+						<reference key="destination" ref="565582112"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="114037228"/>
+							<reference key="NSDestination" ref="565582112"/>
+							<string key="NSLabel">value: arrangedObjects.statusImage</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.statusImage</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100704</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3241,10 +3355,11 @@ A</bytes>
 							<reference ref="169429689"/>
 							<reference ref="396409464"/>
 							<reference ref="865728884"/>
-							<reference ref="514991912"/>
 							<reference ref="1065151375"/>
 							<reference ref="175870869"/>
 							<reference ref="932060579"/>
+							<reference ref="514991912"/>
+							<reference ref="858682990"/>
 						</array>
 						<reference key="parent" ref="827802848"/>
 					</object>
@@ -4260,9 +4375,28 @@ A</bytes>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">100658</int>
-						<reference key="object" ref="231269386"/>
+						<reference key="object" ref="335572779"/>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">CueDeviceRelation Array Controller</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100686</int>
+						<reference key="object" ref="866422922"/>
+						<reference key="parent" ref="0"/>
+						<string key="objectName">CueDevicePropertyRelation Array Controller</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100698</int>
+						<reference key="object" ref="858682990"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="313196383"/>
+						</array>
+						<reference key="parent" ref="317955023"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100699</int>
+						<reference key="object" ref="313196383"/>
+						<reference key="parent" ref="858682990"/>
 					</object>
 				</array>
 			</object>
@@ -4488,9 +4622,12 @@ A</bytes>
 				<string key="100637.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100639.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100658.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBEditorWindowLastContentRect">{{508, 184}, {1110, 754}}</string>
+				<string key="100686.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="100698.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="100699.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="5.IBEditorWindowLastContentRect">{{458, 184}, {1110, 754}}</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBWindowTemplateEditedContentRect">{{508, 184}, {1110, 754}}</string>
+				<string key="5.IBWindowTemplateEditedContentRect">{{458, 184}, {1110, 754}}</string>
 				<integer value="1" key="5.ImportedFromIB2"/>
 				<integer value="1" key="5.windowTemplate.hasMinSize"/>
 				<string key="5.windowTemplate.minSize">{131.131, 86}</string>
@@ -4501,7 +4638,7 @@ A</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">100682</int>
+			<int key="maxID">100704</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4518,7 +4655,9 @@ A</bytes>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="addNewItem:">id</string>
+						<string key="go:">id</string>
 						<string key="removeSelectedItems:">id</string>
+						<string key="stop:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cueArrayController">NSArrayController</string>
@@ -4567,6 +4706,7 @@ A</bytes>
 					<string key="className">DevicesController</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="cueArrayController">NSArrayController</string>
 						<string key="devicesArrayController">NSArrayController</string>
 						<string key="groupsArrayController">NSArrayController</string>
 					</dictionary>

@@ -8,6 +8,11 @@
 
 #import "DeviceModel.h"
 #import "Helper.h"
+#import "DevicePropertyModel.h"
+#import "CueController.h"
+
+extern CueController * cueController;
+
 
 @interface DeviceModel (CoreDataGeneratedPrimitiveAccessors)
 
@@ -23,12 +28,22 @@
 @dynamic deviceNumber;
 @dynamic addresses;
 
+@synthesize selectedCue;
+
 
 -(void) awakeFromFetch{
 	_dimmerStore = nil;
 	[super awakeFromFetch];
 }
 
+-(id) initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context{
+	if([super initWithEntity:entity insertIntoManagedObjectContext:context]){
+		[[cueController cueArrayController] addObserver:self forKeyPath:@"selectionIndexes" options:nil context:@"cueSelection"];
+		[self addObserver:self forKeyPath:@"properties" options:nil context:@"properties"];
+		
+	}
+	return self;
+}
 
 
 -(DevicePropertyModel*) getProperty:(NSString*)name{
@@ -43,7 +58,7 @@
 -(DevicePropertyModel *) dimmer{
 	if(_dimmerStore == nil){
 		_dimmerStore = [self getProperty:@"DIM"];
-
+		
 		if(_dimmerStore != nil){
 			[_dimmerStore addObserver:self forKeyPath:@"value" options:NSKeyValueObservingOptionPrior context:@"dimmerChange"];
 		}
@@ -61,27 +76,62 @@
 	return ret;
 }
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+-(void) clearDimmer{
+	[[self dimmer] clear];
 }
+
+- (BOOL) propertySetInCue:(CueModel*)cue{
+	for(DevicePropertyModel * prop in [self properties]){
+		if([prop propertySetInSelectedCue])
+			return YES;
+	}
+	return NO;
+}
+
+-(BOOL) propertySetInSelectedCue{
+	return [self propertySetInCue:selectedCue];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if([(NSString*)context isEqualToString:@"cueSelection"]){
+		if([[cueController selectedCues] count] == 1){
+			[self setSelectedCue:[[cueController selectedCues] lastObject]];
+		}
+		else {
+			[self setSelectedCue:nil];	
+		}
+	}
+	if([(NSString*)context isEqualToString:@"properties"]){
+		for(DevicePropertyModel * prop in [self properties]){
+			[prop addObserver:self forKeyPath:@"propertySetInSelectedCue" options:nil context:@"propertySetInSelectedCue"];
+		}
+	}
+	if([(NSString*)context isEqualToString:@"propertySetInSelectedCue"]){
+		[self willChangeValueForKey:@"propertySetInSelectedCue"];
+		[self didChangeValueForKey:@"propertySetInSelectedCue"];
+	}
+
+}	
+
 
 -(void) setAddressesToken:(NSArray *)array{
 	
 	[self setAddresses:[NSSet set]];
 	
 	for(NSString * string in array){
-
+		
 		NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
 		[f setNumberStyle:NSNumberFormatterDecimalStyle];
 		NSNumber * number = [f numberFromString:string];
 		[f release];
 		
 		NSManagedObject * channel = [NSEntityDescription insertNewObjectForEntityForName:@"DeviceDmxAddress" 
-									  inManagedObjectContext:[self managedObjectContext]];
+																  inManagedObjectContext:[self managedObjectContext]];
 		[channel setValue:number forKey:@"address"];
 		[self addAddressesObject:channel];
 	}
 	
-
+	
 }
 
 -(NSArray *) addressesToken{
@@ -154,70 +204,6 @@
 @end
 
 
-
-
-
-#if 0
-/*
- *
- * You do not need any of these.  
- * These are templates for writing custom functions that override the default CoreData functionality.
- * You should delete all the methods that you do not customize.
- * Optimized versions will be provided dynamically by the framework.
- *
- *
- */
-
-
-// coalesce these into one @interface DeviceModel (CoreDataGeneratedPrimitiveAccessors) section
-@interface DeviceModel (CoreDataGeneratedPrimitiveAccessors)
-
-- (NSMutableSet*)primitiveProperties;
-- (void)setPrimitiveProperties:(NSMutableSet*)value;
-
-- (NSMutableSet*)primitiveAddresses;
-- (void)setPrimitiveAddresses:(NSMutableSet*)value;
-
-@end
-
-
-- (void)addPropertiesObject:(NSManagedObject *)value 
-{    
-    NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
-    
-    [self willChangeValueForKey:@"properties" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
-    [[self primitiveProperties] addObject:value];
-    [self didChangeValueForKey:@"properties" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
-    
-    [changedObjects release];
-}
-
-- (void)removePropertiesObject:(NSManagedObject *)value 
-{
-    NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
-    
-    [self willChangeValueForKey:@"properties" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
-    [[self primitiveProperties] removeObject:value];
-    [self didChangeValueForKey:@"properties" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
-    
-    [changedObjects release];
-}
-
-- (void)addProperties:(NSSet *)value 
-{    
-    [self willChangeValueForKey:@"properties" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
-    [[self primitiveProperties] unionSet:value];
-    [self didChangeValueForKey:@"properties" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
-}
-
-- (void)removeProperties:(NSSet *)value 
-{
-    [self willChangeValueForKey:@"properties" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
-    [[self primitiveProperties] minusSet:value];
-    [self didChangeValueForKey:@"properties" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
-}
-
-#endif
 
 
 

@@ -9,6 +9,7 @@
 
 @interface DimmerView : NSView {
 	NSArray * selection;
+	NSMutableArray * valueCache;
 }
 
 -(void) setSelection:(NSArray *)selection;

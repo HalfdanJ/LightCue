@@ -75,5 +75,54 @@
 	[groupsArrayController setSortDescriptors:[NSArray arrayWithObject:groupSorter]];	
 }
 
+- (NSError *)willPresentError:(NSError *)inError {
+	if (!([[inError domain] isEqualToString:NSCocoaErrorDomain])) {
+		return inError;
+	}
+	
+	NSInteger errorCode = [inError code];
+	if ((errorCode < NSValidationErrorMinimum) ||
+		(errorCode > NSValidationErrorMaximum)) {
+		return inError;
+	}
+	
+	if (errorCode != NSValidationMultipleErrorsError) {
+		return inError;
+	}
+
+	
+	
+	NSArray *detailedErrors = [[inError userInfo] objectForKey:NSDetailedErrorsKey];
+	
+	unsigned numErrors = [detailedErrors count];
+	NSMutableString *errorString = [NSMutableString stringWithFormat:@"%u validation errors have occurred", numErrors];
+	
+	if (numErrors > 3) {
+		[errorString appendFormat:@".\nThe first 3 are:\n"];
+	}
+	else {
+		[errorString appendFormat:@":\n"];
+	}
+	NSUInteger i, displayErrors = numErrors > 3 ? 3 : numErrors;
+	for (i = 0; i < displayErrors; i++) {
+		[errorString appendFormat:@"%@\n",
+		 [[detailedErrors objectAtIndex:i] localizedDescription]];
+	}
+	
+	
+	
+	
+	NSMutableDictionary *newUserInfo = [NSMutableDictionary
+										dictionaryWithDictionary:[inError userInfo]];
+	[newUserInfo setObject:errorString forKey:NSLocalizedDescriptionKey];
+	
+	NSError *newError = [NSError errorWithDomain:[inError domain]
+											code:[inError code]
+										userInfo:newUserInfo];
+	return newError;
+	
+}
+
+
 
 @end

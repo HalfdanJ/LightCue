@@ -45,6 +45,7 @@
 		DDA7055811C2908C00132DB5 /* DevicePropertyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */; };
 		DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */; };
 		DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC035A811CBD49B005EBCC6 /* CueController.m */; };
+		DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,6 +124,8 @@
 		DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFormatter.h; sourceTree = "<group>"; };
 		DDC035A711CBD49B005EBCC6 /* CueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueController.h; sourceTree = "<group>"; };
 		DDC035A811CBD49B005EBCC6 /* CueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueController.m; sourceTree = "<group>"; };
+		DDF0AB0611EB538C002729B4 /* CueDevicePropertyRelationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueDevicePropertyRelationModel.h; sourceTree = "<group>"; };
+		DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueDevicePropertyRelationModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,8 +187,6 @@
 				2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */,
 				DDA7043511C2829200132DB5 /* ViewController.h */,
 				DDA7043611C2829200132DB5 /* ViewController.m */,
-				DDA7051411C28C2000132DB5 /* DevicesController.h */,
-				DDA7051511C28C2100132DB5 /* DevicesController.m */,
 				DD18641C11E736D1008B4F27 /* Cue */,
 				DDA7031711C276B800132DB5 /* DeviceGroup */,
 				DDA7031611C276B000132DB5 /* Device */,
@@ -261,6 +262,8 @@
 				DD1861A011E65095008B4F27 /* CueTimeCell.m */,
 				DD18641E11E73700008B4F27 /* CueModel.h */,
 				DD18641F11E73700008B4F27 /* CueModel.m */,
+				DDF0AB0611EB538C002729B4 /* CueDevicePropertyRelationModel.h */,
+				DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */,
 			);
 			name = Cue;
 			sourceTree = "<group>";
@@ -268,6 +271,8 @@
 		DDA7031611C276B000132DB5 /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				DDA7051411C28C2000132DB5 /* DevicesController.h */,
+				DDA7051511C28C2100132DB5 /* DevicesController.m */,
 				DDA7031811C276C200132DB5 /* DeviceView.h */,
 				DDA7031911C276C200132DB5 /* DeviceView.m */,
 				DDA7039F11C27E9100132DB5 /* DeviceModel.h */,
@@ -399,6 +404,7 @@
 				DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */,
 				DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */,
 				DD18642011E73700008B4F27 /* CueModel.m in Sources */,
+				DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
