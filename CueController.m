@@ -10,6 +10,8 @@
 #include "CueTimeCell.h"
 #include "CueModel.h"
 #import "DevicePropertyModel.h"
+#import "CueDeviceRelationModel.h"
+#import "CueTableTextCell.h"
 
 NSString *DemoItemsDropType = @"CueDropType";
 
@@ -35,30 +37,49 @@ CueController * cueController;
 	
 	[NSEvent addLocalMonitorForEventsMatchingMask:(NSKeyDownMask) handler:^(NSEvent *incomingEvent) {
         NSEvent *result = incomingEvent;
-//		NSLog(@"Events: %@",incomingEvent);
+		//		NSLog(@"Events: %@",incomingEvent);
 		
 		//Escape
 		if([incomingEvent keyCode] == 53){
 			[self stop:self];
 		}
 		return result;
-
+		
 	}];
 	
 }
 
-	 
+
 
 - (IBAction)go:(id)sender{
 	[self applyPropertiesForCue:[self cueBeforeCue:[[self selectedCues] lastObject]]];
 	
 	[[[cueArrayController selectedObjects] lastObject] go];
-	[cueArrayController selectNext:self];
+	int index = [[cueArrayController selectionIndexes] lastIndex];
+
+	while([[[[cueArrayController arrangedObjects] objectAtIndex:index] follow] boolValue]){
+		index++;
+	}
+	
+	[cueArrayController setSelectionIndex:index + 1];
 }
 
 - (IBAction)stop:(id)sender{
 	for(CueModel * cue in [cueArrayController arrangedObjects]){
 		[cue stop];
+	}
+}
+
+- (IBAction)follow:(id)sender{
+	BOOL first = YES;
+	BOOL set;
+	for(CueModel*cue in [self selectedCues]){
+		if(first){
+			set = ![[cue valueForKey:@"follow"] boolValue];
+		} 
+		[cue setValue:[NSNumber numberWithBool:set] forKey:@"follow"];		
+		
+		first = NO;
 	}
 }
 
@@ -71,12 +92,16 @@ CueController * cueController;
 	
 	NSError *error;
 	NSArray *array = [moc executeFetchRequest:request error:&error];
-	if (array == nil)
-	{
-	}	
+	
 	for(DevicePropertyModel * prop in array){
 		NSNumber * val = [prop valueInCue:cue];
+		//		if(![prop isRunning])
 		[prop setValue:val forKey:@"outputValue"];
+		
+//		if([[[(CueDeviceRelationModel*)[prop lastModifier] cue] valueForKey:@"lineNumber"] intValue] > [[cue valueForKey:@"lineNumber"] intValue])
+//			[prop setLastModifier:nil];
+		
+		[prop setLastModifier:[prop devicePropertyModifyingCue:cue]];
 	}
 	
 }
@@ -238,14 +263,37 @@ CueController * cueController;
 	return 20;	
 }
 -(void) tableView:(NSTableView *)tableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)row{
+	CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
+	
+	if([[aTableColumn identifier] isEqualToString:@"name"]){
+		BOOL cueBeforeFollow = [[[self cueBeforeCue:cue] valueForKey:@"follow"] boolValue];
+		BOOL cueFollow = [[cue valueForKey:@"follow"] boolValue];
+		
+		if(!cueBeforeFollow && cueFollow)
+			[(CueTableTextCell*)aCell setFollowBoxSegment:1];			
+
+		else if(cueFollow && [cue nextCue] == nil)
+			[(CueTableTextCell*)aCell setFollowBoxSegment:3];		
+
+		else if(cueBeforeFollow && cueFollow)
+			[(CueTableTextCell*)aCell setFollowBoxSegment:2];			
+
+		
+		else if(cueBeforeFollow && !cueFollow)
+			[(CueTableTextCell*)aCell setFollowBoxSegment:3];			
+		else 
+			[(CueTableTextCell*)aCell setFollowBoxSegment:0];			
+		
+		
+	} 
+	
 	if([[aTableColumn identifier] isEqualToString:@"image"]){
 		
 	} else {
 		if ([[aTableColumn identifier] isEqualToString:@"preWait"] || [[aTableColumn identifier] isEqualToString:@"postWait"] || [[aTableColumn identifier] isEqualToString:@"fadeTime"] || [[aTableColumn identifier] isEqualToString:@"fadeDownTime"]) {
 			
-//			if([[aTableColumn identifier] isEqualToString:@"preWait"])
-			CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
-
+			//			if([[aTableColumn identifier] isEqualToString:@"preWait"])
+			
 			{
 				[aCell setRunning:([[cue valueForKey:[NSString stringWithFormat:@"%@RunningTime",[aTableColumn identifier]]] doubleValue] > 0)?YES:NO];
 				[aCell setRunningTime:[[cue valueForKey:[NSString stringWithFormat:@"%@RunningTime",[aTableColumn identifier]]] doubleValue]];

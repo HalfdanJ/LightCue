@@ -22,6 +22,9 @@
 	CueModel * selectedCue;
 	
 	BOOL inSelectedCue;
+	BOOL isRunning;
+	BOOL isLive;
+
 }
 
 @property (retain) NSNumber * dimmerValue;
@@ -30,6 +33,8 @@
 @property (retain) CueModel * selectedCue;
 
 @property (readwrite) BOOL inSelectedCue;
+@property (readwrite) BOOL isRunning;
+@property (readwrite) BOOL isLive;
 
 - (void)setSelected:(BOOL)flag;
 - (void)setDeviceNumber:(int)number;

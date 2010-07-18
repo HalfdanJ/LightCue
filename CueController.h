@@ -25,6 +25,8 @@
 - (NSArray*) selectedCues;
 - (IBAction)go:(id)sender;
 - (IBAction)stop:(id)sender;
+- (IBAction)follow:(id)sender;
+
 - (void) applyPropertiesForCue:(CueModel*)cue;
 
 

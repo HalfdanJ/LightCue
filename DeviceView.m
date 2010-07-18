@@ -16,7 +16,7 @@
 
 @implementation DeviceView
 
-@synthesize dimmerValue, dimmerOutputValue, deviceName, selectedCue, inSelectedCue;
+@synthesize dimmerValue, dimmerOutputValue, deviceName, selectedCue, inSelectedCue, isRunning, isLive;
 
 -(void) awakeFromNib{
 	[self setFrame:NSMakeRect(0, 0, VIEW_SIZE, VIEW_SIZE)];
@@ -45,7 +45,9 @@
 	//
 	
 	NSColor * dimColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:0.5];
-	
+	NSColor * greenColor = [NSColor colorWithDeviceRed:15/255.0 green:215/255.0 blue:0/255.0 alpha:1];
+	NSColor * orangeColor = [NSColor colorWithDeviceRed:255/255.0 green:210/255.0 blue:0/255.0 alpha:1];
+
 	[NSGraphicsContext saveGraphicsState];
 	
 	
@@ -88,6 +90,9 @@
 		
 		//Fill
 		[[[NSColor whiteColor]colorWithAlphaComponent:0.3] set];	
+		if(isRunning){
+			[[greenColor colorWithAlphaComponent:0.7] set];	
+		} 
 		//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
 		//		[barColor set];
 		[dimPath fill];
@@ -107,7 +112,9 @@
 		
 		
 		//Fill
-		if(inSelectedCue)
+		if(isLive){
+			[[orangeColor colorWithAlphaComponent:0.7] set];	
+		} else if(inSelectedCue)
 			[[dimColor colorWithAlphaComponent:0.7] set];	
 		else {
 			[[[NSColor whiteColor]colorWithAlphaComponent:0.2] set];	
@@ -123,12 +130,27 @@
 	float overAlpa = 0.5;
 	float selectedAlpha = 0.5;
 	
-	if(inSelectedCue){
+	if(isRunning){
+		strokeColor = greenColor;
+		baseAlpha = 0.8;
+		overAlpa = 0.9;
+		selectedAlpha = 1.0;
+	}
+	else if(isLive){
+		strokeColor = orangeColor;
+		baseAlpha = 0.8;
+		overAlpa = 0.9;
+		selectedAlpha = 1.0;
+		
+	}
+	else if(inSelectedCue){
 		strokeColor = dimColor;
 		baseAlpha = 0.8;
 		overAlpa = 0.9;
 		selectedAlpha = 1.0;
 	}
+	
+	
 	[[strokeColor colorWithAlphaComponent:baseAlpha] set];		
 	if(selected){
 		//		[[NSColor colorWithCalibratedRed:29/255.0 green:89/255.0 blue:180/255.0 alpha:1.0] set];
@@ -233,6 +255,14 @@
 	[self setNeedsDisplay:YES];	
 }
 
+-(void) setIsRunning:(BOOL)b{
+	isRunning = b;
+	[self setNeedsDisplay:YES];	
+}
+-(void) setIsLive:(BOOL)b{
+	isLive = b;
+	[self setNeedsDisplay:YES];	
+}
 
 @end
 
@@ -261,7 +291,9 @@
 	[devview bind:@"deviceName" toObject:representedObject withKeyPath:@"name" options:nil];
 	[devview bind:@"selectedCue" toObject:representedObject withKeyPath:@"selectedCue" options:nil];
 	[devview bind:@"inSelectedCue" toObject:representedObject withKeyPath:@"propertySetInSelectedCue" options:nil];
-	
+	[devview bind:@"isRunning" toObject:representedObject withKeyPath:@"isRunning" options:nil];
+	[devview bind:@"isLive" toObject:representedObject withKeyPath:@"dimmer.propertyLiveInSelectedCue" options:nil];
+
 }
 
 -(id) copyWithZone:(NSZone *)zone{

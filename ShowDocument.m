@@ -76,6 +76,7 @@
 }
 
 - (NSError *)willPresentError:(NSError *)inError {
+	NSLog(@"Error: %@",inError);
 	if (!([[inError domain] isEqualToString:NSCocoaErrorDomain])) {
 		return inError;
 	}

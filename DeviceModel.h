@@ -17,16 +17,18 @@
 	//For easy binding, simply a link to the selected cue in the cue list
 	CueModel * selectedCue;
 }
+
 @property (nonatomic, retain) NSSet* properties;
 @property (nonatomic, retain) NSNumber * deviceNumber;
 @property (readonly, retain) DevicePropertyModel * dimmer;
 @property (nonatomic, retain) NSSet* addresses;
-
 @property (retain) NSArray * addressesToken;
 @property (readonly, retain) NSString * fullName;
 @property (readwrite, retain) CueModel * selectedCue;
-@property (readonly) BOOL propertySetInSelectedCue;
 
+@property (readonly) BOOL propertySetInSelectedCue;
+@property (readonly) BOOL isRunning;
+@property (readonly) float percentageLiveInSelectedCue;
 
 -(DevicePropertyModel*) getProperty:(NSString*)name;
 -(NSString*) fullName;

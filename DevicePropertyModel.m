@@ -28,7 +28,7 @@ extern CueController * cueController;
 @dynamic value;
 @dynamic device;
 
-@synthesize selectedCue, lastModifier, mutexHolder;
+@synthesize selectedCue, lastModifier, mutexHolder, isRunning;
 
 
 
@@ -54,6 +54,22 @@ extern CueController * cueController;
 	return nil;
 }
 
+- (NSManagedObject*)devicePropertyModifyingCue:(CueModel*)cue{
+	if([self propertySetInCue:cue]){
+		return [self devicePropertyInCue:cue];
+	} else {
+		CueDevicePropertyRelationModel * wantedRelation = nil;
+		int lowestLineNumber = -1;
+		for(CueDevicePropertyRelationModel * cueRelation in [self valueForKey:@"cueRelations"]){
+			if([[[cueRelation cue] lineNumber] intValue] > lowestLineNumber && [[[cueRelation cue] lineNumber] intValue] < [[cue lineNumber] intValue]){
+				lowestLineNumber = [[[cueRelation cue] lineNumber] intValue];
+				wantedRelation = cueRelation;
+			}
+		}
+		return wantedRelation;
+	}
+}
+
 -(void) setMutexHolder:(NSManagedObject *)obj{
 	[self willChangeValueForKey:@"mutexHolder"];
 	mutexHolder = obj;
@@ -65,7 +81,11 @@ extern CueController * cueController;
 
 - (NSNumber*) valueInCue:(CueModel*)cue{
 	if([self propertySetInCue:cue]){
-		return [[self devicePropertyInCue:cue]valueForKey:@"value"];
+		if([self devicePropertyInCue:cue] == [self mutexHolder]){
+			return [self valueForKey:@"outputValue"];
+		} else {		
+			return [[self devicePropertyInCue:cue]valueForKey:@"value"];
+		}
 	} else {
 		CueDevicePropertyRelationModel * wantedRelation = nil;
 		int lowestLineNumber = -1;
@@ -77,7 +97,12 @@ extern CueController * cueController;
 		}
 		
 		if(wantedRelation != nil){
-			return [wantedRelation valueForKey:@"value"];
+			if(wantedRelation == [self mutexHolder]){
+				return [self valueForKey:@"outputValue"];
+			}
+			else {
+				return [wantedRelation valueForKey:@"value"];
+			}
 		} else {
 			return [NSNumber numberWithInt:0];
 		}
@@ -108,6 +133,21 @@ extern CueController * cueController;
 	return NO;
 }
 
+-(BOOL) propertyLiveInCue:(CueModel *)cue{
+	if([(CueDevicePropertyRelationModel*)lastModifier cue] == cue){
+		return YES;
+	}
+	return NO;
+}
+
+-(BOOL) propertyLiveInSelectedCue{
+	if([[cueController selectedCues] count] == 1){
+		CueModel * cue = [[cueController selectedCues] lastObject];
+		return [self propertyLiveInCue:cue];
+	}
+	return NO;	
+}
+
 + (NSSet *)keyPathsForValuesAffectingValueInSelectedCue{
     return [NSSet setWithObjects:@"selectedCue", @"value",@"cueRelations", nil];
 }
@@ -117,11 +157,13 @@ extern CueController * cueController;
     return [NSSet setWithObjects:@"selectedCue", nil];
 }
 
++ (NSSet *)keyPathsForValuesAffectingPropertyLiveInSelectedCue{
+    return [NSSet setWithObjects:@"selectedCue", @"cueRelations", @"isRunning", nil];
+}
+
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-//	NSLog(@"%@",context);
 	if([(NSString*)context isEqualToString:@"cueSelection"]){
 		if([[cueController selectedCues] count] == 1){
-	//		NSLog(@"Set cue");
 			[self setSelectedCue:[[cueController selectedCues] lastObject]];
 		}
 		else {
@@ -169,13 +211,12 @@ extern CueController * cueController;
 		}
 		
 		if(!deviceFound){
-//			[self willChangeValueForKey:@"propertySetInSelectedCue"];
-			deviceRelation = [NSEntityDescription insertNewObjectForEntityForName:@"CueDeviceRelation" 
-														   inManagedObjectContext:[self managedObjectContext]];
+			//Add device to the cue
+			deviceRelation = [NSEntityDescription insertNewObjectForEntityForName:@"CueDeviceRelation" inManagedObjectContext:[self managedObjectContext]];
 			[deviceRelation setValue:[self device] forKey:@"device"];			
 			[cue addDeviceRelationsObject:deviceRelation];
-//			[self didChangeValueForKey:@"propertySetInSelectedCue"];
 		} else {
+			//else find the device relation in the cue
 			for(NSManagedObject * _devicePropertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
 				if([_devicePropertyRelation valueForKey:@"deviceProperty"] == self ){
 					propertyFound = YES;
@@ -192,12 +233,15 @@ extern CueController * cueController;
 			[devicePropertyRelation setValue:value forKey:@"value"];			
 			[devicePropertyRelation setValue:self forKey:@"deviceProperty"];
 			[self willChangeValueForKey:@"propertySetInSelectedCue"];
-
-						[self didChangeValueForKey:@"propertySetInSelectedCue"];
-			
+			[self didChangeValueForKey:@"propertySetInSelectedCue"];
 		}
 		
 		[devicePropertyRelation setValue:value forKey:@"value"];
+		
+		//Check if its live, and should update the output value
+		if([self propertyLiveInSelectedCue]){
+			[self setValue:value forKey:@"outputValue"];
+		}
 	}
 	
 }
@@ -208,14 +252,7 @@ extern CueController * cueController;
     return YES;
 }
 
+
+
 @end
-
-
-
-
-
-
-
-
-
 

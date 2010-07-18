@@ -7,9 +7,9 @@
 //
 
 #import "CueModel.h"
-
+#import "DevicePropertyModel.h"
 //
-//--------
+//--------<
 //
 
 
@@ -51,14 +51,21 @@
 @synthesize fadeDownTimeRunningTime, fadeDownTimeVisualRep;
 @synthesize postWaitRunningTime, postWaitVisualRep;
 
+-(id) initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context{
+	if([super initWithEntity:entity insertIntoManagedObjectContext:context]){
+		[self addObserver:self forKeyPath:@"follow" options:nil context:@"follow"];
+	}
+	return self;
+}
 - (IBAction) go{
-	NSLog(@"GO");
+	if([self running])
+		[self stop];
 	[self startPreWait];
 }
 
 - (IBAction) stop{
 	[self willChangeValueForKey:@"running"];
-
+	
 	[preWaitTimer invalidate];
 	[fadeTimer invalidate];
 	[fadeDownTimer invalidate];
@@ -68,7 +75,7 @@
 	[self willChangeValueForKey:@"fadeTimeVisualRep"];
 	[self willChangeValueForKey:@"fadeDownTimeVisualRep"];
 	[self willChangeValueForKey:@"postWaitVisualRep"];
-
+	
 	preWaitRunningTime = 0;
 	fadeTimeRunningTime = 0;
 	fadeDownTimeRunningTime = 0;
@@ -83,7 +90,8 @@
 	fadeDownPercent = 0;
 	
 	[self didChangeValueForKey:@"running"];
-
+	
+	[self finishedRunning];
 	
 	for(NSManagedObject * deviceRelation in [self deviceRelations]){
 		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
@@ -93,7 +101,19 @@
 			}
 		}
 	}
+	
+}
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if([(NSString*)context isEqualToString:@"isLive"]){
+		[self willChangeValueForKey:@"percentageLive"];
+		[self didChangeValueForKey:@"percentageLive"];
+	}
+	if([(NSString*)context isEqualToString:@"follow"]){
+		[[self nextCue] willChangeValueForKey:@"name"];
+		[[self nextCue] didChangeValueForKey:@"name"];
+	}
+	
 }
 
 - (BOOL) running{
@@ -103,13 +123,58 @@
 	return NO;
 }
 
+-(float) percentageLive{
+	float ret = 0;
+	int num = 0;
+	for(NSManagedObject * deviceRelation in [self deviceRelations]){
+		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+			num += 1;
+			if([propertyRelation isLive]){
+				ret += 1;
+			}
+		}
+	}
+	ret /=(float) num;
+	
+	return ret;
+}
+
 + (NSSet*) keyPathsForValuesAffectingStatusImage {
-    return [NSSet setWithObjects:@"running", nil];
+    return [NSSet setWithObjects:@"running", @"percentageLive", nil];
+}
+
++ (NSSet*) keyPathsForValuesAffectingName {
+    return [NSSet setWithObjects:@"follow", nil];	
+} 
+
+- (CueModel*) nextCue{
+	NSManagedObjectContext *context = [self managedObjectContext];
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Cue" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lineNumber == %@+1", [self valueForKey:@"lineNumber"]];
+	[fetchRequest setPredicate:predicate];	
+	
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:nil];
+	
+	if([fetchedObjects count] > 0){
+		return [fetchedObjects lastObject];
+	}
+	return nil;	
 }
 
 - (NSImage *) statusImage{
 	if([self running])
-		return  [NSImage imageNamed:@"NSSlideshowTemplate"];
+		return  [NSImage imageNamed:@"greenDot"];
+	if([self percentageLive] == 1)
+		return   [NSImage imageNamed:@"orangeDot"]; 
+	
+	if([self percentageLive] > 0)
+		return   [NSImage imageNamed:@"halfOrangeDot"]; 
+	
+	
 	return nil;
 }
 
@@ -118,14 +183,18 @@
 	
 	for(NSManagedObject * deviceRelation in [self deviceRelations]){
 		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
-			CueDevicePropertyRelationModel * lastRelation = [propertyRelation trackBackwardsCached];
-			double fadeFrom;
-			if(lastRelation == nil){
-				fadeFrom = 0;
-			} else {
-				fadeFrom = [[lastRelation valueForKey:@"value"] doubleValue];
-			}	
-			[[propertyRelation valueForKey:@"deviceProperty"] setValue:[NSNumber numberWithFloat:percent*[[propertyRelation valueForKey:@"value"] doubleValue]  + (1-percent)*fadeFrom] forKey:@"outputValue"];
+			CueDevicePropertyRelationModel * mutexHolder = [[propertyRelation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"];
+			if(mutexHolder == propertyRelation){
+				
+				CueDevicePropertyRelationModel * lastRelation = [propertyRelation trackBackwardsCached];
+				double fadeFrom;
+				if(lastRelation == nil){
+					fadeFrom = 0;
+				} else {
+					fadeFrom = [[lastRelation valueForKey:@"lostMutexValue"] doubleValue];
+				}	
+				[[propertyRelation valueForKey:@"deviceProperty"] setValue:[NSNumber numberWithFloat:percent*[[propertyRelation valueForKey:@"value"] doubleValue]  + (1-percent)*fadeFrom] forKey:@"outputValue"];
+			}
 		}
 	}
 }
@@ -139,14 +208,11 @@
 	NSSet * cueDeviceRelations = [self deviceRelations];
 	for(NSManagedObject * obj in cueDeviceRelations){
 		for(CueDevicePropertyRelationModel * relation in [obj valueForKey:@"devicePropertyRelations"]){
-//			CueDevicePropertyRelationModel * lastProperty = [relation trackBackwards];
-			
-			CueDevicePropertyRelationModel * lastModifier = [[relation valueForKey:@"deviceProperty"] valueForKey:@"lastModifier"];
+			CueDevicePropertyRelationModel * lastModifier = [[relation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"];
 			if(lastModifier == nil || [[[lastModifier cue] lineNumber] intValue] < [[self lineNumber] intValue] ){
 				[[relation valueForKey:@"deviceProperty"]  setValue:relation forKey:@"mutexHolder"];
-			} else {
-				NSLog(@"Was not able to get mutex");
-			}
+				[(DevicePropertyModel*)[relation valueForKey:@"deviceProperty"] setIsRunning:YES];
+			} 
 		}
 	}
 	
@@ -203,30 +269,36 @@
 													   userInfo:[NSNumber numberWithInt:1] repeats:YES];
 		postWaitTimerStartDate = [NSDate date];
 	} else {
-		[self finishedRunning];
+		[self performFollow];
 	}
 }
 
 -(void) finishedRunning{
 	[self willChangeValueForKey:@"running"];
 	[self didChangeValueForKey:@"running"];
-
+	
 	
 	NSSet * cueDeviceRelations = [self deviceRelations];
 	for(NSManagedObject * obj in cueDeviceRelations){
 		for(CueDevicePropertyRelationModel * relation in [obj valueForKey:@"devicePropertyRelations"]){
-			//			CueDevicePropertyRelationModel * lastProperty = [relation trackBackwards];
+			[(DevicePropertyModel*)[relation valueForKey:@"deviceProperty"] setIsRunning:NO];
 			
 			CueDevicePropertyRelationModel * mutexHolder = [[relation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"];
 			if(mutexHolder == relation){
 				[[relation valueForKey:@"deviceProperty"]  setValue:nil forKey:@"mutexHolder"];
-				NSLog(@"Did have mutex in finish, was set to nil");
-			} else {
-				NSLog(@"Did not have mutex in finish");
-			}
+			} 
+			CueDevicePropertyRelationModel * lastRelation = [relation trackBackwardsCached];
+			[lastRelation setValue:[lastRelation valueForKey:@"value"] forKey:@"lostMutexValue"];
+			
 		}
 	}
 	
+}
+
+-(void) performFollow{
+	if([[self follow] boolValue]){
+		[[self nextCue] go];
+	}
 }
 
 - (void)preWaitTimerFired:(NSTimer*)theTimer{
@@ -254,8 +326,8 @@
 	
 	if (fadeTimeRunningTime >= [[self valueForKey:@"fadeTime"] doubleValue]) {
 		[fadeTimer invalidate];
-		if(![fadeDownTimer isValid]){
-			[self startPostWait];
+		if(![fadeDownTimer isValid] && ![postWaitTimer isValid] ){
+			[self finishedRunning];
 		}
 		fadeTimeRunningTime = 0;
 	}
@@ -276,8 +348,8 @@
 	
 	if (fadeDownTimeRunningTime >= [[self valueForKey:@"fadeDownTime"] doubleValue]) {
 		[fadeDownTimer invalidate];
-		if(![fadeTimer isValid]){
-			[self startPostWait];
+		if(![fadeTimer isValid] && ![postWaitTimer isValid] ){
+			[self finishedRunning];
 		}
 		
 		fadeDownTimeRunningTime = 0;
@@ -292,7 +364,10 @@
 	if (postWaitRunningTime >= [[self valueForKey:@"postWait"] doubleValue]) {
 		[postWaitTimer invalidate];
 		postWaitRunningTime = 0;
-		[self finishedRunning];
+		[self performFollow];
+		if(![fadeTimer isValid] && ![fadeDownTimer isValid] ){
+			[self finishedRunning];
+		}
 	}
 	[self didChangeValueForKey:@"postWaitVisualRep"];
 }
@@ -342,6 +417,7 @@
     [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
     
     [changedObjects release];
+	
 }
 
 - (void)removeDeviceRelationsObject:(NSManagedObject *)value 
@@ -380,53 +456,25 @@
     [self didChangeValueForKey:@"fadeTime"];
 }
 
-
-@end
-
-
-
-
-#if 0
-/*
- *
- * You do not need any of these.  
- * These are templates for writing custom functions that override the default CoreData functionality.
- * You should delete all the methods that you do not customize.
- * Optimized versions will be provided dynamically by the framework.
- *
- *
- */
-
-
-// coalesce these into one @interface CueModel (CoreDataGeneratedPrimitiveAccessors) section
-@interface CueModel (CoreDataGeneratedPrimitiveAccessors)
-@end
-
-- (NSNumber *)fadeTime 
+- (NSNumber *)follow 
 {
     NSNumber * tmpValue;
     
-    [self willAccessValueForKey:@"fadeTime"];
-    tmpValue = [self primitiveFadeTime];
-    [self didAccessValueForKey:@"fadeTime"];
+    [self willAccessValueForKey:@"follow"];
+    tmpValue = [self primitiveValueForKey:@"follow"];
+    [self didAccessValueForKey:@"follow"];
     
     return tmpValue;
 }
 
-- (void)setFadeTime:(NSNumber *)value 
+- (void)setFollow:(NSNumber *)value 
 {
-    [self willChangeValueForKey:@"fadeTime"];
-    [self setPrimitiveFadeTime:value];
-    [self didChangeValueForKey:@"fadeTime"];
+	if(![value boolValue] || [self nextCue] != nil){
+		
+		[self willChangeValueForKey:@"follow"];
+		[self setPrimitiveValue:value forKey:@"follow"];
+		[self didChangeValueForKey:@"follow"];
+	}
 }
 
-- (BOOL)validateFadeTime:(id *)valueRef error:(NSError **)outError 
-{
-    // Insert custom validation logic here.
-    return YES;
-}
-
-#endif
-
-
-
+@end

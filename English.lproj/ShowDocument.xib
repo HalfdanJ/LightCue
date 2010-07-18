@@ -11,8 +11,8 @@
 			<string key="com.brandonwalkin.BWToolkit">1.2.5</string>
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
+			<integer value="6"/>
 			<integer value="100203"/>
-			<integer value="100639"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -213,6 +213,7 @@
 																					<reference key="NSTableView" ref="365980103"/>
 																				</object>
 																				<object class="NSTableColumn" id="107291376">
+																					<string key="NSIdentifier">name</string>
 																					<double key="NSWidth">304</double>
 																					<double key="NSMinWidth">40</double>
 																					<double key="NSMaxWidth">1000</double>
@@ -541,7 +542,7 @@
 																	<int key="NSsFlags">1</int>
 																	<reference key="NSTarget" ref="793987195"/>
 																	<string key="NSAction">_doScroller:</string>
-																	<double key="NSCurValue">0.0012804097311139564</double>
+																	<double key="NSCurValue">0.0025608194622279128</double>
 																	<double key="NSPercent">0.99872122762148341</double>
 																</object>
 																<object class="NSClipView" id="472738686">
@@ -1706,14 +1707,14 @@
 						<object class="NSButton" id="858682990">
 							<reference key="NSNextResponder" ref="317955023"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{848, 715}, {34, 35}}</string>
+							<string key="NSFrame">{{833, 715}, {34, 35}}</string>
 							<reference key="NSSuperview" ref="317955023"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="313196383">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
 								<string key="NSContents">S</string>
-								<object class="NSFont" key="NSSupport">
+								<object class="NSFont" key="NSSupport" id="375188695">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">18</double>
 									<int key="NSfFlags">16</int>
@@ -1723,6 +1724,26 @@
 								<int key="NSButtonFlags2">134</int>
 								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">400</int>
+								<int key="NSPeriodicInterval">75</int>
+							</object>
+						</object>
+						<object class="NSButton" id="352770495">
+							<reference key="NSNextResponder" ref="317955023"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{871, 715}, {34, 35}}</string>
+							<reference key="NSSuperview" ref="317955023"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="971135996">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">134217728</int>
+								<string key="NSContents">F</string>
+								<reference key="NSSupport" ref="375188695"/>
+								<reference key="NSControlView" ref="352770495"/>
+								<int key="NSButtonFlags">-2033434369</int>
+								<int key="NSButtonFlags2">134</int>
+								<string key="NSAlternateContents"/>
+								<string key="NSKeyEquivalent">f</string>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
 							</object>
@@ -3316,6 +3337,14 @@ A</bytes>
 					</object>
 					<int key="connectionID">100704</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">follow:</string>
+						<reference key="source" ref="107634021"/>
+						<reference key="destination" ref="352770495"/>
+					</object>
+					<int key="connectionID">100715</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -3360,6 +3389,7 @@ A</bytes>
 							<reference ref="932060579"/>
 							<reference ref="514991912"/>
 							<reference ref="858682990"/>
+							<reference ref="352770495"/>
 						</array>
 						<reference key="parent" ref="827802848"/>
 					</object>
@@ -4398,6 +4428,19 @@ A</bytes>
 						<reference key="object" ref="313196383"/>
 						<reference key="parent" ref="858682990"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100712</int>
+						<reference key="object" ref="352770495"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="971135996"/>
+						</array>
+						<reference key="parent" ref="317955023"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100713</int>
+						<reference key="object" ref="971135996"/>
+						<reference key="parent" ref="352770495"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -4427,6 +4470,7 @@ A</bytes>
 				<string key="100132.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100133.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100134.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="100135.CustomClassName">CueTableTextCell</string>
 				<string key="100135.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100136.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100137.CustomClassName">CueTimeCell</string>
@@ -4625,9 +4669,11 @@ A</bytes>
 				<string key="100686.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100698.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100699.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBEditorWindowLastContentRect">{{458, 184}, {1110, 754}}</string>
+				<string key="100712.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="100713.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="5.IBEditorWindowLastContentRect">{{574, 299}, {1110, 754}}</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBWindowTemplateEditedContentRect">{{458, 184}, {1110, 754}}</string>
+				<string key="5.IBWindowTemplateEditedContentRect">{{574, 299}, {1110, 754}}</string>
 				<integer value="1" key="5.ImportedFromIB2"/>
 				<integer value="1" key="5.windowTemplate.hasMinSize"/>
 				<string key="5.windowTemplate.minSize">{131.131, 86}</string>
@@ -4638,7 +4684,7 @@ A</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">100704</int>
+			<int key="maxID">100715</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4655,6 +4701,7 @@ A</bytes>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="addNewItem:">id</string>
+						<string key="follow:">id</string>
 						<string key="go:">id</string>
 						<string key="removeSelectedItems:">id</string>
 						<string key="stop:">id</string>
@@ -4667,6 +4714,14 @@ A</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">CueController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">CueTableTextCell</string>
+					<string key="superclassName">NSTextFieldCell</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">CueTableTextCell.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

@@ -50,8 +50,11 @@
 - (void)postWaitTimerFired:(NSTimer*)theTimer;
 
 - (void) finishedRunning;
+- (void) performFollow;
 
 - (BOOL) running;
+
+- (CueModel*) nextCue;
 
 
 @property (readonly) BOOL running;
@@ -71,6 +74,10 @@
 
 @property (readonly,retain) NSImage * statusImage;
 
+@property (readonly) float percentageLive;
+
+- (NSNumber *)follow;
+- (void)setFollow:(NSNumber *)value;
 
 - (void)addDeviceRelationsObject:(NSManagedObject *)value;
 - (void)removeDeviceRelationsObject:(NSManagedObject *)value;

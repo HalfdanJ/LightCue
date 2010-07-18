@@ -82,7 +82,7 @@ extern CueController * cueController;
 
 - (BOOL) propertySetInCue:(CueModel*)cue{
 	for(DevicePropertyModel * prop in [self properties]){
-		if([prop propertySetInSelectedCue])
+		if([prop propertySetInCue:cue])
 			return YES;
 	}
 	return NO;
@@ -91,6 +91,27 @@ extern CueController * cueController;
 -(BOOL) propertySetInSelectedCue{
 	return [self propertySetInCue:selectedCue];
 }
+
+-(BOOL) isRunning{
+	for(DevicePropertyModel * prop in [self properties]){
+		if([prop isRunning])
+			return YES;
+	}
+	return NO;
+}
+
+-(float) percentageLiveInSelectedCue{
+	float v = 0;
+	for(DevicePropertyModel * prop in [self properties]){
+		if([prop propertyLiveInSelectedCue])
+			v += 1;
+	}
+	
+	v /= [[self properties] count];
+	return v;
+	
+}
+
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 	if([(NSString*)context isEqualToString:@"cueSelection"]){
@@ -104,13 +125,24 @@ extern CueController * cueController;
 	if([(NSString*)context isEqualToString:@"properties"]){
 		for(DevicePropertyModel * prop in [self properties]){
 			[prop addObserver:self forKeyPath:@"propertySetInSelectedCue" options:nil context:@"propertySetInSelectedCue"];
+			[prop addObserver:self forKeyPath:@"isRunning" options:nil context:@"isRunning"];	
+			[prop addObserver:self forKeyPath:@"propertyLiveInSelectedCue" options:nil context:@"propertyLiveInSelectedCue"];	
+
 		}
 	}
 	if([(NSString*)context isEqualToString:@"propertySetInSelectedCue"]){
 		[self willChangeValueForKey:@"propertySetInSelectedCue"];
 		[self didChangeValueForKey:@"propertySetInSelectedCue"];
 	}
-
+	if([(NSString*)context isEqualToString:@"propertyLiveInSelectedCue"]){
+		[self willChangeValueForKey:@"percentageLiveInSelectedCue"];
+		[self didChangeValueForKey:@"percentageLiveInSelectedCue"];
+	}
+	if([(NSString*)context isEqualToString:@"isRunning"]){
+		[self willChangeValueForKey:@"isRunning"];
+		[self didChangeValueForKey:@"isRunning"];
+	}
+	
 }	
 
 
