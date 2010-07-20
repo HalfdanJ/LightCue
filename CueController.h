@@ -15,7 +15,12 @@
 	IBOutlet NSPersistentDocument * document;
 	NSArray *_sortDescriptors;
 	IBOutlet NSTableView * cueTable;
+	
+	//The last cue that has been run
+	CueModel * activeCue;
 }
+
+@property (retain) CueModel * activeCue;
 
 - (NSArrayController *) cueArrayController;
 

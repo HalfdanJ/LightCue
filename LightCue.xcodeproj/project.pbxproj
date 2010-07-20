@@ -36,6 +36,8 @@
 		DD3E886011EFAF1100442BA7 /* orangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */; };
 		DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */; };
 		DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */; };
+		DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD85425911F4A43F00D9A974 /* SerialDeviceController.m */; };
+		DD85427C11F4A67A00D9A974 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD85427B11F4A67A00D9A974 /* IOKit.framework */; };
 		DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
 		DDA7030611C2764100132DB5 /* BWToolkitFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
 		DDA7031A11C276C200132DB5 /* DeviceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7031911C276C200132DB5 /* DeviceView.m */; };
@@ -110,6 +112,10 @@
 		DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueDeviceRelationModel.m; sourceTree = "<group>"; };
 		DD3E8A5611F2150800442BA7 /* CueTableTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableTextCell.h; sourceTree = "<group>"; };
 		DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableTextCell.m; sourceTree = "<group>"; };
+		DD85425811F4A43F00D9A974 /* SerialDeviceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerialDeviceController.h; sourceTree = "<group>"; };
+		DD85425911F4A43F00D9A974 /* SerialDeviceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerialDeviceController.m; sourceTree = "<group>"; };
+		DD85426111F4A54700D9A974 /* pro_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pro_driver.h; sourceTree = "<group>"; };
+		DD85427B11F4A67A00D9A974 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BWToolkitFramework.framework; sourceTree = "<group>"; };
 		DDA7031811C276C200132DB5 /* DeviceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceView.h; sourceTree = "<group>"; };
 		DDA7031911C276C200132DB5 /* DeviceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceView.m; sourceTree = "<group>"; };
@@ -147,6 +153,7 @@
 			files = (
 				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
 				DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */,
+				DD85427C11F4A67A00D9A974 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +171,7 @@
 		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD85427B11F4A67A00D9A974 /* IOKit.framework */,
 				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
 				7788DA0506752A1600599AAD /* CoreData.framework */,
 				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
@@ -195,6 +203,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DD85425711F4A42F00D9A974 /* SerialDevice */,
 				2A37F4AEFDCFA73011CA2CEA /* ShowDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */,
 				DDA7043511C2829200132DB5 /* ViewController.h */,
@@ -285,6 +294,16 @@
 				DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */,
 			);
 			name = Cue;
+			sourceTree = "<group>";
+		};
+		DD85425711F4A42F00D9A974 /* SerialDevice */ = {
+			isa = PBXGroup;
+			children = (
+				DD85426111F4A54700D9A974 /* pro_driver.h */,
+				DD85425811F4A43F00D9A974 /* SerialDeviceController.h */,
+				DD85425911F4A43F00D9A974 /* SerialDeviceController.m */,
+			);
+			name = SerialDevice;
 			sourceTree = "<group>";
 		};
 		DDA7031611C276B000132DB5 /* Device */ = {
@@ -429,6 +448,7 @@
 				DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */,
 				DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */,
 				DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */,
+				DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

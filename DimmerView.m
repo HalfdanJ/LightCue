@@ -7,6 +7,7 @@
 
 #import "DimmerView.h"
 #include "DeviceModel.h"
+#import "DevicePropertyModel.h"
 
 @implementation DimmerView
 
@@ -180,7 +181,7 @@
 		DevicePropertyModel * dimmerProperty = [device dimmer];
 		if (dimmerProperty != nil) {
 			float dimValue = [[valueCache objectAtIndex:i]  floatValue];
-			[[device dimmer] setValue:[NSNumber numberWithFloat:255.0*MAX(0,MIN(1,(dimValue/255.0+deltaDim)))]];
+			[[device dimmer] setValueAndProcess:[NSNumber numberWithFloat:255.0*MAX(0,MIN(1,(dimValue/255.0+deltaDim)))]];
 			[valueCache replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:255.0*(dimValue/255.0+deltaDim)]];
 			i++;
 		}

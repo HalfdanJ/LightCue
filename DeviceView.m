@@ -40,174 +40,192 @@
 }
 
 -(void) drawRect:(NSRect)dirtyRect{
-	//
-	//Boundry 
-	//
+	[NSGraphicsContext saveGraphicsState]; 
 	
-	NSColor * dimColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:0.5];
+	
+	NSColor * dimColor = [NSColor colorWithDeviceRed:56/255.0 green:117/255.0 blue:215/255.0 alpha:0.5];
 	NSColor * greenColor = [NSColor colorWithDeviceRed:15/255.0 green:215/255.0 blue:0/255.0 alpha:1];
+	
 	NSColor * orangeColor = [NSColor colorWithDeviceRed:255/255.0 green:210/255.0 blue:0/255.0 alpha:1];
-
-	[NSGraphicsContext saveGraphicsState];
 	
 	
+	[NSGraphicsContext saveGraphicsState]; 
+	
+	//
+	//Boundry Background 
+	//
 	
 	NSShadow* theShadow = [[NSShadow alloc] init];
 	[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
-	[theShadow setShadowBlurRadius:15];	
+	[theShadow setShadowBlurRadius:10];	
 	if(selected){
-		[theShadow setShadowColor:[[NSColor whiteColor]
-								   colorWithAlphaComponent:1.0]];	
+		[theShadow setShadowColor:[[NSColor whiteColor] colorWithAlphaComponent:1.0]];	
 	} else {
-		[theShadow setShadowColor:[[NSColor blackColor]
-								   colorWithAlphaComponent:0.9]];	
-		
+		[theShadow setShadowColor:[[NSColor blackColor] colorWithAlphaComponent:0.9]];	
 	}
-	[theShadow set];
+	
+	NSBezierPath* boundryPath = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, VIEW_SIZE-PADDING*2) xRadius:5 yRadius:5];	
+	[boundryPath setLineWidth:1.5];	
+	
+	[NSGraphicsContext saveGraphicsState];{
+		[theShadow set];
+		
+		//Fill
+		[[NSColor colorWithCalibratedWhite:0.2 alpha:1.0] set];	
+		[boundryPath fill];
+		
+	}[NSGraphicsContext restoreGraphicsState];
+	
+	[boundryPath addClip];
 	
 	
-	NSBezierPath* thePath = [NSBezierPath bezierPath];	
-    [thePath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, VIEW_SIZE-PADDING*2) xRadius:5 yRadius:5];
-	[thePath setLineWidth:1.5];
+	//
+	// Output value background
+	//
 	
-	//Fill
-	[[NSColor colorWithCalibratedWhite:0.2 alpha:1.0] set];	
-	//	NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
-	//	[barColor set];
-	[thePath fill];
-	[NSGraphicsContext restoreGraphicsState];
-	
+	NSBezierPath* dimBackgroundPath = [NSBezierPath bezierPathWithRect:NSMakeRect(VIEW_SIZE*(2.0/3.0), PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2))];	
+	[[NSColor colorWithCalibratedWhite:0.17 alpha:1.0] set];	
+	[dimBackgroundPath fill];
 	
 	
 	//
 	//Device dim
 	//
 	
-	if(dimmerOutputValue != nil){
-		NSBezierPath* dimPath = [NSBezierPath bezierPath];	
-		[dimPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerOutputValue floatValue]/255) xRadius:5 yRadius:5];
-		[dimPath setLineWidth:2.0];
-		
-		//Fill
-		[[[NSColor whiteColor]colorWithAlphaComponent:0.3] set];	
-		if(isRunning){
-			[[greenColor colorWithAlphaComponent:0.7] set];	
-		} 
-		//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
-		//		[barColor set];
-		[dimPath fill];
-	}
-	
-	
 	if(dimmerValue != nil){
-		NSBezierPath* dimPath = [NSBezierPath bezierPath];	
-		[dimPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerValue floatValue]/255) xRadius:5 yRadius:5];
-		[dimPath setLineWidth:1.0];
+		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE*2.0/3.0-PADDING, (VIEW_SIZE-PADDING*2)*[dimmerValue floatValue]/255)];	
 		
-		//Stroke
-		[[[NSColor whiteColor]colorWithAlphaComponent:0.8] set];	
-		//		NSColor * barColor = [NSColor colorWithDeviceRed:112/255.0 green:121/255.0 blue:131/255.0 alpha:1.0];
-		//		[barColor set];
-		[dimPath stroke];
+		/*if(inSelectedCue){
+		 NSBezierPath* dimSelectionLines = [NSBezierPath bezierPath];	
+		 for(int i=0;i<100;i+=5){
+		 [dimSelectionLines moveToPoint:NSMakePoint(0, i)];
+		 [dimSelectionLines lineToPoint:NSMakePoint(i,0)];				
+		 }
+		 
+		 [[[NSColor whiteColor] colorWithAlphaComponent:0.3] set];	
+		 [dimSelectionLines stroke];
+		 }*/
 		
-		
-		//Fill
-		if(isLive){
-			[[orangeColor colorWithAlphaComponent:0.7] set];	
-		} else if(inSelectedCue)
-			[[dimColor colorWithAlphaComponent:0.7] set];	
-		else {
-			[[[NSColor whiteColor]colorWithAlphaComponent:0.2] set];	
-		}
-
+		[[[NSColor whiteColor] colorWithAlphaComponent:0.3] set];	
 		[dimPath fill];
+		
+		if(inSelectedCue){
+			[[dimColor colorWithAlphaComponent:0.4] set];
+			[dimPath fill];			
+		}		
 	}
 	
 	
-	//Stroke
+	//
+	//Device output dim
+	//
+	
+	if(dimmerOutputValue != nil){		
+		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(VIEW_SIZE*(2.0/3.0), PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerOutputValue floatValue]/255)];	
+		if(isRunning){
+			[[greenColor colorWithAlphaComponent:0.85] set];				
+		} else if(isLive){
+			[[orangeColor colorWithAlphaComponent:0.65] set];					
+		} else {
+			[[NSColor colorWithCalibratedWhite:0.3 alpha:1.0]set];	
+		}		
+		[dimPath fill];
+	}
+	
+	//
+	// Device dim and output value seperator
+	//
+	
+	
+	{
+		NSBezierPath* dimSeperatorPath = [NSBezierPath bezierPath];	
+		[dimSeperatorPath moveToPoint:NSMakePoint(VIEW_SIZE*(2.0/3.0), 0.0)];
+		[dimSeperatorPath lineToPoint:NSMakePoint(VIEW_SIZE*(2.0/3.0), (VIEW_SIZE))];
+		
+		[[NSColor colorWithCalibratedWhite:1.0 alpha:0.2] set];	
+		[dimSeperatorPath stroke];
+	}
+	
+	[NSGraphicsContext restoreGraphicsState];
+	
+	
+	//Boundry Stroke
 	NSColor * strokeColor = [NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.2];
 	float baseAlpha = 0.2;
 	float overAlpa = 0.5;
 	float selectedAlpha = 0.5;
+	[boundryPath setLineWidth:2.0];
 	
-	if(isRunning){
-		strokeColor = greenColor;
-		baseAlpha = 0.8;
-		overAlpa = 0.9;
-		selectedAlpha = 1.0;
-	}
-	else if(isLive){
-		strokeColor = orangeColor;
-		baseAlpha = 0.8;
-		overAlpa = 0.9;
-		selectedAlpha = 1.0;
-		
-	}
-	else if(inSelectedCue){
+	/*	if(isRunning){
+	 strokeColor = greenColor;
+	 baseAlpha = 0.8;
+	 overAlpa = 0.9;
+	 selectedAlpha = 1.0;
+	 }*/
+	/*	else if(isLive){
+	 strokeColor = orangeColor;
+	 baseAlpha = 0.8;
+	 overAlpa = 0.9;
+	 selectedAlpha = 1.0;
+	 
+	 }
+	 else*/ 
+	if(inSelectedCue){
 		strokeColor = dimColor;
 		baseAlpha = 0.8;
-		overAlpa = 0.9;
+		overAlpa = 1.0;
 		selectedAlpha = 1.0;
+		[boundryPath setLineWidth:3.0];		 
 	}
-	
 	
 	[[strokeColor colorWithAlphaComponent:baseAlpha] set];		
 	if(selected){
-		//		[[NSColor colorWithCalibratedRed:29/255.0 green:89/255.0 blue:180/255.0 alpha:1.0] set];
-		
 		[[strokeColor colorWithAlphaComponent:selectedAlpha] set];		
-		
-		//		NSColor * barColor = [NSColor colorWithDeviceRed:61.2/255.0 green:144.0/255.0 blue:230.0/255.0 alpha:1.0];
-		//		[barColor set];
 	} else if(mouseOver){
 		[[strokeColor colorWithAlphaComponent:overAlpa] set];		
  	} 
-	[thePath setLineWidth:2.0];
 	
-	[thePath stroke];
-	
-	
-	//Selection Stroke
-	if(selected){
-		NSBezierPath* selectionPath = [NSBezierPath bezierPath];	
-		[selectionPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING-1, PADDING-1, VIEW_SIZE-(PADDING-1)*2, VIEW_SIZE-(PADDING-1)*2) xRadius:5 yRadius:5];
-		[selectionPath setLineWidth:1];
-		
-		NSColor * strokeColor = [NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0];
-		[strokeColor set];
-		[selectionPath stroke];
-	}
-	
-	
-	
+	[boundryPath stroke];	
 	
 	
 	//
 	//Device number
 	//
-	[NSGraphicsContext saveGraphicsState];
 	
+	[NSGraphicsContext saveGraphicsState];{		
+		NSFont * myFont = [NSFont fontWithName:@"Geneva" size:9];
+		
+		NSDictionary * attsDict = [NSDictionary dictionaryWithObjectsAndKeys:
+								   [NSColor whiteColor], NSForegroundColorAttributeName,
+								   myFont, NSFontAttributeName,
+								   [NSNumber numberWithInt:NSNoUnderlineStyle],
+								   NSUnderlineStyleAttributeName,
+								   nil ];
+		
+		[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
+		[theShadow setShadowColor:[[NSColor blackColor] colorWithAlphaComponent:0.9]];	
+		[theShadow set];
+		
+		[[NSString stringWithFormat:@"%i",deviceNumber] drawAtPoint:NSMakePoint(5, VIEW_SIZE-17) withAttributes:attsDict];
+		
+		if(deviceName != nil){
+			[[NSString stringWithFormat:@"%@",deviceName] drawAtPoint:NSMakePoint(5, 4) withAttributes:attsDict];
+		}
+		
+	}[NSGraphicsContext restoreGraphicsState];
 	
-	NSFont * myFont = [NSFont fontWithName:@"Geneva" size:9];
+	//
+	//Selection Stroke
+	//
 	
-	NSDictionary * attsDict = [NSDictionary dictionaryWithObjectsAndKeys:
-							   [NSColor whiteColor], NSForegroundColorAttributeName,
-							   myFont, NSFontAttributeName,
-							   [NSNumber numberWithInt:NSNoUnderlineStyle],
-							   NSUnderlineStyleAttributeName,
-							   nil ];
-	
-	[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
-	[theShadow setShadowColor:[[NSColor blackColor]
-							   colorWithAlphaComponent:0.9]];	
-	[theShadow set];
-	
-	[[NSString stringWithFormat:@"%i",deviceNumber] drawAtPoint:NSMakePoint(5, VIEW_SIZE-17) withAttributes:attsDict];
-	
-	if(deviceName != nil){
-		[[NSString stringWithFormat:@"%@",deviceName] drawAtPoint:NSMakePoint(5, 4) withAttributes:attsDict];
+	if(selected){
+		NSBezierPath* selectionPath = [NSBezierPath bezierPath];	
+		[selectionPath appendBezierPathWithRoundedRect:NSMakeRect(PADDING-1, PADDING-1, VIEW_SIZE-(PADDING-1)*2, VIEW_SIZE-(PADDING-1)*2) xRadius:5 yRadius:5];
+		[selectionPath setLineWidth:1];
+		
+		[[NSColor colorWithCalibratedRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0] set];
+		[selectionPath stroke];
 	}
-	
 	
 	[NSGraphicsContext restoreGraphicsState];
 	
@@ -293,7 +311,7 @@
 	[devview bind:@"inSelectedCue" toObject:representedObject withKeyPath:@"propertySetInSelectedCue" options:nil];
 	[devview bind:@"isRunning" toObject:representedObject withKeyPath:@"isRunning" options:nil];
 	[devview bind:@"isLive" toObject:representedObject withKeyPath:@"dimmer.propertyLiveInSelectedCue" options:nil];
-
+	
 }
 
 -(id) copyWithZone:(NSZone *)zone{

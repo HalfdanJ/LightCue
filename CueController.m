@@ -27,6 +27,9 @@ int endLinePosition = -3;
 CueController * cueController;
 
 @implementation CueController
+
+@synthesize activeCue;
+
 -(void) awakeFromNib{
 	NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"lineNumber" ascending:YES];
 	[cueTable setSortDescriptors:[NSArray arrayWithObject:sd]];
@@ -62,12 +65,16 @@ CueController * cueController;
 	}
 	
 	[cueArrayController setSelectionIndex:index + 1];
+	
+	[self setActiveCue:[[cueArrayController arrangedObjects] objectAtIndex:index]];
 }
 
 - (IBAction)stop:(id)sender{
 	for(CueModel * cue in [cueArrayController arrangedObjects]){
 		[cue stop];
 	}
+	
+	[self setActiveCue:nil];
 }
 
 - (IBAction)follow:(id)sender{

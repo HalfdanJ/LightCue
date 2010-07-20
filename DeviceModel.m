@@ -136,7 +136,7 @@ extern CueController * cueController;
 	}
 	if([(NSString*)context isEqualToString:@"propertyLiveInSelectedCue"]){
 		[self willChangeValueForKey:@"percentageLiveInSelectedCue"];
-		[self didChangeValueForKey:@"percentageLiveInSelectedCue"];
+		[self didChangeValueForKey:@"percentageLiveInSelectedCu"];
 	}
 	if([(NSString*)context isEqualToString:@"isRunning"]){
 		[self willChangeValueForKey:@"isRunning"];

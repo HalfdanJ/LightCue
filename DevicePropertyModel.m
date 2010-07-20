@@ -149,7 +149,7 @@ extern CueController * cueController;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueInSelectedCue{
-    return [NSSet setWithObjects:@"selectedCue", @"value",@"cueRelations", nil];
+    return [NSSet setWithObjects:@"selectedCue", @"value",@"cueRelations", @"outputValue", nil];
 }
 
 
@@ -158,7 +158,7 @@ extern CueController * cueController;
 }
 
 + (NSSet *)keyPathsForValuesAffectingPropertyLiveInSelectedCue{
-    return [NSSet setWithObjects:@"selectedCue", @"cueRelations", @"isRunning", nil];
+    return [NSSet setWithObjects:@"selectedCue", @"cueRelations", @"isRunning", @"lastModifier", nil];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -191,7 +191,14 @@ extern CueController * cueController;
     return tmpValue;
 }
 
-- (void)setValue:(NSNumber *)value 
+- (void) setValue:(NSNumber *)value;
+{
+    [self willChangeValueForKey:@"value"];
+    [self setPrimitiveValue:value];
+    [self didChangeValueForKey:@"value"];
+}
+	
+- (void) setValueAndProcess:(NSNumber *)value;
 {
     [self willChangeValueForKey:@"value"];
     [self setPrimitiveValue:value];
@@ -241,17 +248,18 @@ extern CueController * cueController;
 		//Check if its live, and should update the output value
 		if([self propertyLiveInSelectedCue]){
 			[self setValue:value forKey:@"outputValue"];
+		} else {
+			//Check if the last modifier is not set, or is before the selected cue, and that the selected cue is actually active
+			if([[[cueController activeCue] lineNumber] intValue] >= [[[self selectedCue] lineNumber] intValue] && 
+			   ([self lastModifier] == nil || [[[self lastModifier] valueForKeyPath:@"cue.lineNumber"] intValue] <= [[[self selectedCue] lineNumber] intValue]))
+			{
+				[self setLastModifier:devicePropertyRelation];
+				[self setValue:value forKey:@"outputValue"];
+			}
 		}
 	}
 	
 }
-
-- (BOOL)validateValue:(id *)valueRef error:(NSError **)outError 
-{
-    // Insert custom validation logic here.
-    return YES;
-}
-
 
 
 @end

@@ -44,9 +44,12 @@
 //Returns if the property is being set in the cue, and is currently live  (Yellow color)
 - (BOOL) propertyLiveInCue:(CueModel*)cue;
 
-
 //Clears the value (for deselection)
--(void) clear;
+- (void) clear;
+
+//set the value, and creates relations to the selected cue etc...
+- (void) setValueAndProcess:(NSNumber *)val;
+
 @property (readwrite, retain) CueModel * selectedCue;
 
 @property (readonly, retain) NSNumber* valueInSelectedCue;
