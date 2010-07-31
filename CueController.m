@@ -13,6 +13,7 @@
 #import "CueDeviceRelationModel.h"
 #import "CueTableTextCell.h"
 
+
 NSString *DemoItemsDropType = @"CueDropType";
 
 
@@ -24,7 +25,6 @@ int endLinePosition = -3;
 #define startLinePositionNum [NSNumber numberWithInt:startLinePosition]
 #define endLinePositionNum [NSNumber numberWithInt:endLinePosition]
 
-CueController * cueController;
 
 @implementation CueController
 
@@ -36,7 +36,8 @@ CueController * cueController;
 	
 	[cueTable setDataSource:self];
 	[cueTable registerForDraggedTypes:[NSArray arrayWithObjects:DemoItemsDropType, nil]];
-	cueController = self;
+	
+	[graphView bind:@"cueSelection" toObject:cueArrayController withKeyPath:@"selectedObjects" options:nil]; 
 	
 	[NSEvent addLocalMonitorForEventsMatchingMask:(NSKeyDownMask) handler:^(NSEvent *incomingEvent) {
         NSEvent *result = incomingEvent;
@@ -50,7 +51,9 @@ CueController * cueController;
 		
 	}];
 	
+	
 }
+
 
 
 
@@ -59,7 +62,7 @@ CueController * cueController;
 	
 	[[[cueArrayController selectedObjects] lastObject] go];
 	int index = [[cueArrayController selectionIndexes] lastIndex];
-
+	
 	while([[[[cueArrayController arrangedObjects] objectAtIndex:index] follow] boolValue]){
 		index++;
 	}
@@ -99,17 +102,21 @@ CueController * cueController;
 	
 	NSError *error;
 	NSArray *array = [moc executeFetchRequest:request error:&error];
+	[moc processPendingChanges];
+	[[moc undoManager] disableUndoRegistration];
 	
 	for(DevicePropertyModel * prop in array){
 		NSNumber * val = [prop valueInCue:cue];
-		//		if(![prop isRunning])
 		[prop setValue:val forKey:@"outputValue"];
 		
-//		if([[[(CueDeviceRelationModel*)[prop lastModifier] cue] valueForKey:@"lineNumber"] intValue] > [[cue valueForKey:@"lineNumber"] intValue])
-//			[prop setLastModifier:nil];
-		
 		[prop setLastModifier:[prop devicePropertyModifyingCue:cue]];
+		
+		
 	}
+	
+	[moc processPendingChanges];
+	[[moc undoManager] enableUndoRegistration];
+	
 	
 }
 
@@ -136,10 +143,12 @@ CueController * cueController;
 
 - (IBAction)addNewItem:(id)sender
 {
-	NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Cue" inManagedObjectContext:[document managedObjectContext]];
+	NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Cue" inManagedObjectContext:[cueArrayController managedObjectContext]];
 	[newItem setValue:@"" forKey:@"name"];
-	[newItem setValue:[NSNumber numberWithFloat:[[cueArrayController selectionIndexes] firstIndex]+0.1		] forKey:@"lineNumber"];
-	
+	if([[cueArrayController selectionIndexes] count] > 0)
+		[newItem setValue:[NSNumber numberWithFloat:[[cueArrayController selectionIndexes] firstIndex]+0.1		] forKey:@"lineNumber"];
+	else 
+		[newItem setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
 	[self renumberViewPositions];
 	
 }
@@ -152,8 +161,11 @@ CueController * cueController;
 	for( count = 0; count < [selectedItems count]; count ++ )
 	{
 		NSManagedObject *currentObject = [selectedItems objectAtIndex:count];
+		//	NSLog(@"Delete cue. Relations: %@",[currentObject valueForKey:@"deviceRelations"]);
+		//		[cueArrayController removeObject:currentObject];
 		[[document managedObjectContext] deleteObject:currentObject];
 	}
+	
 	
 	[self renumberViewPositions];
 	
@@ -269,6 +281,8 @@ CueController * cueController;
 -(CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row{
 	return 20;	
 }
+
+
 -(void) tableView:(NSTableView *)tableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)row{
 	CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
 	
@@ -278,13 +292,13 @@ CueController * cueController;
 		
 		if(!cueBeforeFollow && cueFollow)
 			[(CueTableTextCell*)aCell setFollowBoxSegment:1];			
-
+		
 		else if(cueFollow && [cue nextCue] == nil)
 			[(CueTableTextCell*)aCell setFollowBoxSegment:3];		
-
+		
 		else if(cueBeforeFollow && cueFollow)
 			[(CueTableTextCell*)aCell setFollowBoxSegment:2];			
-
+		
 		
 		else if(cueBeforeFollow && !cueFollow)
 			[(CueTableTextCell*)aCell setFollowBoxSegment:3];			
@@ -333,20 +347,42 @@ CueController * cueController;
 
 - (BOOL)tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
+	NSArray *objects = [[[self cueArrayController] arrangedObjects] objectsAtIndexes:rowIndexes];
+	NSMutableArray *copyObjectsArray = [NSMutableArray arrayWithCapacity:[objects count]];
+	NSMutableArray *copyStringsArray = [NSMutableArray arrayWithCapacity:[objects count]];
+	
+	for (CueModel *cue in objects) {
+		[copyObjectsArray addObject:[cue dictionaryRepresentation]];
+		[copyStringsArray addObject:[cue stringDescription]];
+	}
+	
+	
+	
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
-	[pasteboard declareTypes:[NSArray arrayWithObject:DemoItemsDropType] owner:self];
+	
+	[pasteboard declareTypes:[NSArray arrayWithObjects:DemoItemsDropType,@"CueBoardType",NSStringPboardType,nil] owner:self];
 	[pasteboard setData:data forType:DemoItemsDropType];
+	
+	NSData *copyData = [NSKeyedArchiver archivedDataWithRootObject:copyObjectsArray];
+	[pasteboard setData:copyData forType:@"CueBoardType"];
+	[pasteboard setString:[copyStringsArray componentsJoinedByString:@"\n"]
+				  forType:NSStringPboardType];
+	
 	return YES;
 }
 
--(NSDragOperation)tableView:(NSTableView *)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation
+-(NSDragOperation)tableView:(NSTableView *)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation 
 {
-	if( [info draggingSource] == cueTable )
+	if( [[info draggingSource] isKindOfClass:[tv class]]	)
 	{
 		if( operation == NSTableViewDropOn )
 			[tv setDropRow:row dropOperation:NSTableViewDropAbove];
 		
-		return NSDragOperationMove;
+		if([info draggingSource] == tv){
+			return NSDragOperationMove;
+		} else {
+			return NSDragOperationCopy;			
+		}
 	}
 	else
 	{
@@ -357,71 +393,67 @@ CueController * cueController;
 - (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
 {
 	NSPasteboard *pasteboard = [info draggingPasteboard];
-	NSData *rowData = [pasteboard dataForType:DemoItemsDropType];
-	NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
-	
-	NSArray *allItemsArray = [cueArrayController arrangedObjects];
-	NSMutableArray *draggedItemsArray = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
-	
-	NSUInteger currentItemIndex;
-	NSRange range = NSMakeRange( 0, [rowIndexes lastIndex] + 1 );
-	while([rowIndexes getIndexes:&currentItemIndex maxCount:1 inIndexRange:&range] > 0)
-	{
-		NSManagedObject *thisItem = [allItemsArray objectAtIndex:currentItemIndex];
+	if (operation == NSDragOperationCopy) {
+		NSData *data = [pasteboard dataForType:@"CueBoardType"];
+		if (data == nil) {
+			return NO;
+		}
+				
+		NSManagedObjectContext *moc = [[self cueArrayController] managedObjectContext];
+		NSArray *cuesArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 		
-		[draggedItemsArray addObject:thisItem];
+		for (NSDictionary *cueDictionary in cuesArray) {
+			CueModel *newCue;
+			newCue = (CueModel *)[NSEntityDescription insertNewObjectForEntityForName:@"Cue" inManagedObjectContext:moc];
+			[newCue setValuesForKeysWithDictionary:cueDictionary];		
+			if([[[self cueArrayController]  selectionIndexes] count] > 0)
+				[newCue setValue:[NSNumber numberWithFloat:[[[self cueArrayController]  selectionIndexes] firstIndex]+0.1] forKey:@"lineNumber"];
+			else 
+				[newCue setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
+			[self renumberViewPositions];
+		}
+				
+	} else {		
+		NSData *rowData = [pasteboard dataForType:DemoItemsDropType];
+		NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
+		
+		NSArray *allItemsArray = [cueArrayController arrangedObjects];
+		NSMutableArray *draggedItemsArray = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
+		
+		NSUInteger currentItemIndex;
+		NSRange range = NSMakeRange( 0, [rowIndexes lastIndex] + 1 );
+		while([rowIndexes getIndexes:&currentItemIndex maxCount:1 inIndexRange:&range] > 0)
+		{
+			NSManagedObject *thisItem = [allItemsArray objectAtIndex:currentItemIndex];
+			
+			[draggedItemsArray addObject:thisItem];
+		}
+		
+		int count;
+		for( count = 0; count < [draggedItemsArray count]; count++ )
+		{
+			NSManagedObject *currentItemToMove = [draggedItemsArray objectAtIndex:count];
+			[currentItemToMove setValue:[NSNumber numberWithInt:-1] forKey:@"lineNumber"];
+		}
+		
+		int tempRow;
+		if( row == 0 )
+			tempRow = -1;
+		else
+			tempRow = row;
+		
+		NSArray *startItemsArray = [self itemsWithViewPositionBetween:0 and:tempRow-1];
+		NSArray *endItemsArray = [self itemsWithViewPositionGreaterThanOrEqualTo:row];
+		
+		
+		int currentViewPosition;
+		
+		currentViewPosition = [self renumberViewPositionsOfItems:startItemsArray startingAt:0];
+		
+		currentViewPosition = [self renumberViewPositionsOfItems:draggedItemsArray startingAt:currentViewPosition];
+		
+		/*currentViewPosition = */ [self renumberViewPositionsOfItems:endItemsArray startingAt:currentViewPosition];
 	}
-	
-	int count;
-	for( count = 0; count < [draggedItemsArray count]; count++ )
-	{
-		NSManagedObject *currentItemToMove = [draggedItemsArray objectAtIndex:count];
-		[currentItemToMove setValue:[NSNumber numberWithInt:-1] forKey:@"lineNumber"];
-	}
-	
-	int tempRow;
-	if( row == 0 )
-		tempRow = -1;
-	else
-		tempRow = row;
-	
-	NSArray *startItemsArray = [self itemsWithViewPositionBetween:0 and:tempRow-1];
-	NSArray *endItemsArray = [self itemsWithViewPositionGreaterThanOrEqualTo:row];
-	
-	/*NSLog(@"\n before 0-%i  >= %i",tempRow,row);
-	 for(NSManagedObject * cue in startItemsArray){
-	 NSLog(@"Start item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 for(NSManagedObject * cue in endItemsArray){
-	 NSLog(@"End item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 
-	 for(NSManagedObject * cue in draggedItemsArray){
-	 NSLog(@"Drag item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 */
-	
-	int currentViewPosition;
-	
-	currentViewPosition = [self renumberViewPositionsOfItems:startItemsArray startingAt:0];
-	
-	currentViewPosition = [self renumberViewPositionsOfItems:draggedItemsArray startingAt:currentViewPosition];
-	
-	/*currentViewPosition = */ [self renumberViewPositionsOfItems:endItemsArray startingAt:currentViewPosition];
-	
-	/*NSLog(@"\n after");
-	 for(NSManagedObject * cue in startItemsArray){
-	 NSLog(@"Start item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 for(NSManagedObject * cue in endItemsArray){
-	 NSLog(@"End item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 
-	 for(NSManagedObject * cue in draggedItemsArray){
-	 NSLog(@"Drag item: %@, %@",[cue valueForKey:@"name"],[cue valueForKey:@"lineNumber"]);
-	 }
-	 */
-	
 	
 	return YES;
 }

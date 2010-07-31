@@ -11,7 +11,6 @@
 #import "CueModel.h"
 #import "CueDevicePropertyRelationModel.h"
 
-extern CueController * cueController;
 
 @interface DevicePropertyModel (CoreDataGeneratedPrimitiveAccessors)
 
@@ -28,14 +27,14 @@ extern CueController * cueController;
 @dynamic value;
 @dynamic device;
 
-@synthesize selectedCue, lastModifier, mutexHolder, isRunning;
+@synthesize selectedCue,activeCue , lastModifier, mutexHolder, isRunning;
 
 
 
 -(id) initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context{
 	if([super initWithEntity:entity insertIntoManagedObjectContext:context]){
 	//	NSLog(@"%@",[cueController cueArrayController]);
-		[[cueController cueArrayController] addObserver:self forKeyPath:@"selectionIndexes" options:nil context:@"cueSelection"];
+//		[[cueController cueArrayController] addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"cueSelection"];
 	}
 	return self;
 }
@@ -117,17 +116,16 @@ extern CueController * cueController;
 }
 
 -(NSNumber *) valueInSelectedCue{
-	if([[cueController selectedCues] count] == 1){
-		CueModel * cue = [[cueController selectedCues] lastObject];
+	if([self selectedCue] != nil){
+		CueModel * cue = selectedCue;
 		return [self valueInCue:cue];
 	}
-	return nil;
-	
+	return nil;	
 }
 
 -(BOOL) propertySetInSelectedCue{
-	if([[cueController selectedCues] count] == 1){
-		CueModel * cue = [[cueController selectedCues] lastObject];
+	if([self selectedCue] != nil){
+		CueModel * cue = selectedCue;
 		return [self propertySetInCue:cue];
 	}
 	return NO;
@@ -141,8 +139,8 @@ extern CueController * cueController;
 }
 
 -(BOOL) propertyLiveInSelectedCue{
-	if([[cueController selectedCues] count] == 1){
-		CueModel * cue = [[cueController selectedCues] lastObject];
+	if([self selectedCue] != nil){
+		CueModel * cue = selectedCue;
 		return [self propertyLiveInCue:cue];
 	}
 	return NO;	
@@ -162,14 +160,6 @@ extern CueController * cueController;
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if([(NSString*)context isEqualToString:@"cueSelection"]){
-		if([[cueController selectedCues] count] == 1){
-			[self setSelectedCue:[[cueController selectedCues] lastObject]];
-		}
-		else {
-			[self setSelectedCue:nil];	
-		}
-	}
 }	
 
 
@@ -204,8 +194,8 @@ extern CueController * cueController;
     [self setPrimitiveValue:value];
     [self didChangeValueForKey:@"value"];
 	
-	if([[cueController selectedCues] count] == 1){
-		CueModel * cue = [[cueController selectedCues] lastObject];
+	if([self selectedCue] != nil){
+		CueModel * cue = selectedCue;
 		BOOL deviceFound = NO;
 		BOOL propertyFound = NO;
 		NSManagedObject * deviceRelation, * devicePropertyRelation;
@@ -250,7 +240,7 @@ extern CueController * cueController;
 			[self setValue:value forKey:@"outputValue"];
 		} else {
 			//Check if the last modifier is not set, or is before the selected cue, and that the selected cue is actually active
-			if([[[cueController activeCue] lineNumber] intValue] >= [[[self selectedCue] lineNumber] intValue] && 
+			if([[activeCue lineNumber] intValue] >= [[[self selectedCue] lineNumber] intValue] && 
 			   ([self lastModifier] == nil || [[[self lastModifier] valueForKeyPath:@"cue.lineNumber"] intValue] <= [[[self selectedCue] lineNumber] intValue]))
 			{
 				[self setLastModifier:devicePropertyRelation];

@@ -46,23 +46,28 @@
 @dynamic fadeTime;
 @dynamic lineNumber;
 
-@synthesize preWaitRunningTime, preWaitVisualRep;
-@synthesize fadeTimeRunningTime, fadeTimeVisualRep;
-@synthesize fadeDownTimeRunningTime, fadeDownTimeVisualRep;
-@synthesize postWaitRunningTime, postWaitVisualRep;
+@synthesize preWaitRunningTime, preWaitTimerStartDate;
+@synthesize fadeTimeRunningTime;
+@synthesize fadeDownTimeRunningTime;
+@synthesize postWaitRunningTime;
 
 -(id) initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context{
 	if([super initWithEntity:entity insertIntoManagedObjectContext:context]){
-		[self addObserver:self forKeyPath:@"follow" options:nil context:@"follow"];
+		[self addObserver:self forKeyPath:@"follow" options:0 context:@"follow"];
+
 	}
 	return self;
 }
+
 - (IBAction) go{
 	if([self running])
 		[self stop];
 	[self startPreWait];
 }
 
+-(void) prepareForDeletion{
+	[self removeObserver:self forKeyPath:@"follow"];
+}
 - (IBAction) stop{
 	[self willChangeValueForKey:@"running"];
 	
@@ -86,8 +91,14 @@
 	[self didChangeValueForKey:@"fadeDownTimeVisualRep"];
 	[self didChangeValueForKey:@"postWaitVisualRep"];
 	
+    
 	fadePercent = 0;
 	fadeDownPercent = 0;
+	
+	preWaitTimerStartDate = nil;
+	fadeTimerStartDate = nil;
+	fadeDownTimerStartDate = nil;
+	postWaitTimerStartDate = nil;
 	
 	[self didChangeValueForKey:@"running"];
 	
@@ -110,8 +121,16 @@
 		[self didChangeValueForKey:@"percentageLive"];
 	}
 	if([(NSString*)context isEqualToString:@"follow"]){
+		[[self managedObjectContext] processPendingChanges];
+		[[[self managedObjectContext] undoManager] disableUndoRegistration];
+		
 		[[self nextCue] willChangeValueForKey:@"name"];
 		[[self nextCue] didChangeValueForKey:@"name"];
+		
+		[[self managedObjectContext] processPendingChanges];
+		[[[self managedObjectContext] undoManager] enableUndoRegistration];
+		
+		
 	}
 	
 }
@@ -122,6 +141,118 @@
 	} 
 	return NO;
 }
+
+-(double) runningTime{
+	if(![self running])
+		return 0;
+	
+	if([preWaitTimer isValid]){	
+		return [self preWaitRunningTime];
+	}
+	if([fadeTimer isValid]){	
+		return [[self valueForKey:@"preWait"] doubleValue] + [self fadeTimeRunningTime];
+	}
+	if([fadeDownTimer isValid]){	
+		return [[self valueForKey:@"preWait"] doubleValue] + [self fadeDownTimeRunningTime];
+	}
+	if([postWaitTimer isValid]){	
+		return [[self valueForKey:@"preWait"] doubleValue] + [self postWaitRunningTime];
+	}
+	
+	return 0;
+}	
+
+-(NSArray *) deviceRelationsChangeNotifier{
+	return [self valueForKey:@"deviceRelations"];
+}
+
++ (NSSet*) keyPathsForValuesAffectingDeviceRelationsChangeNotifier{
+	return [NSSet setWithObjects:@"deviceRelations", nil];
+
+}
+
++ (NSSet*) keyPathsForValuesAffectingRunningTime{
+	return [NSSet setWithObjects:@"running", @"preWaitVisualRep", @"postWaitVisualRep", @"fadeTimeVisualRep", @"fadeDownTimeVisualRep", nil];
+}
+
+
+
++ (NSArray *)keysToBeCopied {
+    static NSArray *keysToBeCopied = nil;
+    if (keysToBeCopied == nil) {
+        keysToBeCopied = [[NSArray alloc] initWithObjects:
+						 @"relationsDictionaryRepresentation", @"name", @"cueNumber", @"descriptionText", @"fadeDownTime", @"fadeTime", @"follow",@"mscNumber",@"name",@"postWait",@"preWait", nil];
+    }
+    return keysToBeCopied;
+}
+
+- (NSDictionary *)dictionaryRepresentation {
+    return [self dictionaryWithValuesForKeys:[[self class] keysToBeCopied]];
+}
+
+-(NSArray *) relationsDictionaryRepresentation{
+	NSMutableArray * dict = [NSMutableArray array];
+	for(CueDeviceRelationModel * deviceRelation in [self deviceRelations]){
+		NSMutableArray * propRelations = [NSMutableArray array];
+
+		for(CueDevicePropertyRelationModel * propRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+
+			NSString * linkName  = [propRelation valueForKey:@"linkName"];
+			if(linkName == nil) linkName = @"";
+			
+			[propRelations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+									  linkName,@"linkName", 
+									  [propRelation valueForKeyPath:@"deviceProperty.name"],@"name", 
+									  [propRelation valueForKey:@"value"], @"value",nil]];
+			
+
+		}
+		[dict addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+						 propRelations,@"relations",
+						 [deviceRelation valueForKeyPath:@"device.deviceNumber"],@"deviceNumber",nil]];
+	}
+	
+	return dict;
+}
+
+-(void) setRelationsDictionaryRepresentation:(NSArray *)d{
+	for(NSDictionary * devicesRelation in d){
+		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+		[fetchRequest setEntity:[NSEntityDescription entityForName:@"Device" inManagedObjectContext:[self managedObjectContext]]];
+		[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"deviceNumber == %@", [devicesRelation valueForKey:@"deviceNumber"]]];	
+		NSArray *fetchedObjects = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+		
+		if([fetchedObjects count] > 0){
+			DeviceModel * device = [fetchedObjects lastObject];
+			CueDeviceRelationModel* deviceRelation = [NSEntityDescription insertNewObjectForEntityForName:@"CueDeviceRelation" inManagedObjectContext:[self managedObjectContext]];
+			[deviceRelation setValue:device forKey:@"device"];
+			[self addDeviceRelationsObject:deviceRelation];
+			
+			for(NSDictionary * depropertyRelation in [devicesRelation valueForKey:@"relations"]){		
+				NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+				[fetchRequest setEntity:[NSEntityDescription entityForName:@"DeviceProperty" inManagedObjectContext:[self managedObjectContext]]];
+				[fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"name == %@ && device.deviceNumber == %@", [depropertyRelation valueForKey:@"name"], [devicesRelation valueForKey:@"deviceNumber"]]];	
+				NSArray *fetchedObjects = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+
+				if([fetchedObjects count] > 0){
+					CueDevicePropertyRelationModel* propertyRelation = [NSEntityDescription insertNewObjectForEntityForName:@"CueDevicePropertyRelation" inManagedObjectContext:[self managedObjectContext]];
+					[propertyRelation setValue:[fetchedObjects lastObject] forKey:@"deviceProperty"];
+					[propertyRelation setValue:[depropertyRelation valueForKey:@"linkName"] forKey:@"linkName"];
+					[propertyRelation setValue:[depropertyRelation valueForKey:@"value"] forKey:@"value"];
+					[propertyRelation setValue:deviceRelation forKey:@"cueDeviceRelation"];
+				}
+				
+			}			
+		}		
+	}
+}
+
+- (NSString *)stringDescription {
+    NSString *stringDescription = [self valueForKey:@"name"];
+    return stringDescription;
+}
+
+
 
 -(float) percentageLive{
 	float ret = 0;
@@ -140,11 +271,11 @@
 }
 
 + (NSSet*) keyPathsForValuesAffectingStatusImage {
-    return [NSSet setWithObjects:@"running", @"percentageLive", nil];
+	return [NSSet setWithObjects:@"running", @"percentageLive", nil];
 }
 
 + (NSSet*) keyPathsForValuesAffectingName {
-    return [NSSet setWithObjects:@"follow", nil];	
+	return [NSSet setWithObjects:@"follow", nil];	
 } 
 
 - (CueModel*) nextCue{
@@ -158,11 +289,33 @@
 	[fetchRequest setPredicate:predicate];	
 	
 	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:nil];
+	//NSLog(@"Next cue found %i for line %@ + 1",[fetchedObjects count], [self valueForKey:@"lineNumber"] );
+	if([fetchedObjects count] > 0){
+		return [fetchedObjects lastObject];
+	}
+	return nil;	
+}
+
+- (CueModel*) previousCue{
+	NSManagedObjectContext *context = [self managedObjectContext];
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Cue" inManagedObjectContext:context];
+	[fetchRequest setEntity:entity];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"lineNumber == %@-1", [self valueForKey:@"lineNumber"]];
+	[fetchRequest setPredicate:predicate];	
+	
+	NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:nil];
 	
 	if([fetchedObjects count] > 0){
 		return [fetchedObjects lastObject];
 	}
 	return nil;	
+}
+
+-(double) duration{
+	return [[self valueForKey:@"preWait"] doubleValue] + MAX( MAX([[self valueForKey:@"postWait"] doubleValue], [[self valueForKey:@"fadeTime"] doubleValue]), [[self valueForKey:@"fadeDownTime"] doubleValue]);
 }
 
 - (NSImage *) statusImage{
@@ -193,7 +346,14 @@
 				} else {
 					fadeFrom = [[lastRelation valueForKey:@"lostMutexValue"] doubleValue];
 				}	
+				[[self managedObjectContext] processPendingChanges];
+				[[[self managedObjectContext] undoManager] disableUndoRegistration];
+								
 				[[propertyRelation valueForKey:@"deviceProperty"] setValue:[NSNumber numberWithFloat:percent*[[propertyRelation valueForKey:@"value"] doubleValue]  + (1-percent)*fadeFrom] forKey:@"outputValue"];
+				
+				[[self managedObjectContext] processPendingChanges];
+				[[[self managedObjectContext] undoManager] enableUndoRegistration];
+
 			}
 		}
 	}
@@ -216,11 +376,12 @@
 		}
 	}
 	
+	preWaitTimerStartDate = [NSDate date];
+
 	if([[self valueForKey:@"preWait"] doubleValue] > 0 ){
 		preWaitTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
 														target:self selector:@selector(preWaitTimerFired:)
 													  userInfo:[NSNumber numberWithInt:1] repeats:YES];
-		preWaitTimerStartDate = [NSDate date];
 	} else {
 		[self startFade];
 		[self startFadeDown];
@@ -233,6 +394,8 @@
 }
 
 -(void) startFade{
+	
+	
 	//Update cache of tracking
 	for(NSManagedObject * deviceRelation in [self deviceRelations]){
 		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
@@ -410,39 +573,39 @@
 
 - (void)addDeviceRelationsObject:(NSManagedObject *)value 
 {    
-    NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
-    
-    [self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
-    [[self primitiveDeviceRelations] addObject:value];
-    [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
-    
-    [changedObjects release];
+	NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
+	
+	[self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
+	[[self primitiveDeviceRelations] addObject:value];
+	[self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];
+	
+	[changedObjects release];
 	
 }
 
 - (void)removeDeviceRelationsObject:(NSManagedObject *)value 
 {
-    NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
-    
-    [self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
-    [[self primitiveDeviceRelations] removeObject:value];
-    [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
-    
-    [changedObjects release];
+	NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
+	
+	[self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
+	[[self primitiveDeviceRelations] removeObject:value];
+	[self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:changedObjects];
+	
+	[changedObjects release];
 }
 
 - (void)addDeviceRelations:(NSSet *)value 
 {    
-    [self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
-    [[self primitiveDeviceRelations] unionSet:value];
-    [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
+	[self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
+	[[self primitiveDeviceRelations] unionSet:value];
+	[self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueUnionSetMutation usingObjects:value];
 }
 
 - (void)removeDeviceRelations:(NSSet *)value 
 {
-    [self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
-    [[self primitiveDeviceRelations] minusSet:value];
-    [self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
+	[self willChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
+	[[self primitiveDeviceRelations] minusSet:value];
+	[self didChangeValueForKey:@"deviceRelations" withSetMutation:NSKeyValueMinusSetMutation usingObjects:value];
 }
 
 - (void)setFadeTime:(NSNumber *)value 
@@ -451,20 +614,20 @@
 		[self setValue:value forKey:@"fadeDownTime"];
 	}
 	
-    [self willChangeValueForKey:@"fadeTime"];
-    [self setPrimitiveFadeTime:value];
-    [self didChangeValueForKey:@"fadeTime"];
+	[self willChangeValueForKey:@"fadeTime"];
+	[self setPrimitiveFadeTime:value];
+	[self didChangeValueForKey:@"fadeTime"];
 }
 
 - (NSNumber *)follow 
 {
-    NSNumber * tmpValue;
-    
-    [self willAccessValueForKey:@"follow"];
-    tmpValue = [self primitiveValueForKey:@"follow"];
-    [self didAccessValueForKey:@"follow"];
-    
-    return tmpValue;
+	NSNumber * tmpValue;
+	
+	[self willAccessValueForKey:@"follow"];
+	tmpValue = [self primitiveValueForKey:@"follow"];
+	[self didAccessValueForKey:@"follow"];
+	
+	return tmpValue;
 }
 
 - (void)setFollow:(NSNumber *)value 

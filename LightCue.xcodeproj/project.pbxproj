@@ -31,6 +31,12 @@
 		DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1861A011E65095008B4F27 /* CueTimeCell.m */; };
 		DD18642011E73700008B4F27 /* CueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18641F11E73700008B4F27 /* CueModel.m */; };
 		DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2E85D011C572EF00B3EFF3 /* CueTableView.m */; };
+		DD3A368312036BDC00797754 /* followArrow1.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368012036BDC00797754 /* followArrow1.png */; };
+		DD3A368412036BDC00797754 /* followArrow2.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368112036BDC00797754 /* followArrow2.png */; };
+		DD3A368512036BDC00797754 /* followArrow3.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368212036BDC00797754 /* followArrow3.png */; };
+		DD3A37C4120377DD00797754 /* prewait_01.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C1120377DD00797754 /* prewait_01.png */; };
+		DD3A37C5120377DD00797754 /* prewait_02.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C2120377DD00797754 /* prewait_02.png */; };
+		DD3A37C6120377DD00797754 /* prewait_03.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C3120377DD00797754 /* prewait_03.png */; };
 		DD3E885E11EFAF1100442BA7 /* greenDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885B11EFAF1100442BA7 /* greenDot.PNG */; };
 		DD3E885F11EFAF1100442BA7 /* halfOrangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885C11EFAF1100442BA7 /* halfOrangeDot.PNG */; };
 		DD3E886011EFAF1100442BA7 /* orangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */; };
@@ -50,9 +56,11 @@
 		DDA7043711C2829200132DB5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7043611C2829200132DB5 /* ViewController.m */; };
 		DDA7051611C28C2100132DB5 /* DevicesController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7051511C28C2100132DB5 /* DevicesController.m */; };
 		DDA7055811C2908C00132DB5 /* DevicePropertyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */; };
+		DDB3292511FC8DD500168794 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB3292411FC8DD500168794 /* GraphView.m */; };
 		DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */; };
 		DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC035A811CBD49B005EBCC6 /* CueController.m */; };
 		DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */; };
+		DDF2BFF511FDBD0C00928748 /* GraphCueAreaView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF2BFF411FDBD0C00928748 /* GraphCueAreaView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -105,6 +113,12 @@
 		DD18641F11E73700008B4F27 /* CueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueModel.m; sourceTree = "<group>"; };
 		DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableView.h; sourceTree = "<group>"; };
 		DD2E85D011C572EF00B3EFF3 /* CueTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableView.m; sourceTree = "<group>"; };
+		DD3A368012036BDC00797754 /* followArrow1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow1.png; path = Resources/followArrow1.png; sourceTree = "<group>"; };
+		DD3A368112036BDC00797754 /* followArrow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow2.png; path = Resources/followArrow2.png; sourceTree = "<group>"; };
+		DD3A368212036BDC00797754 /* followArrow3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow3.png; path = Resources/followArrow3.png; sourceTree = "<group>"; };
+		DD3A37C1120377DD00797754 /* prewait_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_01.png; path = Resources/prewait_01.png; sourceTree = "<group>"; };
+		DD3A37C2120377DD00797754 /* prewait_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_02.png; path = Resources/prewait_02.png; sourceTree = "<group>"; };
+		DD3A37C3120377DD00797754 /* prewait_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_03.png; path = Resources/prewait_03.png; sourceTree = "<group>"; };
 		DD3E885B11EFAF1100442BA7 /* greenDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = greenDot.PNG; path = Resources/greenDot.PNG; sourceTree = "<group>"; };
 		DD3E885C11EFAF1100442BA7 /* halfOrangeDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = halfOrangeDot.PNG; path = Resources/halfOrangeDot.PNG; sourceTree = "<group>"; };
 		DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = orangeDot.PNG; path = Resources/orangeDot.PNG; sourceTree = "<group>"; };
@@ -138,12 +152,16 @@
 		DDA7055611C2908C00132DB5 /* DevicePropertyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicePropertyModel.h; sourceTree = "<group>"; };
 		DDA7055711C2908C00132DB5 /* DevicePropertyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicePropertyModel.m; sourceTree = "<group>"; };
 		DDA7058A11C2946200132DB5 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
+		DDB3292311FC8DD500168794 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
+		DDB3292411FC8DD500168794 /* GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
 		DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeFormatter.m; sourceTree = "<group>"; };
 		DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFormatter.h; sourceTree = "<group>"; };
 		DDC035A711CBD49B005EBCC6 /* CueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueController.h; sourceTree = "<group>"; };
 		DDC035A811CBD49B005EBCC6 /* CueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueController.m; sourceTree = "<group>"; };
 		DDF0AB0611EB538C002729B4 /* CueDevicePropertyRelationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueDevicePropertyRelationModel.h; sourceTree = "<group>"; };
 		DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueDevicePropertyRelationModel.m; sourceTree = "<group>"; };
+		DDF2BFF311FDBD0C00928748 /* GraphCueAreaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphCueAreaView.h; sourceTree = "<group>"; };
+		DDF2BFF411FDBD0C00928748 /* GraphCueAreaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphCueAreaView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +230,7 @@
 				DDA7031711C276B800132DB5 /* DeviceGroup */,
 				DDA7031611C276B000132DB5 /* Device */,
 				DDA7032111C276F300132DB5 /* Operation */,
+				DDB3292C11FC8DFC00168794 /* CueEditArea */,
 				DDA7058A11C2946200132DB5 /* Helper.h */,
 				DD009C4711C97AE60011552A /* ThemedScroller.h */,
 				DD009C4811C97AE60011552A /* ThemedScroller.m */,
@@ -233,6 +252,12 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD3A37C1120377DD00797754 /* prewait_01.png */,
+				DD3A37C2120377DD00797754 /* prewait_02.png */,
+				DD3A37C3120377DD00797754 /* prewait_03.png */,
+				DD3A368012036BDC00797754 /* followArrow1.png */,
+				DD3A368112036BDC00797754 /* followArrow2.png */,
+				DD3A368212036BDC00797754 /* followArrow3.png */,
 				DD3E885B11EFAF1100442BA7 /* greenDot.PNG */,
 				DD3E885C11EFAF1100442BA7 /* halfOrangeDot.PNG */,
 				DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */,
@@ -345,6 +370,17 @@
 			name = Operation;
 			sourceTree = "<group>";
 		};
+		DDB3292C11FC8DFC00168794 /* CueEditArea */ = {
+			isa = PBXGroup;
+			children = (
+				DDB3292311FC8DD500168794 /* GraphView.h */,
+				DDB3292411FC8DD500168794 /* GraphView.m */,
+				DDF2BFF311FDBD0C00928748 /* GraphCueAreaView.h */,
+				DDF2BFF411FDBD0C00928748 /* GraphCueAreaView.m */,
+			);
+			name = CueEditArea;
+			sourceTree = "<group>";
+		};
 		E1B74B1A0667B4A90069E3BA /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,6 +419,9 @@
 			buildConfigurationList = 26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "LightCue" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* LightCue */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -416,6 +455,12 @@
 				DD009C6A11C97CDB0011552A /* TransparentScrollerSlotRight.tif in Resources */,
 				DD009C6B11C97CDB0011552A /* TransparentScrollerSlotTop.tif in Resources */,
 				DD009C6C11C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif in Resources */,
+				DD3A368312036BDC00797754 /* followArrow1.png in Resources */,
+				DD3A368412036BDC00797754 /* followArrow2.png in Resources */,
+				DD3A368512036BDC00797754 /* followArrow3.png in Resources */,
+				DD3A37C4120377DD00797754 /* prewait_01.png in Resources */,
+				DD3A37C5120377DD00797754 /* prewait_02.png in Resources */,
+				DD3A37C6120377DD00797754 /* prewait_03.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +494,8 @@
 				DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */,
 				DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */,
 				DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */,
+				DDB3292511FC8DD500168794 /* GraphView.m in Sources */,
+				DDF2BFF511FDBD0C00928748 /* GraphCueAreaView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +569,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_OBJC_GC = required;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = LightCue_Prefix.pch;
@@ -541,6 +589,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -555,6 +604,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
 			};

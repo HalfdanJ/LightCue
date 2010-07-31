@@ -231,7 +231,7 @@
 	
 	if(selection != nil){
 		for(DeviceModel* device in selection){
-			[device  addObserver:self forKeyPath:@"dimmer.value" options:nil context:@"dimmerValue"];
+			[device  addObserver:self forKeyPath:@"dimmer.value" options:0 context:@"dimmerValue"];
 		}
 	}
 	

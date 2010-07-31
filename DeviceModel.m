@@ -9,9 +9,7 @@
 #import "DeviceModel.h"
 #import "Helper.h"
 #import "DevicePropertyModel.h"
-#import "CueController.h"
 
-extern CueController * cueController;
 
 
 @interface DeviceModel (CoreDataGeneratedPrimitiveAccessors)
@@ -38,8 +36,8 @@ extern CueController * cueController;
 
 -(id) initWithEntity:(NSEntityDescription *)entity insertIntoManagedObjectContext:(NSManagedObjectContext *)context{
 	if([super initWithEntity:entity insertIntoManagedObjectContext:context]){
-		[[cueController cueArrayController] addObserver:self forKeyPath:@"selectionIndexes" options:nil context:@"cueSelection"];
-		[self addObserver:self forKeyPath:@"properties" options:nil context:@"properties"];
+		//		[[cueController cueArrayController] addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"cueSelection"];
+		[self addObserver:self forKeyPath:@"properties" options:0 context:@"properties"];
 		
 	}
 	return self;
@@ -112,22 +110,31 @@ extern CueController * cueController;
 	
 }
 
+-(void) setSelectedCue:(CueModel *)c{
+	[self willChangeValueForKey:@"selectedCue"];
+	selectedCue = c;
+	[self didChangeValueForKey:@"selectedCue"];
+	
+	for(DevicePropertyModel* prop in [self properties]){
+		[prop setSelectedCue:selectedCue];
+	}
+}
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if([(NSString*)context isEqualToString:@"cueSelection"]){
-		if([[cueController selectedCues] count] == 1){
-			[self setSelectedCue:[[cueController selectedCues] lastObject]];
-		}
-		else {
-			[self setSelectedCue:nil];	
-		}
-	}
+	/*	if([(NSString*)context isEqualToString:@"cueSelection"]){
+	 if([[cueController selectedCues] count] == 1){
+	 [self setSelectedCue:[[cueController selectedCues] lastObject]];
+	 }
+	 else {
+	 [self setSelectedCue:nil];	
+	 }
+	 }*/
 	if([(NSString*)context isEqualToString:@"properties"]){
 		for(DevicePropertyModel * prop in [self properties]){
 			[prop addObserver:self forKeyPath:@"propertySetInSelectedCue" options:nil context:@"propertySetInSelectedCue"];
-			[prop addObserver:self forKeyPath:@"isRunning" options:nil context:@"isRunning"];	
-			[prop addObserver:self forKeyPath:@"propertyLiveInSelectedCue" options:nil context:@"propertyLiveInSelectedCue"];	
-
+			[prop addObserver:self forKeyPath:@"isRunning" options:0 context:@"isRunning"];	
+			[prop addObserver:self forKeyPath:@"propertyLiveInSelectedCue" options:0 context:@"propertyLiveInSelectedCue"];	
+			
 		}
 	}
 	if([(NSString*)context isEqualToString:@"propertySetInSelectedCue"]){

@@ -7,10 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CueController.h"
+#import "CueModel.h"
+
+NSString *CuePBoardType = @"CueBoardType";
 
 
 @interface CueTableView : NSTableView {
-
+	IBOutlet CueController * cueController;
 }
 
 @end

@@ -16,7 +16,7 @@
 
 @implementation DeviceView
 
-@synthesize dimmerValue, dimmerOutputValue, deviceName, selectedCue, inSelectedCue, isRunning, isLive;
+@synthesize dimmerOutputValue, dimmerValue, deviceName, selectedCue, inSelectedCue, isRunning, isLive;
 
 -(void) awakeFromNib{
 	[self setFrame:NSMakeRect(0, 0, VIEW_SIZE, VIEW_SIZE)];
@@ -302,7 +302,7 @@
 	[super setRepresentedObject:representedObject];
 	
 	DeviceView * devview = (DeviceView*)[self view];
-	
+		
 	[devview bind:@"deviceNumber" toObject:representedObject withKeyPath:@"deviceNumber" options:nil];
 	[devview bind:@"dimmerValue" toObject:representedObject withKeyPath:@"dimmer.valueInSelectedCue" options:nil];
 	[devview bind:@"dimmerOutputValue" toObject:representedObject withKeyPath:@"dimmer.outputValue" options:nil];

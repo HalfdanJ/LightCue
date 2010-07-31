@@ -15,6 +15,8 @@
 @interface DevicePropertyModel : NSManagedObject {
 	//For easy binding, simply a link to the selected cue in the cue list
 	CueModel * selectedCue;
+	//The active cue
+	CueModel * activeCue;
 	
 	//The object that modified the outputValue last time
 	NSManagedObject * lastModifier;
@@ -24,6 +26,8 @@
 	
 	//YES if the device is used in a cue that is currently running
 	BOOL isRunning;
+	
+
 }
 
 -(float)floatValue;
@@ -51,10 +55,13 @@
 - (void) setValueAndProcess:(NSNumber *)val;
 
 @property (readwrite, retain) CueModel * selectedCue;
+@property (readwrite, retain) CueModel * activeCue;
+
 
 @property (readonly, retain) NSNumber* valueInSelectedCue;
 @property (readonly) BOOL propertySetInSelectedCue;
 @property (readonly) BOOL propertyLiveInSelectedCue;
+
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSNumber * value;

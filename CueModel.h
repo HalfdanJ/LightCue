@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CueDevicePropertyRelationModel.h"
-
+#import "CueDeviceRelationModel.h"
 
 @interface CueModel : NSManagedObject {
 	double preWaitRunningTime;
@@ -53,20 +53,34 @@
 - (void) performFollow;
 
 - (BOOL) running;
+- (double) duration;
 
 - (CueModel*) nextCue;
+- (CueModel*) previousCue;
+
+- (NSNumber *)follow;
+- (void)setFollow:(NSNumber *)value;
+
++ (NSArray *)keysToBeCopied;
+- (NSDictionary *)dictionaryRepresentation;
+- (NSString *)stringDescription;
 
 
 @property (readonly) BOOL running;
+@property (readonly) double runningTime;
+@property (readonly) NSArray * deviceRelationsChangeNotifier;
 
 @property (readwrite) double preWaitRunningTime;
 @property (readwrite) double fadeTimeRunningTime;
 @property (readwrite) double fadeDownTimeRunningTime;
 @property (readwrite) double postWaitRunningTime;
-@property (readwrite) NSNumber * preWaitVisualRep;
-@property (readwrite) NSNumber * fadeTimeVisualRep;
-@property (readwrite) NSNumber * fadeDownTimeVisualRep;
-@property (readwrite) NSNumber * postWaitVisualRep;
+@property (readwrite, retain) NSNumber * preWaitVisualRep;
+@property (readwrite, retain) NSNumber * fadeTimeVisualRep;
+@property (readwrite, retain) NSNumber * fadeDownTimeVisualRep;
+@property (readwrite, retain) NSNumber * postWaitVisualRep;
+
+@property (readonly, retain) NSDate * preWaitTimerStartDate;
+
 @property (nonatomic, retain) NSNumber * fadeTime;
 @property (nonatomic, retain) NSNumber * lineNumber;
 
@@ -76,8 +90,8 @@
 
 @property (readonly) float percentageLive;
 
-- (NSNumber *)follow;
-- (void)setFollow:(NSNumber *)value;
+@property (readwrite) NSArray * relationsDictionaryRepresentation;
+
 
 - (void)addDeviceRelationsObject:(NSManagedObject *)value;
 - (void)removeDeviceRelationsObject:(NSManagedObject *)value;

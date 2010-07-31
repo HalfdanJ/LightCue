@@ -11,9 +11,8 @@
 			<string key="com.brandonwalkin.BWToolkit">1.2.5</string>
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-			<integer value="100406"/>
-			<integer value="100203"/>
-			<integer value="100717"/>
+			<integer value="100202"/>
+			<integer value="100508"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -587,7 +586,7 @@
 															<array class="NSMutableArray" key="NSSubviews">
 																<object class="BWGradientBox" id="957202460">
 																	<reference key="NSNextResponder" ref="199438251"/>
-																	<int key="NSvFlags">274</int>
+																	<int key="NSvFlags">290</int>
 																	<array class="NSMutableArray" key="NSSubviews">
 																		<object class="BWUnanchoredButtonContainer" id="21791300">
 																			<reference key="NSNextResponder" ref="957202460"/>
@@ -605,7 +604,7 @@
 																						<string key="NSContents"/>
 																						<reference key="NSSupport" ref="26"/>
 																						<reference key="NSControlView" ref="979014323"/>
-																						<int key="NSButtonFlags">-2033958657</int>
+																						<int key="NSButtonFlags">-2033434369</int>
 																						<int key="NSButtonFlags2">163</int>
 																						<object class="NSCustomResource" key="NSNormalImage" id="349287615">
 																							<string key="NSClassName">NSImage</string>
@@ -677,7 +676,7 @@
 																</object>
 																<object class="NSScrollView" id="890436951">
 																	<reference key="NSNextResponder" ref="199438251"/>
-																	<int key="NSvFlags">268</int>
+																	<int key="NSvFlags">274</int>
 																	<array class="NSMutableArray" key="NSSubviews">
 																		<object class="NSClipView" id="208622271">
 																			<reference key="NSNextResponder" ref="890436951"/>
@@ -685,13 +684,13 @@
 																			<array class="NSMutableArray" key="NSSubviews">
 																				<object class="NSCustomView" id="54873623">
 																					<reference key="NSNextResponder" ref="208622271"/>
-																					<int key="NSvFlags">274</int>
-																					<string key="NSFrameSize">{691, 112}</string>
+																					<int key="NSvFlags">266</int>
+																					<string key="NSFrameSize">{736, 112}</string>
 																					<reference key="NSSuperview" ref="208622271"/>
-																					<string key="NSClassName">NSView</string>
+																					<string key="NSClassName">GraphView</string>
 																				</object>
 																			</array>
-																			<string key="NSFrame">{{1, 1}, {691, 112}}</string>
+																			<string key="NSFrame">{{1, 1}, {736, 112}}</string>
 																			<reference key="NSSuperview" ref="890436951"/>
 																			<reference key="NSNextKeyView" ref="54873623"/>
 																			<reference key="NSDocView" ref="54873623"/>
@@ -722,10 +721,10 @@
 																			<double key="NSPercent">0.50602412223815918</double>
 																		</object>
 																	</array>
-																	<string key="NSFrame">{{20, 32}, {693, 114}}</string>
+																	<string key="NSFrame">{{20, 32}, {738, 114}}</string>
 																	<reference key="NSSuperview" ref="199438251"/>
 																	<reference key="NSNextKeyView" ref="208622271"/>
-																	<int key="NSsFlags">546</int>
+																	<int key="NSsFlags">562</int>
 																	<reference key="NSVScroller" ref="436958432"/>
 																	<reference key="NSHScroller" ref="935051869"/>
 																	<reference key="NSContentView" ref="208622271"/>
@@ -1862,7 +1861,7 @@ A</bytes>
 												</object>
 											</object>
 											<double key="NSRowHeight">17</double>
-											<int key="NSTvFlags">-157286400</int>
+											<int key="NSTvFlags">-165675008</int>
 											<reference key="NSDelegate"/>
 											<reference key="NSDataSource"/>
 											<int key="NSGridStyleMask">3</int>
@@ -2397,11 +2396,11 @@ A</bytes>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="839218127">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<string key="NSFrameSize">{387, 267}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -3131,6 +3130,46 @@ A</bytes>
 					</object>
 					<int key="connectionID">100720</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">graphView</string>
+						<reference key="source" ref="107634021"/>
+						<reference key="destination" ref="54873623"/>
+					</object>
+					<int key="connectionID">100721</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">cueController</string>
+						<reference key="source" ref="54873623"/>
+						<reference key="destination" ref="107634021"/>
+					</object>
+					<int key="connectionID">100722</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">devicesController</string>
+						<reference key="source" ref="54873623"/>
+						<reference key="destination" ref="125446143"/>
+					</object>
+					<int key="connectionID">100723</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">cueController</string>
+						<reference key="source" ref="365980103"/>
+						<reference key="destination" ref="107634021"/>
+					</object>
+					<int key="connectionID">100728</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">cueController</string>
+						<reference key="source" ref="125446143"/>
+						<reference key="destination" ref="107634021"/>
+					</object>
+					<int key="connectionID">100734</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -3845,31 +3884,6 @@ A</bytes>
 						<reference key="parent" ref="199438251"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">100508</int>
-						<reference key="object" ref="890436951"/>
-						<array class="NSMutableArray" key="children">
-							<reference ref="436958432"/>
-							<reference ref="935051869"/>
-							<reference ref="54873623"/>
-						</array>
-						<reference key="parent" ref="199438251"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">100509</int>
-						<reference key="object" ref="436958432"/>
-						<reference key="parent" ref="890436951"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">100510</int>
-						<reference key="object" ref="935051869"/>
-						<reference key="parent" ref="890436951"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">100511</int>
-						<reference key="object" ref="54873623"/>
-						<reference key="parent" ref="890436951"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">100513</int>
 						<reference key="object" ref="16230363"/>
 						<array class="NSMutableArray" key="children">
@@ -4161,6 +4175,31 @@ A</bytes>
 						<reference key="object" ref="839218127"/>
 						<reference key="parent" ref="671325266"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100508</int>
+						<reference key="object" ref="890436951"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="54873623"/>
+							<reference ref="935051869"/>
+							<reference ref="436958432"/>
+						</array>
+						<reference key="parent" ref="199438251"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100511</int>
+						<reference key="object" ref="54873623"/>
+						<reference key="parent" ref="890436951"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100510</int>
+						<reference key="object" ref="935051869"/>
+						<reference key="parent" ref="890436951"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100509</int>
+						<reference key="object" ref="436958432"/>
+						<reference key="parent" ref="890436951"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -4231,9 +4270,9 @@ A</bytes>
 				<string key="100162.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100163.IBEditorWindowLastContentRect">{{329, 1038}, {50, 50}}</string>
 				<string key="100163.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100202.IBEditorWindowLastContentRect">{{385, 193}, {708, 549}}</string>
+				<string key="100202.IBEditorWindowLastContentRect">{{614, 106}, {708, 549}}</string>
 				<string key="100202.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100202.IBWindowTemplateEditedContentRect">{{385, 193}, {708, 549}}</string>
+				<string key="100202.IBWindowTemplateEditedContentRect">{{614, 106}, {708, 549}}</string>
 				<boolean value="NO" key="100202.NSWindowTemplate.visibleAtLaunch"/>
 				<string key="100203.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100204.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4376,15 +4415,14 @@ A</bytes>
 				<string key="100699.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100712.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="100713.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100716.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100717.IBEditorWindowLastContentRect">{{36, 95}, {387, 267}}</string>
+				<string key="100717.IBEditorWindowLastContentRect">{{329, 95}, {387, 267}}</string>
 				<string key="100717.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="100717.IBWindowTemplateEditedContentRect">{{36, 95}, {387, 267}}</string>
-				<boolean value="YES" key="100717.NSWindowTemplate.visibleAtLaunch"/>
+				<string key="100717.IBWindowTemplateEditedContentRect">{{329, 95}, {387, 267}}</string>
+				<boolean value="NO" key="100717.NSWindowTemplate.visibleAtLaunch"/>
 				<string key="100718.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBEditorWindowLastContentRect">{{401, 127}, {1110, 754}}</string>
+				<string key="5.IBEditorWindowLastContentRect">{{470, 157}, {1110, 754}}</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="5.IBWindowTemplateEditedContentRect">{{401, 127}, {1110, 754}}</string>
+				<string key="5.IBWindowTemplateEditedContentRect">{{470, 157}, {1110, 754}}</string>
 				<integer value="1" key="5.ImportedFromIB2"/>
 				<integer value="1" key="5.windowTemplate.hasMinSize"/>
 				<string key="5.windowTemplate.minSize">{131.131, 86}</string>
@@ -4395,7 +4433,7 @@ A</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">100720</int>
+			<int key="maxID">100734</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4421,6 +4459,7 @@ A</bytes>
 						<string key="cueArrayController">NSArrayController</string>
 						<string key="cueTable">NSTableView</string>
 						<string key="document">NSPersistentDocument</string>
+						<string key="graphView">NSView</string>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
@@ -4438,6 +4477,10 @@ A</bytes>
 				<object class="IBPartialClassDescription">
 					<string key="className">CueTableView</string>
 					<string key="superclassName">NSTableView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">cueController</string>
+						<string key="NS.object.0">CueController</string>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">CueTableView.h</string>
@@ -4473,6 +4516,7 @@ A</bytes>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="cueArrayController">NSArrayController</string>
+						<string key="cueController">CueController</string>
 						<string key="devicesArrayController">NSArrayController</string>
 						<string key="groupsArrayController">NSArrayController</string>
 					</dictionary>
@@ -4503,6 +4547,18 @@ A</bytes>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">GraphView</string>
+					<string key="superclassName">NSControl</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="cueController">CueController</string>
+						<string key="devicesController">DevicesController</string>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">GraphView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

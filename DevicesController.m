@@ -13,18 +13,34 @@
 
 @implementation DevicesController
 
+-(void) startAutoRearranger{
+	[devicesArrayController setAutomaticallyRearrangesObjects:YES];	
+}
+
 -(void) awakeFromNib{
-	[devicesArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"deviceSelection"];
-	[groupsArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"groupsSelection"];
+	[devicesArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"deviceSelection"];
+	[groupsArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"groupsSelection"];
 	
-	[cueArrayController addObserver:self forKeyPath:@"selectionIndexes" options:NSKeyValueObservingOptionNew context:@"cueSelection"];
-	
+	[cueArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"cueSelection"];
+	[cueController addObserver:self forKeyPath:@"activeCue" options:0 context:@"activeCue"];
+
 	devicesSelectedByGroup = [NSMutableArray array];
+	
+
+	//Performance hack
+	[self performSelector:@selector(startAutoRearranger) withObject:nil afterDelay:2.0];
 	
 }
 
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if([((NSString*)context) isEqualToString:@"activeCue"]){
+		for(DeviceModel * device in [devicesArrayController arrangedObjects]){
+			for(DevicePropertyModel* prop in [device properties]){
+				[prop setActiveCue:[cueController activeCue]];
+			}
+		}
+	}
 	
 	if([((NSString*)context) isEqualToString:@"deviceSelection"]){
 		
@@ -76,10 +92,15 @@
 	} 
 	
 	if([((NSString*)context) isEqualToString:@"cueSelection"]){
+		[[devicesArrayController managedObjectContext] processPendingChanges];
+		[[[devicesArrayController managedObjectContext] undoManager] disableUndoRegistration];
+
 		NSArray * selectedCues = [cueArrayController selectedObjects];
 	
 		if([selectedCues count] == 1 ){
 			for(DeviceModel * device in [devicesArrayController arrangedObjects]){
+				[device setSelectedCue:[selectedCues lastObject]];
+				
 				NSManagedObject* cueDeviceProperty = [[device dimmer] devicePropertyInCue:[selectedCues lastObject]];
 				if(cueDeviceProperty != nil){
 					[[device dimmer]  bind:@"value" toObject:cueDeviceProperty withKeyPath:@"value" options:nil];	
@@ -92,13 +113,20 @@
 			
 		} else {
 			for(DeviceModel * device in [devicesArrayController arrangedObjects]){
+				[device setSelectedCue:nil];
 				[device  clearDimmer];	
 				[device setSelectedCue:nil];
 			}	
 		
 		}
 		
-		
+		[[devicesArrayController managedObjectContext] processPendingChanges];
+		[[[devicesArrayController managedObjectContext] undoManager] enableUndoRegistration];
 	}
 }
+
+-(NSArrayController *) devicesArrayController{
+	return devicesArrayController;
+}
 @end
+

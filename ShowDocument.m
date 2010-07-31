@@ -9,7 +9,7 @@
 #import "ShowDocument.h"
 #import "DevicePropertyModel.h"
 #import "DeviceModel.h"
-#import "Helper.h"
+//#import "Helper.h"
 
 
 @implementation ShowDocument
@@ -18,14 +18,26 @@
 {
     self = [super init];
     if (self != nil) {
+		NSNotificationCenter *nc;
+		nc = [NSNotificationCenter defaultCenter];
+
+		[nc addObserver:self
+			   selector:@selector(handleContentChange:)
+				   name:NSManagedObjectContextObjectsDidChangeNotification
+				 object:nil];
+		
     }
     return self;
+}
+
+-(void)handleContentChange:(id)change{
+//	NSLog(@"Change %@",change);
 }
 
 //Prepopulate new document
 - (id)initWithType:(NSString *)typeName error:(NSError **)outError{
 	self = [super initWithType:typeName error:outError];
-    if (self != nil) {
+   /* if (self != nil) {
 		NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
 		[[managedObjectContext undoManager] disableUndoRegistration];
 		
@@ -52,7 +64,7 @@
 		
 		[managedObjectContext processPendingChanges];
 		[[managedObjectContext undoManager] enableUndoRegistration];
-	}
+	}*/
 	return self;
 }
 
@@ -123,6 +135,8 @@
 	return newError;
 	
 }
+
+
 
 
 

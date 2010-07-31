@@ -15,7 +15,7 @@
 	BOOL mouseOver;
 	int deviceNumber;
 	NSNumber * dimmerValue;
-	NSNumber * dimmerOuputValue;
+	NSNumber * dimmerOutputValue;
 	NSTrackingRectTag trackingRect;
 	NSString * deviceName;
 	
