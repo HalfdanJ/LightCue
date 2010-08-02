@@ -41,7 +41,7 @@
 	}
 }
 
-- (CueModel*) cue{
+- (LightCueModel*) cue{
 	return [[self valueForKey:@"cueDeviceRelation"] valueForKey:@"cue"];
 }
 

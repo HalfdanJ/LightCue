@@ -9,14 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 @class DeviceModel;
-@class CueModel;
+@class LightCueModel;
 
 
 @interface DevicePropertyModel : NSManagedObject {
 	//For easy binding, simply a link to the selected cue in the cue list
-	CueModel * selectedCue;
+	LightCueModel * selectedCue;
 	//The active cue
-	CueModel * activeCue;
+	LightCueModel * activeCue;
 	
 	//The object that modified the outputValue last time
 	NSManagedObject * lastModifier;
@@ -33,20 +33,20 @@
 -(float)floatValue;
 
 //Finds a cueDevicePropertyRelation for the cue if one
-- (NSManagedObject*)devicePropertyInCue:(CueModel*)cue;
+- (NSManagedObject*)devicePropertyInCue:(LightCueModel*)cue;
 
 //Finds the cueDevicePropertyRelation for the cue that edits it
-- (NSManagedObject*)devicePropertyModifyingCue:(CueModel*)cue;
+- (NSManagedObject*)devicePropertyModifyingCue:(LightCueModel*)cue;
 
 
 //tracks the property backwards from the cue to find the first occurance, and returns the value
-- (NSNumber*) valueInCue:(CueModel*)cue;
+- (NSNumber*) valueInCue:(LightCueModel*)cue;
 
 //Returns if the property is being set in the cue (Blue color)
-- (BOOL) propertySetInCue:(CueModel*)cue;
+- (BOOL) propertySetInCue:(LightCueModel*)cue;
 
 //Returns if the property is being set in the cue, and is currently live  (Yellow color)
-- (BOOL) propertyLiveInCue:(CueModel*)cue;
+- (BOOL) propertyLiveInCue:(LightCueModel*)cue;
 
 //Clears the value (for deselection)
 - (void) clear;
@@ -54,8 +54,8 @@
 //set the value, and creates relations to the selected cue etc...
 - (void) setValueAndProcess:(NSNumber *)val;
 
-@property (readwrite, retain) CueModel * selectedCue;
-@property (readwrite, retain) CueModel * activeCue;
+@property (readwrite, retain) LightCueModel * selectedCue;
+@property (readwrite, retain) LightCueModel * activeCue;
 
 
 @property (readonly, retain) NSNumber* valueInSelectedCue;

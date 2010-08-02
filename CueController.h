@@ -8,26 +8,27 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CueModel.h"
+#import "LightCueModel.h"
+#import "CueTreeController.h"
+#import "CueGroupModel.h"
 
-
-@interface CueController : NSObject <NSTableViewDelegate, NSTableViewDataSource> {
-	IBOutlet NSArrayController * cueArrayController;
+@interface CueController : NSResponder <NSTableViewDelegate, NSTableViewDataSource, NSOutlineViewDelegate, NSOutlineViewDataSource> {
+	IBOutlet CueTreeController * cueTreeController;
 	IBOutlet NSPersistentDocument * document;
-	NSArray *_sortDescriptors;
-	IBOutlet NSTableView * cueTable;
+//	IBOutlet NSTableView * cueTable;
+	IBOutlet NSOutlineView * cueOutline;
 	IBOutlet NSView * graphView;
 	
+	NSArray * sortDescriptors;
 	//The last cue that has been run
 	CueModel * activeCue;
 }
 
 @property (retain) CueModel * activeCue;
+@property (retain) 	NSArray * sortDescriptors;
 
-- (NSArrayController *) cueArrayController;
+- (CueTreeController *) cueTreeController;
 
-- (CueModel*)cueBeforeCue:(CueModel*)cue;
-- (CueModel*)cueAfterCue:(CueModel*)cue;
 
 - (NSArray*) selectedCues;
 - (IBAction)go:(id)sender;
@@ -39,7 +40,7 @@
 
 - (IBAction)addNewItem:(id)sender;
 - (IBAction)removeSelectedItems:(id)szender;
-- (NSArray *)sortDescriptors;
+
 - (void)renumberViewPositions;
 
 @end

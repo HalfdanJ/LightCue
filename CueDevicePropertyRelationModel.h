@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CueModel;
+@class LightCueModel;
 @interface CueDevicePropertyRelationModel : NSManagedObject {
 	CueDevicePropertyRelationModel * trackBackwardsCached;
 	BOOL isMutexHolder;
@@ -21,7 +21,7 @@
 @property (readonly) BOOL isLive;
 @property (readwrite) BOOL isMutexHolder;
 @property (copy) NSNumber * lostMutexValue;
-@property (retain, readonly) CueModel * cue;
+@property (retain, readonly) LightCueModel * cue;
 
 
 - (CueDevicePropertyRelationModel*) trackBackwards;

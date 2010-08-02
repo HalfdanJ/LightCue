@@ -21,7 +21,7 @@
 	[devicesArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"deviceSelection"];
 	[groupsArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"groupsSelection"];
 	
-	[cueArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:@"cueSelection"];
+	[[cueController cueTreeController] addObserver:self forKeyPath:@"selectedObjects" options:0 context:@"cueSelection"];
 	[cueController addObserver:self forKeyPath:@"activeCue" options:0 context:@"activeCue"];
 
 	devicesSelectedByGroup = [NSMutableArray array];
@@ -95,7 +95,7 @@
 		[[devicesArrayController managedObjectContext] processPendingChanges];
 		[[[devicesArrayController managedObjectContext] undoManager] disableUndoRegistration];
 
-		NSArray * selectedCues = [cueArrayController selectedObjects];
+		NSArray * selectedCues = [[cueController cueTreeController] selectedObjects];
 	
 		if([selectedCues count] == 1 ){
 			for(DeviceModel * device in [devicesArrayController arrangedObjects]){

@@ -28,8 +28,9 @@
 		DD009C6A11C97CDB0011552A /* TransparentScrollerSlotRight.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5E11C97CDB0011552A /* TransparentScrollerSlotRight.tif */; };
 		DD009C6B11C97CDB0011552A /* TransparentScrollerSlotTop.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C5F11C97CDB0011552A /* TransparentScrollerSlotTop.tif */; };
 		DD009C6C11C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif in Resources */ = {isa = PBXBuildFile; fileRef = DD009C6011C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif */; };
+		DD0AD2F812060A500001C420 /* CueGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD0AD2F712060A500001C420 /* CueGroupModel.m */; };
 		DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1861A011E65095008B4F27 /* CueTimeCell.m */; };
-		DD18642011E73700008B4F27 /* CueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18641F11E73700008B4F27 /* CueModel.m */; };
+		DD18642011E73700008B4F27 /* LightCueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18641F11E73700008B4F27 /* LightCueModel.m */; };
 		DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2E85D011C572EF00B3EFF3 /* CueTableView.m */; };
 		DD3A368312036BDC00797754 /* followArrow1.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368012036BDC00797754 /* followArrow1.png */; };
 		DD3A368412036BDC00797754 /* followArrow2.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368112036BDC00797754 /* followArrow2.png */; };
@@ -37,6 +38,9 @@
 		DD3A37C4120377DD00797754 /* prewait_01.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C1120377DD00797754 /* prewait_01.png */; };
 		DD3A37C5120377DD00797754 /* prewait_02.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C2120377DD00797754 /* prewait_02.png */; };
 		DD3A37C6120377DD00797754 /* prewait_03.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A37C3120377DD00797754 /* prewait_03.png */; };
+		DD3A38D11204348E00797754 /* CueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A38D01204348E00797754 /* CueModel.m */; };
+		DD3A39B21205A2F000797754 /* CueOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A39B11205A2F000797754 /* CueOutlineView.m */; };
+		DD3A3B201205BF9900797754 /* CueTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A3B1F1205BF9900797754 /* CueTreeController.m */; };
 		DD3E885E11EFAF1100442BA7 /* greenDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885B11EFAF1100442BA7 /* greenDot.PNG */; };
 		DD3E885F11EFAF1100442BA7 /* halfOrangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885C11EFAF1100442BA7 /* halfOrangeDot.PNG */; };
 		DD3E886011EFAF1100442BA7 /* orangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */; };
@@ -107,10 +111,12 @@
 		DD009C5E11C97CDB0011552A /* TransparentScrollerSlotRight.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotRight.tif; path = Resources/TransparentScrollerSlotRight.tif; sourceTree = "<group>"; };
 		DD009C5F11C97CDB0011552A /* TransparentScrollerSlotTop.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotTop.tif; path = Resources/TransparentScrollerSlotTop.tif; sourceTree = "<group>"; };
 		DD009C6011C97CDB0011552A /* TransparentScrollerSlotVerticalFill.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TransparentScrollerSlotVerticalFill.tif; path = Resources/TransparentScrollerSlotVerticalFill.tif; sourceTree = "<group>"; };
+		DD0AD2F612060A500001C420 /* CueGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueGroupModel.h; sourceTree = "<group>"; };
+		DD0AD2F712060A500001C420 /* CueGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueGroupModel.m; sourceTree = "<group>"; };
 		DD18619F11E65095008B4F27 /* CueTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTimeCell.h; sourceTree = "<group>"; };
 		DD1861A011E65095008B4F27 /* CueTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTimeCell.m; sourceTree = "<group>"; };
-		DD18641E11E73700008B4F27 /* CueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueModel.h; sourceTree = "<group>"; };
-		DD18641F11E73700008B4F27 /* CueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueModel.m; sourceTree = "<group>"; };
+		DD18641E11E73700008B4F27 /* LightCueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightCueModel.h; sourceTree = "<group>"; };
+		DD18641F11E73700008B4F27 /* LightCueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightCueModel.m; sourceTree = "<group>"; };
 		DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableView.h; sourceTree = "<group>"; };
 		DD2E85D011C572EF00B3EFF3 /* CueTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableView.m; sourceTree = "<group>"; };
 		DD3A368012036BDC00797754 /* followArrow1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow1.png; path = Resources/followArrow1.png; sourceTree = "<group>"; };
@@ -119,6 +125,13 @@
 		DD3A37C1120377DD00797754 /* prewait_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_01.png; path = Resources/prewait_01.png; sourceTree = "<group>"; };
 		DD3A37C2120377DD00797754 /* prewait_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_02.png; path = Resources/prewait_02.png; sourceTree = "<group>"; };
 		DD3A37C3120377DD00797754 /* prewait_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = prewait_03.png; path = Resources/prewait_03.png; sourceTree = "<group>"; };
+		DD3A38CF1204348E00797754 /* CueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueModel.h; sourceTree = "<group>"; };
+		DD3A38D01204348E00797754 /* CueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueModel.m; sourceTree = "<group>"; };
+		DD3A39B01205A2F000797754 /* CueOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueOutlineView.h; sourceTree = "<group>"; };
+		DD3A39B11205A2F000797754 /* CueOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueOutlineView.m; sourceTree = "<group>"; };
+		DD3A39C41205A4B700797754 /* PasteboardTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasteboardTypes.h; sourceTree = "<group>"; };
+		DD3A3B1E1205BF9900797754 /* CueTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTreeController.h; sourceTree = "<group>"; };
+		DD3A3B1F1205BF9900797754 /* CueTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTreeController.m; sourceTree = "<group>"; };
 		DD3E885B11EFAF1100442BA7 /* greenDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = greenDot.PNG; path = Resources/greenDot.PNG; sourceTree = "<group>"; };
 		DD3E885C11EFAF1100442BA7 /* halfOrangeDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = halfOrangeDot.PNG; path = Resources/halfOrangeDot.PNG; sourceTree = "<group>"; };
 		DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = orangeDot.PNG; path = Resources/orangeDot.PNG; sourceTree = "<group>"; };
@@ -236,6 +249,7 @@
 				DD009C4811C97AE60011552A /* ThemedScroller.m */,
 				DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */,
 				DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */,
+				DD3A39C41205A4B700797754 /* PasteboardTypes.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -305,18 +319,26 @@
 			children = (
 				DDC035A711CBD49B005EBCC6 /* CueController.h */,
 				DDC035A811CBD49B005EBCC6 /* CueController.m */,
+				DD3A39B01205A2F000797754 /* CueOutlineView.h */,
+				DD3A39B11205A2F000797754 /* CueOutlineView.m */,
 				DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */,
 				DD2E85D011C572EF00B3EFF3 /* CueTableView.m */,
 				DD18619F11E65095008B4F27 /* CueTimeCell.h */,
 				DD1861A011E65095008B4F27 /* CueTimeCell.m */,
-				DD18641E11E73700008B4F27 /* CueModel.h */,
-				DD18641F11E73700008B4F27 /* CueModel.m */,
+				DD3A38CF1204348E00797754 /* CueModel.h */,
+				DD3A38D01204348E00797754 /* CueModel.m */,
+				DD18641E11E73700008B4F27 /* LightCueModel.h */,
+				DD18641F11E73700008B4F27 /* LightCueModel.m */,
+				DD0AD2F612060A500001C420 /* CueGroupModel.h */,
+				DD0AD2F712060A500001C420 /* CueGroupModel.m */,
 				DDF0AB0611EB538C002729B4 /* CueDevicePropertyRelationModel.h */,
 				DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */,
 				DD3E892A11F0507D00442BA7 /* CueDeviceRelationModel.h */,
 				DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */,
 				DD3E8A5611F2150800442BA7 /* CueTableTextCell.h */,
 				DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */,
+				DD3A3B1E1205BF9900797754 /* CueTreeController.h */,
+				DD3A3B1F1205BF9900797754 /* CueTreeController.m */,
 			);
 			name = Cue;
 			sourceTree = "<group>";
@@ -489,13 +511,17 @@
 				DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */,
 				DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */,
 				DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */,
-				DD18642011E73700008B4F27 /* CueModel.m in Sources */,
+				DD18642011E73700008B4F27 /* LightCueModel.m in Sources */,
 				DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */,
 				DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */,
 				DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */,
 				DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */,
 				DDB3292511FC8DD500168794 /* GraphView.m in Sources */,
 				DDF2BFF511FDBD0C00928748 /* GraphCueAreaView.m in Sources */,
+				DD3A38D11204348E00797754 /* CueModel.m in Sources */,
+				DD3A39B21205A2F000797754 /* CueOutlineView.m in Sources */,
+				DD3A3B201205BF9900797754 /* CueTreeController.m in Sources */,
+				DD0AD2F812060A500001C420 /* CueGroupModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

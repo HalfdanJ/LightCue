@@ -7,7 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CueModel;
+@class LightCueModel;
 
 @interface DeviceView : NSView
 {
@@ -19,7 +19,7 @@
 	NSTrackingRectTag trackingRect;
 	NSString * deviceName;
 	
-	CueModel * selectedCue;
+	LightCueModel * selectedCue;
 	
 	BOOL inSelectedCue;
 	BOOL isRunning;
@@ -30,7 +30,7 @@
 @property (retain) NSNumber * dimmerValue;
 @property (retain) NSNumber * dimmerOutputValue;
 @property (retain) NSString * deviceName;
-@property (retain) CueModel * selectedCue;
+@property (retain) LightCueModel * selectedCue;
 
 @property (readwrite) BOOL inSelectedCue;
 @property (readwrite) BOOL isRunning;

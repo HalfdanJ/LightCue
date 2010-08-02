@@ -8,13 +8,13 @@
 
 #import "CueController.h"
 #include "CueTimeCell.h"
-#include "CueModel.h"
+#include "LightCueModel.h"
 #import "DevicePropertyModel.h"
 #import "CueDeviceRelationModel.h"
 #import "CueTableTextCell.h"
 
+#import "PasteboardTypes.h"
 
-NSString *DemoItemsDropType = @"CueDropType";
 
 
 int temporaryLinePosition = -1;
@@ -25,24 +25,72 @@ int endLinePosition = -3;
 #define startLinePositionNum [NSNumber numberWithInt:startLinePosition]
 #define endLinePositionNum [NSNumber numberWithInt:endLinePosition]
 
+@implementation NSManagedObjectContext (FetchedObjectFromURI)
+- (NSManagedObject *)objectWithURI:(NSURL *)uri
+{
+    NSManagedObjectID *objectID =
+	[[self persistentStoreCoordinator]
+	 managedObjectIDForURIRepresentation:uri];
+    
+    if (!objectID)
+    {
+        return nil;
+    }
+    
+    NSManagedObject *objectForID = [self objectWithID:objectID];
+    if (![objectForID isFault])
+    {
+        return objectForID;
+    }
+	
+    NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:[objectID entity]];
+    
+    // Equivalent to
+    // predicate = [NSPredicate predicateWithFormat:@"SELF = %@", objectForID];
+    NSPredicate *predicate =
+	[NSComparisonPredicate
+	 predicateWithLeftExpression:
+	 [NSExpression expressionForEvaluatedObject]
+	 rightExpression:
+	 [NSExpression expressionForConstantValue:objectForID]
+	 modifier:NSDirectPredicateModifier
+	 type:NSEqualToPredicateOperatorType
+	 options:0];
+    [request setPredicate:predicate];
+	
+    NSArray *results = [self executeFetchRequest:request error:nil];
+    if ([results count] > 0 )
+    {
+        return [results objectAtIndex:0];
+    }
+	
+    return nil;
+}
+@end
+
 
 @implementation CueController
 
-@synthesize activeCue;
+@synthesize activeCue, sortDescriptors;
+
+#pragma mark Init
 
 -(void) awakeFromNib{
 	NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"lineNumber" ascending:YES];
-	[cueTable setSortDescriptors:[NSArray arrayWithObject:sd]];
+	[self setSortDescriptors:[NSArray arrayWithObject:sd]];
 	
-	[cueTable setDataSource:self];
-	[cueTable registerForDraggedTypes:[NSArray arrayWithObjects:DemoItemsDropType, nil]];
+	//[cueOutline setSortDescriptors:[NSArray arrayWithObject:sd]];
 	
-	[graphView bind:@"cueSelection" toObject:cueArrayController withKeyPath:@"selectedObjects" options:nil]; 
+	[cueOutline setDataSource:self];
+	[cueOutline setNextResponder:self];
+	[cueOutline registerForDraggedTypes:[NSArray arrayWithObjects:CueDropType, nil]];
+	
+	[graphView bind:@"cueSelection" toObject:cueTreeController withKeyPath:@"selectedObjects" options:nil]; 
 	
 	[NSEvent addLocalMonitorForEventsMatchingMask:(NSKeyDownMask) handler:^(NSEvent *incomingEvent) {
         NSEvent *result = incomingEvent;
 		//		NSLog(@"Events: %@",incomingEvent);
-		
 		//Escape
 		if([incomingEvent keyCode] == 53){
 			[self stop:self];
@@ -52,28 +100,37 @@ int endLinePosition = -3;
 	}];
 	
 	
+	[[NSNotificationCenter defaultCenter] addObserver:cueTreeController
+											 selector:@selector(rearrangeObjects)
+												 name:NSUndoManagerDidUndoChangeNotification
+											   object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:cueTreeController
+											 selector:@selector(rearrangeObjects)
+												 name:NSUndoManagerDidRedoChangeNotification
+											   object:nil];
+	
 }
 
-
-
+#pragma mark Actions
 
 - (IBAction)go:(id)sender{
-	[self applyPropertiesForCue:[self cueBeforeCue:[[self selectedCues] lastObject]]];
+	CueModel * selectedCue = [[self selectedCues] lastObject];
 	
-	[[[cueArrayController selectedObjects] lastObject] go];
-	int index = [[cueArrayController selectionIndexes] lastIndex];
+	[self applyPropertiesForCue:[selectedCue previousCue]];
 	
-	while([[[[cueArrayController arrangedObjects] objectAtIndex:index] follow] boolValue]){
-		index++;
+	[[[cueTreeController selectedObjects] lastObject] go];
+	
+	while(selectedCue != nil && [selectedCue follow] ){
+		selectedCue = [selectedCue nextCue];
 	}
 	
-	[cueArrayController setSelectionIndex:index + 1];
+	[cueTreeController setSelectedObject:[selectedCue nextCue]];
 	
-	[self setActiveCue:[[cueArrayController arrangedObjects] objectAtIndex:index]];
+	[self setActiveCue:selectedCue ];
 }
 
 - (IBAction)stop:(id)sender{
-	for(CueModel * cue in [cueArrayController arrangedObjects]){
+	for(LightCueModel * cue in [cueTreeController arrangedObjects]){
 		[cue stop];
 	}
 	
@@ -83,7 +140,7 @@ int endLinePosition = -3;
 - (IBAction)follow:(id)sender{
 	BOOL first = YES;
 	BOOL set;
-	for(CueModel*cue in [self selectedCues]){
+	for(LightCueModel*cue in [self selectedCues]){
 		if(first){
 			set = ![[cue valueForKey:@"follow"] boolValue];
 		} 
@@ -93,7 +150,107 @@ int endLinePosition = -3;
 	}
 }
 
--(void) applyPropertiesForCue:(CueModel *)cue{
+-(IBAction) groupCues:(id)sender{	
+
+	BOOL canDo = YES;
+	
+	NSMutableArray * selectedCues= [NSMutableArray array];
+	
+	NSLog(@"Selection: %@",[cueTreeController selectedNodes]);
+	int lowestIndent = -1;
+	int lowestLineNumber = -1;
+	for(NSTreeNode * node in [cueTreeController selectedNodes]){
+		if(lowestIndent == -1 || lowestIndent > [[node indexPath] length])
+			lowestIndent = [[node indexPath] length];
+		if(lowestLineNumber == -1 || lowestLineNumber > [[(CueModel*)[node representedObject] lineNumber] intValue])
+			lowestLineNumber = [[(CueModel*)[node representedObject] lineNumber] intValue];
+
+	}
+	
+	//Rule 1: Are all in the selection either in the lowest Indent, or has a parents(parent) in that indent that is also in the selection?
+	for(NSTreeNode * node in [cueTreeController selectedNodes]){		
+		if([[node indexPath] length] > lowestIndent){
+			NSTreeNode * parent = [node parentNode];
+			while(parent != nil){
+//				NSLog(@"Nodes %@ parent (%@) %i %@",[[node representedObject] lineNumber],[[parent representedObject] lineNumber], [[cueTreeController selectedNodes] containsObject:parent],parent);
+				if(![[cueTreeController selectedNodes] containsObject:parent]){
+					canDo = NO; 
+					break;
+				}
+				if([[parent indexPath] length] == lowestIndent){
+					[cueTreeController removeSelectionIndexPaths:[NSArray arrayWithObject:[node indexPath]]];
+					break;
+				}	
+				parent = [parent parentNode];
+			}
+		}
+	}
+	
+	//Rule 2: all must have continious linenumber
+	for(NSTreeNode * node in [cueTreeController selectedNodes]){		
+		int line = [[(CueModel*)[node representedObject] lineNumber] intValue];
+		if(line != lowestLineNumber){
+			canDo = NO;
+			break;
+		}
+		lowestLineNumber ++;
+	}
+
+	
+	NSLog(@"Can do %i",canDo);
+	
+	if(canDo){
+	
+		for(CueModel * cue in [self selectedCues]){
+			[selectedCues addObject:cue];	
+		}
+		
+		double lineNumber  = 0;
+		if([[cueTreeController selectedObjects] count] > 0){
+			 lineNumber = [[[[cueTreeController selectedObjects] objectAtIndex:0] valueForKey:@"lineNumber"] doubleValue];
+			[[[cueTreeController selectedObjects] objectAtIndex:0] setLineNumber:[NSNumber numberWithFloat:lineNumber+0.1]];
+		}		
+		CueModel * parent = (CueModel*)[[[cueTreeController selectedObjects] objectAtIndex:0] parent];
+		
+		CueGroupModel *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"CueGroup" inManagedObjectContext:[cueTreeController managedObjectContext]];
+		[newItem setValue:@"" forKey:@"name"];
+		[newItem setParent:parent];
+		[newItem setValue:[NSNumber numberWithFloat:lineNumber] forKey:@"lineNumber"];
+		
+		for(CueModel * cue in selectedCues){
+			[cue setParent:newItem];
+		}
+
+		[self renumberViewPositions];
+	}
+	
+}
+
+- (IBAction)addNewItem:(id)sender
+{
+	LightCueModel *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"LightCue" inManagedObjectContext:[cueTreeController managedObjectContext]];
+	[newItem setName:@""];
+	if([[cueTreeController selectedObjects] count] > 0)
+		[newItem setValue:[NSNumber numberWithFloat:[[[[cueTreeController selectedObjects] lastObject] valueForKey:@"lineNumber"] doubleValue]+0.1] forKey:@"lineNumber"];
+	else 
+		[newItem setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
+	[self renumberViewPositions];
+	
+}
+
+- (IBAction)removeSelectedItems:(id)sender
+{
+	for(CueModel * cue in [cueTreeController selectedObjects])
+	{
+		[[document managedObjectContext] deleteObject:cue];
+	}	
+	
+	[self renumberViewPositions];	
+}
+
+#pragma mark Setters 
+
+-(void) applyPropertiesForCue:(LightCueModel *)cue{
 	NSManagedObjectContext *moc = [document managedObjectContext];
 	NSEntityDescription *entityDescription = [NSEntityDescription
 											  entityForName:@"DeviceProperty" inManagedObjectContext:moc];
@@ -120,68 +277,16 @@ int endLinePosition = -3;
 	
 }
 
+
+#pragma mark Getters 
+
 - (NSArray*) selectedCues{
-	return [cueArrayController selectedObjects];
-}
-
-- (CueModel*)cueBeforeCue:(CueModel*)cue{
-	int index = [[cueArrayController arrangedObjects] indexOfObject:cue];
-	if(index > 0)
-		return [[cueArrayController arrangedObjects] objectAtIndex:index-1];
-	else 
-		return nil;
-}
-- (CueModel*)cueAfterCue:(CueModel*)cue{
-	int index = [[cueArrayController arrangedObjects] indexOfObject:cue];
-	if(index < [[cueArrayController arrangedObjects] count] - 1)
-		return [[cueArrayController arrangedObjects] objectAtIndex:index+1];
-	else 
-		return nil;	
+	return [cueTreeController selectedObjects];
 }
 
 
-
-- (IBAction)addNewItem:(id)sender
-{
-	NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Cue" inManagedObjectContext:[cueArrayController managedObjectContext]];
-	[newItem setValue:@"" forKey:@"name"];
-	if([[cueArrayController selectionIndexes] count] > 0)
-		[newItem setValue:[NSNumber numberWithFloat:[[cueArrayController selectionIndexes] firstIndex]+0.1		] forKey:@"lineNumber"];
-	else 
-		[newItem setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
-	[self renumberViewPositions];
-	
-}
-
-- (IBAction)removeSelectedItems:(id)sender
-{
-	NSArray *selectedItems = [cueArrayController selectedObjects];
-	
-	int count;
-	for( count = 0; count < [selectedItems count]; count ++ )
-	{
-		NSManagedObject *currentObject = [selectedItems objectAtIndex:count];
-		//	NSLog(@"Delete cue. Relations: %@",[currentObject valueForKey:@"deviceRelations"]);
-		//		[cueArrayController removeObject:currentObject];
-		[[document managedObjectContext] deleteObject:currentObject];
-	}
-	
-	
-	[self renumberViewPositions];
-	
-}
-
-- (NSArray *)sortDescriptors
-{
-	if( _sortDescriptors == nil )
-	{
-		_sortDescriptors = [NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lineNumber" ascending:YES]];
-	}
-	return _sortDescriptors;
-}
-
-- (NSArrayController *) cueArrayController{
-	return cueArrayController;
+- (CueTreeController *) cueTreeController{
+	return cueTreeController;
 }
 
 
@@ -199,7 +304,7 @@ int endLinePosition = -3;
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	[fetchRequest setEntity:entityDesc];
 	[fetchRequest setPredicate:fetchPredicate];
-	[fetchRequest setSortDescriptors:[self sortDescriptors]];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lineNumber" ascending:YES]]];
 	arrayOfItems = [[document managedObjectContext] executeFetchRequest:fetchRequest error:&error];
 	[fetchRequest release];
 	
@@ -208,36 +313,31 @@ int endLinePosition = -3;
 
 - (NSArray *)itemsWithViewPosition:(int)value
 {
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber == %i", value];
-	
+	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber == %i", value];	
 	return [self itemsUsingFetchPredicate:fetchPredicate];
 }
 
 - (NSArray *)itemsWithNonTemporaryViewPosition
 {
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= 0"];
-	
+	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= 0"];	
 	return [self itemsUsingFetchPredicate:fetchPredicate];
 }
 
 - (NSArray *)itemsWithViewPositionGreaterThanOrEqualTo:(int)value
 {
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= %i", value];
-	
+	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= %i", value];	
 	return [self itemsUsingFetchPredicate:fetchPredicate];
 }
 
 - (NSArray *)itemsWithViewPositionBetween:(int)lowValue and:(int)highValue
 {
-	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= %i && lineNumber <= %i", lowValue, highValue];
-	
+	NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"lineNumber >= %i && lineNumber <= %i", lowValue, highValue];	
 	return [self itemsUsingFetchPredicate:fetchPredicate];
 }
 
 - (int)renumberViewPositionsOfItems:(NSArray *)array startingAt:(int)value
 {
-	int currentViewPosition = value;
-	
+	int currentViewPosition = value;	
 	int count = 0;
 	
 	if( array && ([array count] > 0) )
@@ -253,8 +353,6 @@ int endLinePosition = -3;
 	return currentViewPosition;
 }
 
-
-#pragma mark reorder
 - (void)renumberViewPositions
 {
 	NSArray *startItems = [self itemsWithViewPosition:startLinePosition];
@@ -273,21 +371,23 @@ int endLinePosition = -3;
 	
 	if( endItems && ([endItems count] > 0) )
 		[self renumberViewPositionsOfItems:endItems startingAt:currentViewPosition];
+	
+	[cueTreeController rearrangeObjects];
 }
 
+#pragma mark -
+#pragma mark OutlineView Delegates
 
-#pragma mark TableController
-
--(CGFloat) tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row{
+-(CGFloat) outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item{
 	return 20;	
 }
 
 
--(void) tableView:(NSTableView *)tableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)row{
-	CueModel * cue = [[cueArrayController arrangedObjects] objectAtIndex:row];
+-(void) outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn item:(id)item{
+	CueModel * cue = [item representedObject];
 	
 	if([[aTableColumn identifier] isEqualToString:@"name"]){
-		BOOL cueBeforeFollow = [[[self cueBeforeCue:cue] valueForKey:@"follow"] boolValue];
+		BOOL cueBeforeFollow = [[[cue previousCue] valueForKey:@"follow"] boolValue];
 		BOOL cueFollow = [[cue valueForKey:@"follow"] boolValue];
 		
 		if(!cueBeforeFollow && cueFollow)
@@ -345,40 +445,45 @@ int endLinePosition = -3;
 	[aCell setBackgroundStyle:NSBackgroundStyleDark];
 }
 
-- (BOOL)tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
+
+-(BOOL) outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pasteboard
 {
-	NSArray *objects = [[[self cueArrayController] arrangedObjects] objectsAtIndexes:rowIndexes];
-	NSMutableArray *copyObjectsArray = [NSMutableArray arrayWithCapacity:[objects count]];
-	NSMutableArray *copyStringsArray = [NSMutableArray arrayWithCapacity:[objects count]];
+	NSMutableArray * objectsURIs = [NSMutableArray arrayWithCapacity:[items count]];
+	NSMutableArray * objects = [NSMutableArray arrayWithCapacity:[items count]];
+	[items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[objects addObject:[obj representedObject]];
+		[objectsURIs addObject:[[[obj representedObject] objectID] URIRepresentation]];
+	}];
+	
+	NSMutableArray *copyObjectsArray = [NSMutableArray arrayWithCapacity:[objectsURIs count]];
+	NSMutableArray *copyStringsArray = [NSMutableArray arrayWithCapacity:[objectsURIs count]];
 	
 	for (CueModel *cue in objects) {
 		[copyObjectsArray addObject:[cue dictionaryRepresentation]];
 		[copyStringsArray addObject:[cue stringDescription]];
 	}
 	
+	[pasteboard declareTypes:[NSArray arrayWithObjects:CueDropType,CueCopyType,NSStringPboardType,nil] owner:self];
 	
-	
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
-	
-	[pasteboard declareTypes:[NSArray arrayWithObjects:DemoItemsDropType,@"CueBoardType",NSStringPboardType,nil] owner:self];
-	[pasteboard setData:data forType:DemoItemsDropType];
-	
-	NSData *copyData = [NSKeyedArchiver archivedDataWithRootObject:copyObjectsArray];
-	[pasteboard setData:copyData forType:@"CueBoardType"];
-	[pasteboard setString:[copyStringsArray componentsJoinedByString:@"\n"]
-				  forType:NSStringPboardType];
+	[pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:objectsURIs] forType:CueDropType];	
+	[pasteboard setData:[NSKeyedArchiver archivedDataWithRootObject:copyObjectsArray] forType:CueCopyType];
+	[pasteboard setString:[copyStringsArray componentsJoinedByString:@"\n"] forType:NSStringPboardType];
 	
 	return YES;
 }
 
--(NSDragOperation)tableView:(NSTableView *)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation 
+-(NSDragOperation) outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index 
 {
-	if( [[info draggingSource] isKindOfClass:[tv class]]	)
+	if(index == -1 && ([[item representedObject] isKindOfClass:[LightCueModel class]] ||  [info draggingSource] == outlineView)){
+		return NSDragOperationNone;
+	}
+	
+	if( [[info draggingSource] isKindOfClass:[outlineView class]]	)
 	{
-		if( operation == NSTableViewDropOn )
-			[tv setDropRow:row dropOperation:NSTableViewDropAbove];
-		
-		if([info draggingSource] == tv){
+		/*	if( operation == NSTableViewDropOn )
+		 [tv setDropRow:row dropOperation:NSTableViewDropAbove];
+		 */	
+		if([info draggingSource] == outlineView){
 			return NSDragOperationMove;
 		} else {
 			return NSDragOperationCopy;			
@@ -390,72 +495,106 @@ int endLinePosition = -3;
 	}
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation
+
+-(BOOL) outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
+	NSLog(@"childIndex: %i item: %@",index,item);
+	NSDragOperation operation;
+	if([info draggingSource] == outlineView){
+		operation = NSDragOperationMove;
+	} else {
+		operation = NSDragOperationCopy;			
+	}
+	
 	NSPasteboard *pasteboard = [info draggingPasteboard];
 	if (operation == NSDragOperationCopy) {
-		NSData *data = [pasteboard dataForType:@"CueBoardType"];
+		NSData *data = [pasteboard dataForType:CueCopyType];
 		if (data == nil) {
 			return NO;
 		}
-				
-		NSManagedObjectContext *moc = [[self cueArrayController] managedObjectContext];
+		
+		NSManagedObjectContext *moc = [cueTreeController managedObjectContext];
 		NSArray *cuesArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 		
 		for (NSDictionary *cueDictionary in cuesArray) {
-			CueModel *newCue;
-			newCue = (CueModel *)[NSEntityDescription insertNewObjectForEntityForName:@"Cue" inManagedObjectContext:moc];
+			LightCueModel *newCue;
+			newCue = (LightCueModel *)[NSEntityDescription insertNewObjectForEntityForName:@"LightCue" inManagedObjectContext:moc];
 			[newCue setValuesForKeysWithDictionary:cueDictionary];		
-			if([[[self cueArrayController]  selectionIndexes] count] > 0)
-				[newCue setValue:[NSNumber numberWithFloat:[[[self cueArrayController]  selectionIndexes] firstIndex]+0.1] forKey:@"lineNumber"];
-			else 
-				[newCue setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
+			/*	if([[[self cueTreeController]  selectionIndexes] count] > 0)
+			 [newCue setValue:[NSNumber numberWithFloat:[[cueTreeController selectionIndexes] firstIndex]+0.1] forKey:@"lineNumber"];
+			 else 
+			 [newCue setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];*/
 			[self renumberViewPositions];
 		}
-				
-	} else {		
-		NSData *rowData = [pasteboard dataForType:DemoItemsDropType];
-		NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
 		
-		NSArray *allItemsArray = [cueArrayController arrangedObjects];
-		NSMutableArray *draggedItemsArray = [NSMutableArray arrayWithCapacity:[rowIndexes count]];
+	} else if (operation == NSDragOperationMove){		
+		NSData *rowData = [pasteboard dataForType:CueDropType];
+		NSArray * uris = [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
+		
+		//		NSArray *allItemsArray = [cueArrayController arrangedObjects];
+		NSMutableArray *draggedItemsArray = [NSMutableArray arrayWithCapacity:[uris count]];
 		
 		NSUInteger currentItemIndex;
-		NSRange range = NSMakeRange( 0, [rowIndexes lastIndex] + 1 );
-		while([rowIndexes getIndexes:&currentItemIndex maxCount:1 inIndexRange:&range] > 0)
-		{
-			NSManagedObject *thisItem = [allItemsArray objectAtIndex:currentItemIndex];
-			
+		
+		for(NSURL* uri in uris){
+			NSManagedObject *thisItem = [[cueTreeController managedObjectContext] objectWithURI:uri];			
 			[draggedItemsArray addObject:thisItem];
 		}
 		
-		int count;
-		for( count = 0; count < [draggedItemsArray count]; count++ )
+		
+		for(int count = 0; count < [draggedItemsArray count]; count++ )
 		{
-			NSManagedObject *currentItemToMove = [draggedItemsArray objectAtIndex:count];
+			CueModel *currentItemToMove = [draggedItemsArray objectAtIndex:count];
 			[currentItemToMove setValue:[NSNumber numberWithInt:-1] forKey:@"lineNumber"];
+			[currentItemToMove setParent:[item representedObject]];
 		}
 		
-		int tempRow;
-		if( row == 0 )
-			tempRow = -1;
-		else
-			tempRow = row;
-		
-		NSArray *startItemsArray = [self itemsWithViewPositionBetween:0 and:tempRow-1];
-		NSArray *endItemsArray = [self itemsWithViewPositionGreaterThanOrEqualTo:row];
+		[self renumberViewPositions];
 		
 		
-		int currentViewPosition;
+		int lineNumberOfIndex = 0;
+		if(item != nil){
+			lineNumberOfIndex += [[[item representedObject] valueForKey:@"lineNumber"] intValue]+1;
+		}
 		
-		currentViewPosition = [self renumberViewPositionsOfItems:startItemsArray startingAt:0];
+		NSPredicate *fetchPredicate = [NSPredicate predicateWithFormat:@"parent == %@ && lineNumber != -1",[[item representedObject] parent]];	
+		NSArray * itemsWithSameParent = [self itemsUsingFetchPredicate:fetchPredicate];
 		
-		currentViewPosition = [self renumberViewPositionsOfItems:draggedItemsArray startingAt:currentViewPosition];
+		int i=0;
+		for(CueModel * cue in itemsWithSameParent){
+			if(i < index){
+				lineNumberOfIndex += [[cue valueForKey:@"children"] count]+1;
+			}
+			i++;
+		}
 		
-		/*currentViewPosition = */ [self renumberViewPositionsOfItems:endItemsArray startingAt:currentViewPosition];
+		/*	
+		 if(lineNumberOfIndex == 0)
+		 lineNumberOfIndex = -1;
+		 */
+		
+		NSArray *startItemsArray = [self itemsWithViewPositionBetween:0 and:lineNumberOfIndex-1];
+		NSArray *endItemsArray = [self itemsWithViewPositionGreaterThanOrEqualTo:lineNumberOfIndex];		
+		
+		int currentViewPosition = [self renumberViewPositionsOfItems:startItemsArray startingAt:0];	
+		currentViewPosition = [self renumberViewPositionsOfItems:draggedItemsArray startingAt:currentViewPosition];		
+		[self renumberViewPositionsOfItems:endItemsArray startingAt:currentViewPosition];
+		
+		[cueTreeController rearrangeObjects];
 	}
 	
 	return YES;
 }
 
+- (void)outlineViewItemDidCollapse:(NSNotification *)notification;
+{
+	CueModel *collapsedItem = [[[notification userInfo] valueForKey:@"NSObject"] representedObject];
+	[collapsedItem setValue:[NSNumber numberWithBool:NO] forKey:@"isExpanded"];
+}
+
+- (void)outlineViewItemDidExpand:(NSNotification *)notification;
+{
+	CueModel *expandedItem = [[[notification userInfo] valueForKey:@"NSObject"] representedObject];
+	[expandedItem setValue:[NSNumber numberWithBool:YES] forKey:@"isExpanded"];
+}
 @end

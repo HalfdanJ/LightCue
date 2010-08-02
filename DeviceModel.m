@@ -78,7 +78,7 @@
 	[[self dimmer] clear];
 }
 
-- (BOOL) propertySetInCue:(CueModel*)cue{
+- (BOOL) propertySetInCue:(LightCueModel*)cue{
 	for(DevicePropertyModel * prop in [self properties]){
 		if([prop propertySetInCue:cue])
 			return YES;
@@ -110,7 +110,7 @@
 	
 }
 
--(void) setSelectedCue:(CueModel *)c{
+-(void) setSelectedCue:(LightCueModel *)c{
 	[self willChangeValueForKey:@"selectedCue"];
 	selectedCue = c;
 	[self didChangeValueForKey:@"selectedCue"];

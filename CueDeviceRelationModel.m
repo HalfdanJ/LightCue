@@ -18,7 +18,7 @@
 	}
 }
 
-- (CueModel *)cue 
+- (LightCueModel *)cue 
 {
     id tmpObject;
     

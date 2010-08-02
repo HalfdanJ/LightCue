@@ -9,7 +9,6 @@
 
 @implementation GraphView
 @synthesize cueSelection, graphStartTime,graphTimePosition;
-//, preWaitValue,postWaitValue,fadeValue, fadeDownValue;
 
 -(id) initWithFrame:(NSRect)frameRect{		
 	[super initWithFrame:frameRect];
@@ -33,52 +32,6 @@
 	
 	[super awakeFromNib];
 }
-
-/*
- -(void) updateCueStartTimes{
- float counter = 0;
- int i = 0;
- NSMutableDictionary * runningCue = nil;
- BOOL lastRunning = NO;
- NSMutableDictionary * lastDict;
- for(NSMutableDictionary * dict in [drawingDict objectForKey:@"shownCues"]){
- 
- if([[dict objectForKey:@"cueModel"] running]){
- if(runningCue == nil)
- runningCue = dict;
- }
- 
- if(i==0){
- //First
- if([[[dict objectForKey:@"cueModel"] follow] boolValue] || ([[dict objectForKey:@"selected"] boolValue])){
- [self setGraphStartTime:0];
- } else {
- [self setGraphStartTime:-[[dict objectForKey:@"cueModel"] duration]];
- }
- } else {
- if([[dict objectForKey:@"cueModel"] running] && lastRunning){
- //They should sync their times
- counter += [[lastDict objectForKey:@"cueModel"] runningTime] - [[dict objectForKey:@"cueModel"] runningTime];				
- if([lastDict objectForKey:@"earlyStopDuration"] == nil){
- [lastDict setObject:[NSNumber numberWithDouble:[[lastDict objectForKey:@"cueModel"] runningTime] - [[dict objectForKey:@"cueModel"] runningTime]] forKey:@"earlyStopDuration"];
- }
- } else {
- counter += [[lastDict objectForKey:@"cueModel"] duration];			
- }
- }
- 
- [dict setValue:[NSNumber numberWithDouble:counter+[self graphStartTime]] forKey:@"startTime"];
- 
- i++;
- lastRunning = [[dict objectForKey:@"cueModel"] running];
- lastDict = dict;
- }
- [self setFrameSize:NSMakeSize(MAX(counter*timeScale, [[self superview] frame].size.width), [self frame].size.height)];
- 
- 
- }
- */
-
 -(double) firetimeForDict:(NSDictionary*)dict{
 	if([dict objectForKey:@"actualFireTime"] != nil){
 		return [[dict objectForKey:@"actualFireTime"] doubleValue];
@@ -120,7 +73,7 @@
 									//If the time is inside the margin of fade or fadeDown
 									double eventTime = [[event valueForKey:@"time"] doubleValue];
 									double cueTime = eventTime - [self firetimeForDict:[event valueForKeyPath:@"cue"]];
-									CueModel * cue = [event valueForKeyPath:@"cue.cueModel"];
+									LightCueModel * cue = [event valueForKeyPath:@"cue.cueModel"];
 									if(cueTime > [[cue valueForKey:@"preWait"] doubleValue] && (cueTime < [[cue valueForKey:@"preWait"] doubleValue] + [[cue valueForKey:@"fadeTime"] doubleValue] || cueTime < [[cue valueForKey:@"preWait"] doubleValue] + [[cue valueForKey:@"fadeDownTime"] doubleValue])){
 										double fadePercentage = MIN(1,(cueTime -  [[cue valueForKey:@"preWait"] doubleValue])/[[cue valueForKey:@"fadeTime"] doubleValue]);
 										double fadeDownPercentage = MIN(1,(cueTime -  [[cue valueForKey:@"preWait"] doubleValue])/[[cue valueForKey:@"fadeDownTime"] doubleValue]);
@@ -291,15 +244,15 @@
 	double fireTime; // the base time that the first cue in the selection will have
 	NSMutableDictionary * lastDict; //The dict before the current buffer
 	for(NSMutableDictionary * dict in [drawingDict objectForKey:@"shownCues"]){
-		CueModel * cue = [dict objectForKey:@"cueModel"];
+		LightCueModel * cue = [dict objectForKey:@"cueModel"];
 		
 		if(i==0){
 			//The first one should have 0 as expected fire time
 			fireTime = 0;
 		} else {
-			CueModel * lastCue = [lastDict objectForKey:@"cueModel"];
+			LightCueModel * lastCue = [lastDict objectForKey:@"cueModel"];
 			
-			if([[lastCue follow] boolValue]){
+			if([lastCue follow]){
 				fireTime += [[lastCue valueForKey:@"preWait"] doubleValue] + [[lastCue valueForKey:@"postWait"] doubleValue];				
 			} else {
 				//if the last dict is not a follow, this one is expected to fire just after the previous
@@ -332,7 +285,7 @@
 	NSArray * cueOberservationKeyPaths = [NSArray arrayWithObjects:@"runningTime",@"running",@"preWait",@"fadeTime",@"fadeDownTime",@"postWait",@"follow",@"deviceRelationsChangeNotifier",nil];
 	
 	for(NSDictionary * cueDict in [drawingDict objectForKey:@"shownCues"]){
-		CueModel * cue = [cueDict objectForKey:@"cueModel"];
+		LightCueModel * cue = [cueDict objectForKey:@"cueModel"];
 		for(NSString * s in cueOberservationKeyPaths){
 			[cue removeObserver:self forKeyPath:s];
 		}
@@ -341,11 +294,11 @@
 	//Calculate the cues that should be shown
 	NSMutableArray * shownDictCues = [NSMutableArray array];
 	
-	if([cueSelection count] == 1){		
-		CueModel * selectedCue = [cueSelection lastObject];		
+	if([cueSelection count] == 1 && [[cueSelection lastObject] isKindOfClass:[LightCueModel class]]){		
+		LightCueModel * selectedCue = [cueSelection lastObject];		
 		
-		CueModel * prevCue = selectedCue;		
-		while (prevCue != nil && [[[prevCue previousCue] follow] boolValue]) {
+		LightCueModel * prevCue = selectedCue;		
+		while (prevCue != nil && [[prevCue previousCue] follow]) {
 			prevCue = [prevCue previousCue];	
 			NSMutableDictionary * prev = [NSMutableDictionary dictionary];
 			[prev setObject:prevCue forKey:@"cueModel"];
@@ -361,8 +314,8 @@
 		[shownDictCues addObject:selected];
 		
 		
-		CueModel * nextCue = [selectedCue nextCue];
-		while (nextCue != nil && [[selectedCue follow] boolValue]) {
+		LightCueModel * nextCue = [selectedCue nextCue];
+		while (nextCue != nil && [selectedCue follow]) {
 			if(nextCue != nil){
 				NSMutableDictionary * next = [NSMutableDictionary dictionary];
 				[next setObject:nextCue forKey:@"cueModel"];
@@ -395,7 +348,7 @@
 	[drawingDict setObject:shownDictCues forKey:@"shownCues"];	
 	
 	for(NSDictionary * cueDict in [drawingDict objectForKey:@"shownCues"]){
-		CueModel * cue = [cueDict objectForKey:@"cueModel"];
+		LightCueModel * cue = [cueDict objectForKey:@"cueModel"];
 		for(NSString * s in cueOberservationKeyPaths){
 			[cue addObserver:self forKeyPath:s options:0 context:s];
 		}

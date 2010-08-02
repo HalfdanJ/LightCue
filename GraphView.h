@@ -8,7 +8,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-#import "CueModel.h"
+#import "LightCueModel.h"
 #import "CueController.h"
 #import "DevicesController.h"
 #import "DeviceModel.h"

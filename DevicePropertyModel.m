@@ -8,7 +8,7 @@
 
 #import "DevicePropertyModel.h"
 #import "CueController.h"
-#import "CueModel.h"
+#import "LightCueModel.h"
 #import "CueDevicePropertyRelationModel.h"
 
 
@@ -43,7 +43,7 @@
 	return [[self value] floatValue];
 }
 
--(NSManagedObject*)devicePropertyInCue:(CueModel*)cue{
+-(NSManagedObject*)devicePropertyInCue:(LightCueModel*)cue{
 	for(NSManagedObject * cueDevicePropertyRelation in [self valueForKey:@"cueRelations"]){
 		if([[cueDevicePropertyRelation valueForKey:@"cueDeviceRelation"] valueForKey:@"cue"] == cue){
 			return cueDevicePropertyRelation;
@@ -53,7 +53,7 @@
 	return nil;
 }
 
-- (NSManagedObject*)devicePropertyModifyingCue:(CueModel*)cue{
+- (NSManagedObject*)devicePropertyModifyingCue:(LightCueModel*)cue{
 	if([self propertySetInCue:cue]){
 		return [self devicePropertyInCue:cue];
 	} else {
@@ -78,7 +78,7 @@
 		[self setLastModifier:obj];
 }
 
-- (NSNumber*) valueInCue:(CueModel*)cue{
+- (NSNumber*) valueInCue:(LightCueModel*)cue{
 	if([self propertySetInCue:cue]){
 		if([self devicePropertyInCue:cue] == [self mutexHolder]){
 			return [self valueForKey:@"outputValue"];
@@ -108,7 +108,7 @@
 	}
 }
 
-- (BOOL) propertySetInCue:(CueModel*)cue{
+- (BOOL) propertySetInCue:(LightCueModel*)cue{
 	if([self devicePropertyInCue:cue] != nil)
 		return YES;
 	
@@ -117,7 +117,7 @@
 
 -(NSNumber *) valueInSelectedCue{
 	if([self selectedCue] != nil){
-		CueModel * cue = selectedCue;
+		LightCueModel * cue = selectedCue;
 		return [self valueInCue:cue];
 	}
 	return nil;	
@@ -125,13 +125,13 @@
 
 -(BOOL) propertySetInSelectedCue{
 	if([self selectedCue] != nil){
-		CueModel * cue = selectedCue;
+		LightCueModel * cue = selectedCue;
 		return [self propertySetInCue:cue];
 	}
 	return NO;
 }
 
--(BOOL) propertyLiveInCue:(CueModel *)cue{
+-(BOOL) propertyLiveInCue:(LightCueModel *)cue{
 	if([(CueDevicePropertyRelationModel*)lastModifier cue] == cue){
 		return YES;
 	}
@@ -140,7 +140,7 @@
 
 -(BOOL) propertyLiveInSelectedCue{
 	if([self selectedCue] != nil){
-		CueModel * cue = selectedCue;
+		LightCueModel * cue = selectedCue;
 		return [self propertyLiveInCue:cue];
 	}
 	return NO;	
@@ -195,7 +195,7 @@
     [self didChangeValueForKey:@"value"];
 	
 	if([self selectedCue] != nil){
-		CueModel * cue = selectedCue;
+		LightCueModel * cue = selectedCue;
 		BOOL deviceFound = NO;
 		BOOL propertyFound = NO;
 		NSManagedObject * deviceRelation, * devicePropertyRelation;

@@ -8,13 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CueDevicePropertyRelationModel.h"
-#import "CueModel.h"
+#import "LightCueModel.h"
 
 @interface CueDeviceRelationModel : NSManagedObject <NSKeyedArchiverDelegate> {
 
 }
 
-- (CueModel *)cue;
+- (LightCueModel *)cue;
 
 
 // Access to-many relationship via -[NSObject mutableSetValueForKey:]

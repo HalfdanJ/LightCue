@@ -17,8 +17,6 @@
     if (self) {
 		backgroundColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.3];	
 		activeBackgroundColor = [NSColor colorWithDeviceRed:56.0/255 green:117/255.0 blue:215/255.0 alpha:0.33];
-		//	[self setAutoresizingMask:NSViewHeightSizable];
-		
 		lastRunningTimeCache = 0;
     }
     return self;
@@ -106,7 +104,7 @@
 		float fadeTime = [[drawDict valueForKeyPath:@"cueModel.fadeTime"] floatValue];
 		float fadeDownTime = [[drawDict valueForKeyPath:@"cueModel.fadeDownTime"] floatValue];
 		float barHeight = [self frame].size.height/2.0-5;
-		CueModel * cue = [drawDict valueForKey:@"cueModel"];
+		LightCueModel * cue = [drawDict valueForKey:@"cueModel"];
 		
 		[NSGraphicsContext saveGraphicsState];{		
 			NSRect frame = [self bounds];
@@ -152,8 +150,8 @@
 		}[NSGraphicsContext restoreGraphicsState];
 		
 		//Follow
-		if([[cue follow]boolValue] && postWait > 0){
-			NSRect rect = NSMakeRect(0, barHeight*0.5+10.5, postWait*timeScale, barHeight);
+		if([cue follow] && postWait > 0){
+			NSRect rect = NSMakeRect(preWait*timeScale, barHeight*0.5+10.5, postWait*timeScale, barHeight);
 			NSDrawThreePartImage(rect, [NSImage imageNamed:@"followArrow1"], [NSImage imageNamed:@"followArrow2"], [NSImage imageNamed:@"followArrow3"], NO, NSCompositeSourceOver, 0.8, YES);
 		}
 		//Prewait
@@ -214,7 +212,7 @@
 -(void) mouseUp:(NSEvent *)theEvent{
 	if([theEvent clickCount] == 2 && [theEvent type] == NSLeftMouseUp){
 		if(cueController != nil){
-			[[cueController cueArrayController] setSelectedObjects:[NSArray arrayWithObject:[drawDict objectForKey:@"cueModel"]]];
+			[[cueController cueTreeController] setSelectedObject:[drawDict objectForKey:@"cueModel"]];
 		}
 	}
 }

@@ -26,8 +26,9 @@
 	
 }*/
 
+
 -(id) copy:sender{
-	NSArray *selectedObjects = [[cueController cueArrayController] selectedObjects];
+	NSArray *selectedObjects = [[cueController cueTreeController] selectedObjects];
     NSUInteger count = [selectedObjects count];
     if (count == 0) {
         return nil;
@@ -38,7 +39,7 @@
 	NSMutableArray *copyObjectsArray = [NSMutableArray arrayWithCapacity:count];
 	NSMutableArray *copyStringsArray = [NSMutableArray arrayWithCapacity:count];
 	
-	for (CueModel *cue in selectedObjects) {
+	for (LightCueModel *cue in selectedObjects) {
 		[copyObjectsArray addObject:[cue dictionaryRepresentation]];
 		[copyStringsArray addObject:[cue stringDescription]];
 	}
@@ -52,6 +53,8 @@
 	[generalPasteboard setString:[copyStringsArray componentsJoinedByString:@"\n"]
 						 forType:NSStringPboardType];
 	
+	return generalPasteboard;
+	
 }
 
 - (void)paste:sender {
@@ -61,17 +64,17 @@
         return;
     }
 	
-    NSManagedObjectContext *moc = [[cueController cueArrayController] managedObjectContext];
-//    NSMutableSet *departmentEmployees = [self.department mutableSetValueForKey:@"Cue"];
+    NSManagedObjectContext *moc = [[cueController cueTreeController] managedObjectContext];
+//    NSMutableSet *departmentEmployees = [self.department mutableSetValueForKey:@"LightCue"];
     NSArray *cuesArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 	
     for (NSDictionary *cueDictionary in cuesArray) {
-        CueModel *newCue;
-        newCue = (CueModel *)[NSEntityDescription insertNewObjectForEntityForName:@"Cue"
+        LightCueModel *newCue;
+        newCue = (LightCueModel *)[NSEntityDescription insertNewObjectForEntityForName:@"LightCue"
 																inManagedObjectContext:moc];
         [newCue setValuesForKeysWithDictionary:cueDictionary];		
-		if([[[cueController cueArrayController]  selectionIndexes] count] > 0)
-			[newCue setValue:[NSNumber numberWithFloat:[[[cueController cueArrayController]  selectionIndexes] firstIndex]+0.1] forKey:@"lineNumber"];
+		if([[[cueController cueTreeController]  selectedObjects] count] > 0)
+			[newCue setValue:[NSNumber numberWithFloat:[[[[[cueController cueTreeController] selectedObjects]  lastObject] valueForKey:@"lineNumber"] doubleValue]+0.1] forKey:@"lineNumber"];
 		else 
 			[newCue setValue:[NSNumber numberWithFloat:0] forKey:@"lineNumber"];
 		[cueController renumberViewPositions];
@@ -83,14 +86,14 @@
 
 - (void)cut:sender {
     [self copy:sender];
-	NSArray *selectedObjects = [[cueController cueArrayController] selectedObjects];
+	NSArray *selectedObjects = [[cueController cueTreeController] selectedObjects];
     if ([selectedObjects count] == 0) {
         return;
     }
 //    NSManagedObjectContext *moc = [[cueController cueArrayController] managedObjectContext];
 	
-    for (CueModel *cue in selectedObjects) {
-		[[cueController cueArrayController] removeObject:cue];
+    for (LightCueModel *cue in selectedObjects) {
+		[[cueController cueTreeController] removeObject:cue];
 //        [moc deleteObject:cue];
     }
 	
