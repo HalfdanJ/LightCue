@@ -10,5 +10,8 @@
 
 
 @implementation CueGroupModel
+-(BOOL) isGroup{
+	return YES;	
+}
 
 @end

@@ -69,6 +69,11 @@
 		DevicePropertyModel * dimmerProperty = [device dimmer];
 		if (dimmerProperty != nil) {
 			float dimValue = [[dimmerProperty valueForKey:@"value"] floatValue]/255.0;
+			if([[dimmerProperty valueForKey:@"value"] floatValue] == -1){
+				dimValue = [[dimmerProperty valueForKey:@"outputValue"] floatValue]/255.0;
+			}
+
+			
 			if(dimValue > highestDim){
 				highestDim = dimValue;
 			}
@@ -102,6 +107,9 @@
 		DevicePropertyModel * dimmerProperty = [device dimmer];
 		if (dimmerProperty != nil) {
 			float dimValue = [[dimmerProperty valueForKey:@"value"] floatValue]/255.0;
+			if([[dimmerProperty valueForKey:@"value"] floatValue] == -1){
+				dimValue = [[dimmerProperty valueForKey:@"outputValue"] floatValue]/255.0;
+			}
 			if(dimValue > 0.02){
 				
 				
@@ -196,7 +204,10 @@
 	for(DeviceModel* device in selection){
 		DevicePropertyModel * dimmerProperty = [device dimmer];
 		if (dimmerProperty != nil) {
-			[valueCache addObject:[dimmerProperty valueForKey:@"value"]];
+			NSNumber * n = [dimmerProperty valueForKey:@"value"];
+			if([n intValue] == -1)
+				n = [dimmerProperty valueForKey:@"outputValue"];
+			[valueCache addObject:n];
 		}
 	}
 	
@@ -224,6 +235,8 @@
 	if(selection != nil){
 		for(DeviceModel* device in selection){
 			[device removeObserver:self forKeyPath:@"dimmer.value"];
+			[device removeObserver:self forKeyPath:@"dimmer.outputValue"];
+
 		}
 	}
 	
@@ -232,6 +245,7 @@
 	if(selection != nil){
 		for(DeviceModel* device in selection){
 			[device  addObserver:self forKeyPath:@"dimmer.value" options:0 context:@"dimmerValue"];
+			[device  addObserver:self forKeyPath:@"dimmer.outputValue" options:0 context:@"dimmerValue"];
 		}
 	}
 	

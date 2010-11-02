@@ -9,13 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 @class LightCueModel;
+@class CueModel;
 @class DevicePropertyModel;
 
 @interface DeviceModel : NSManagedObject {
 	DevicePropertyModel * _dimmerStore;
 	
 	//For easy binding, simply a link to the selected cue in the cue list
-	LightCueModel * selectedCue;
+	CueModel * selectedCue;
 }
 
 @property (nonatomic, retain) NSSet* properties;
@@ -24,7 +25,7 @@
 @property (nonatomic, retain) NSSet* addresses;
 @property (retain) NSArray * addressesToken;
 @property (readonly, retain) NSString * fullName;
-@property (readwrite, retain) LightCueModel * selectedCue;
+@property (readwrite, retain) CueModel * selectedCue;
 
 @property (readonly) BOOL propertySetInSelectedCue;
 @property (readonly) BOOL isRunning;
@@ -34,8 +35,10 @@
 -(NSString*) fullName;
 -(DevicePropertyModel *) dimmer;
 -(void) clearDimmer;
+-(void) storeProperties;
 
-- (BOOL) propertySetInCue:(LightCueModel*)cue;
+
+- (BOOL) propertySetInCue:(CueModel*)cue;
 
 @end
 

@@ -25,5 +25,9 @@
 }
 
 -(NSArrayController *) devicesArrayController;
+-(IBAction) createNewDevice:(id)sender;
+
+- (IBAction) storeDevices:(id)sender;
+- (IBAction) clearDevices:(id)sender;
 
 @end

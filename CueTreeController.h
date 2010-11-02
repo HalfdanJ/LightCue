@@ -7,12 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ESTreeController.h"
 
-
-@interface CueTreeController : NSTreeController {
+@interface CueTreeController : ESTreeController {
 
 }
-
-- (void)setSelectedObject:(id)object;
 
 @end

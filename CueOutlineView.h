@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CueController.h"
+#import "ESOutlineView.h"
 
-@interface CueOutlineView : NSOutlineView {
+@interface CueOutlineView : ESOutlineView {
 	IBOutlet CueController * cueController;
 
 }

@@ -53,7 +53,6 @@
 	return self;
 }
 
-
 - (void)awakeFromInsert;
 {
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"isLeaf"];
@@ -64,49 +63,12 @@
 }
 
 
-- (IBAction) go{
-	if([self running])
-		[self stop];
-	[self startPreWait];
-}
-
-
 - (IBAction) stop{
-	[self willChangeValueForKey:@"running"];
-	
-	[preWaitTimer invalidate];
-	[fadeTimer invalidate];
-	[fadeDownTimer invalidate];
-	[postWaitTimer invalidate];
-	
-	[self willChangeValueForKey:@"preWaitVisualRep"];
-	[self willChangeValueForKey:@"fadeTimeVisualRep"];
-	[self willChangeValueForKey:@"fadeDownTimeVisualRep"];
-	[self willChangeValueForKey:@"postWaitVisualRep"];
-	
-	preWaitRunningTime = 0;
-	fadeTimeRunningTime = 0;
-	fadeDownTimeRunningTime = 0;
-	postWaitRunningTime = 0;
-	
-	[self didChangeValueForKey:@"preWaitVisualRep"];
-	[self didChangeValueForKey:@"fadeTimeVisualRep"];
-	[self didChangeValueForKey:@"fadeDownTimeVisualRep"];
-	[self didChangeValueForKey:@"postWaitVisualRep"];
-	
-    
+	[super stop];
+
 	fadePercent = 0;
 	fadeDownPercent = 0;
-	
-	preWaitTimerStartDate = nil;
-	fadeTimerStartDate = nil;
-	fadeDownTimerStartDate = nil;
-	postWaitTimerStartDate = nil;
-	
-	[self didChangeValueForKey:@"running"];
-	
-	[self finishedRunning];
-	
+		
 	for(NSManagedObject * deviceRelation in [self deviceRelations]){
 		for(CueDevicePropertyRelationModel * propertyRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
 			if([[propertyRelation valueForKey:@"deviceProperty"] valueForKey:@"mutexHolder"] == propertyRelation){
@@ -139,6 +101,41 @@
 }
 
 
++ (NSArray *)keysToBeCopied {
+    static NSArray *keysToBeCopied = nil;
+    if (keysToBeCopied == nil) {
+        keysToBeCopied = [[NSArray alloc] initWithObjects:
+						  @"relationsDictionaryRepresentation", @"name", @"cueNumber", @"descriptionText", @"fadeDownTime", @"fadeTime", @"follow",@"mscNumber",@"name",@"postWait",@"preWait", nil];
+    }
+    return keysToBeCopied;
+}
+
+-(NSArray *) relationsDictionaryRepresentation{
+	NSMutableArray * dict = [NSMutableArray array];
+	for(CueDeviceRelationModel * deviceRelation in [self deviceRelations]){
+		NSMutableArray * propRelations = [NSMutableArray array];
+		
+		for(CueDevicePropertyRelationModel * propRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
+			
+			NSString * linkName  = [propRelation valueForKey:@"linkName"];
+			if(linkName == nil) linkName = @"";
+			
+			[propRelations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+									  linkName,@"linkName", 
+									  [propRelation valueForKeyPath:@"deviceProperty.name"],@"name", 
+									  [propRelation valueForKey:@"value"], @"value",nil]];
+			
+			
+		}
+		[dict addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+						 propRelations,@"relations",
+						 [deviceRelation valueForKeyPath:@"device.deviceNumber"],@"deviceNumber",nil]];
+	}
+	
+	return dict;
+}
+
+
 -(NSArray *) deviceRelationsChangeNotifier{
 	return [self valueForKey:@"deviceRelations"];
 }
@@ -148,49 +145,6 @@
 
 }
 
-+ (NSSet*) keyPathsForValuesAffectingRunningTime{
-	return [NSSet setWithObjects:@"running", @"preWaitVisualRep", @"postWaitVisualRep", @"fadeTimeVisualRep", @"fadeDownTimeVisualRep", nil];
-}
-
-
-
-+ (NSArray *)keysToBeCopied {
-    static NSArray *keysToBeCopied = nil;
-    if (keysToBeCopied == nil) {
-        keysToBeCopied = [[NSArray alloc] initWithObjects:
-						 @"relationsDictionaryRepresentation", @"name", @"cueNumber", @"descriptionText", @"fadeDownTime", @"fadeTime", @"follow",@"mscNumber",@"name",@"postWait",@"preWait", nil];
-    }
-    return keysToBeCopied;
-}
-
-- (NSDictionary *)dictionaryRepresentation {
-    return [self dictionaryWithValuesForKeys:[[self class] keysToBeCopied]];
-}
-
--(NSArray *) relationsDictionaryRepresentation{
-	NSMutableArray * dict = [NSMutableArray array];
-	for(CueDeviceRelationModel * deviceRelation in [self deviceRelations]){
-		NSMutableArray * propRelations = [NSMutableArray array];
-
-		for(CueDevicePropertyRelationModel * propRelation in [deviceRelation valueForKey:@"devicePropertyRelations"]){
-
-			NSString * linkName  = [propRelation valueForKey:@"linkName"];
-			if(linkName == nil) linkName = @"";
-			
-			[propRelations addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-									  linkName,@"linkName", 
-									  [propRelation valueForKeyPath:@"deviceProperty.name"],@"name", 
-									  [propRelation valueForKey:@"value"], @"value",nil]];
-			
-
-		}
-		[dict addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-						 propRelations,@"relations",
-						 [deviceRelation valueForKeyPath:@"device.deviceNumber"],@"deviceNumber",nil]];
-	}
-	
-	return dict;
-}
 
 -(void) setRelationsDictionaryRepresentation:(NSArray *)d{
 	for(NSDictionary * devicesRelation in d){
@@ -222,11 +176,6 @@
 			}			
 		}		
 	}
-}
-
-- (NSString *)stringDescription {
-    NSString *stringDescription = [self valueForKey:@"name"];
-    return stringDescription;
 }
 
 
@@ -300,8 +249,8 @@
 	fadePercent = 0;
 	fadeDownPercent = 0;
 	
-	[self willChangeValueForKey:@"running"];
 	
+		
 	NSSet * cueDeviceRelations = [self deviceRelations];
 	for(NSManagedObject * obj in cueDeviceRelations){
 		for(CueDevicePropertyRelationModel * relation in [obj valueForKey:@"devicePropertyRelations"]){
@@ -313,20 +262,8 @@
 		}
 	}
 	
-	preWaitTimerStartDate = [NSDate date];
-
-	if([[self valueForKey:@"preWait"] doubleValue] > 0 ){
-		preWaitTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-														target:self selector:@selector(preWaitTimerFired:)
-													  userInfo:[NSNumber numberWithInt:1] repeats:YES];
-	} else {
-		[self startFade];
-		[self startFadeDown];
-		[self startPostWait];
-		
-	}
+	[super startPreWait];
 	
-	[self didChangeValueForKey:@"running"];
 	
 }
 
@@ -337,44 +274,12 @@
 			[propertyRelation trackBackwards];
 		}
 	}
-	
-	if([[self valueForKey:@"fadeTime"] doubleValue] > 0 ){
-		fadeTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-													 target:self selector:@selector(fadeTimerFired:)
-												   userInfo:[NSNumber numberWithInt:1] repeats:YES];
-		fadeTimerStartDate = [NSDate date];
-	} else {
-	}
-}
 
--(void) startFadeDown{
-	if([[self valueForKey:@"fadeDownTime"] doubleValue] > 0 ){
-		fadeDownTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-														 target:self selector:@selector(fadeDownTimerFired:)
-													   userInfo:[NSNumber numberWithInt:1] repeats:YES];
-		fadeDownTimerStartDate = [NSDate date];
-	} else {
-		if([[self valueForKey:@"fadeTime"] doubleValue] == 0){
-			[self startPostWait];
-		}
-	}
-}
-
--(void) startPostWait{
-	if([[self valueForKey:@"postWait"] doubleValue] > 0 ){
-		postWaitTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-														 target:self selector:@selector(postWaitTimerFired:)
-													   userInfo:[NSNumber numberWithInt:1] repeats:YES];
-		postWaitTimerStartDate = [NSDate date];
-	} else {
-		[self performFollow];
-	}
+	[super startFade];
 }
 
 -(void) finishedRunning{
-	[self willChangeValueForKey:@"running"];
-	[self didChangeValueForKey:@"running"];
-	
+	[super finishedRunning];
 	
 	NSSet * cueDeviceRelations = [self deviceRelations];
 	for(NSManagedObject * obj in cueDeviceRelations){
@@ -393,43 +298,15 @@
 	
 }
 
--(void) performFollow{
-	if([self follow] ){
-		[[self nextCue] go];
-	}
-}
-
-- (void)preWaitTimerFired:(NSTimer*)theTimer{
-	[self willChangeValueForKey:@"preWaitVisualRep"];
-	preWaitRunningTime = [[theTimer fireDate] timeIntervalSinceDate:preWaitTimerStartDate];
-	
-	if (preWaitRunningTime >= [[self valueForKey:@"preWait"] doubleValue]) {
-		[preWaitTimer invalidate];
-		preWaitRunningTime = 0;
-		[self startFade];
-		[self startFadeDown];
-		[self startPostWait];
-		
-	}
-	[self didChangeValueForKey:@"preWaitVisualRep"];
-}
 
 - (void)fadeTimerFired:(NSTimer*)theTimer{
-	[self willChangeValueForKey:@"fadeTimeVisualRep"];
-	fadeTimeRunningTime = [[theTimer fireDate] timeIntervalSinceDate:fadeTimerStartDate];
-	
+	[super fadeTimerFired:theTimer];
+
 	fadePercent = fadeTimeRunningTime/[[self valueForKey:@"fadeTime"] doubleValue];
 	if(fadePercent > 1)
 		fadePercent = 1;
 	
-	if (fadeTimeRunningTime >= [[self valueForKey:@"fadeTime"] doubleValue]) {
-		[fadeTimer invalidate];
-		if(![fadeDownTimer isValid] && ![postWaitTimer isValid] ){
-			[self finishedRunning];
-		}
-		fadeTimeRunningTime = 0;
-	}
-	[self didChangeValueForKey:@"fadeTimeVisualRep"];
+	NSLog(@"Fade time %f %f",fadePercent, fadeTimeRunningTime);
 	
 	[self updateOutput ];
 	
@@ -437,39 +314,15 @@
 }
 
 - (void)fadeDownTimerFired:(NSTimer*)theTimer{
-	[self willChangeValueForKey:@"fadeDownTimeVisualRep"];
-	fadeDownTimeRunningTime = [[theTimer fireDate] timeIntervalSinceDate:fadeDownTimerStartDate];
+	[super fadeDownTimerFired:theTimer];
+	
 	fadeDownPercent = fadeDownTimeRunningTime/[[self valueForKey:@"fadeTime"] doubleValue];
 	if(fadeDownPercent > 1)
 		fadeDownPercent = 1;
-	
-	
-	if (fadeDownTimeRunningTime >= [[self valueForKey:@"fadeDownTime"] doubleValue]) {
-		[fadeDownTimer invalidate];
-		if(![fadeTimer isValid] && ![postWaitTimer isValid] ){
-			[self finishedRunning];
-		}
-		
-		fadeDownTimeRunningTime = 0;
-	}
-	[self didChangeValueForKey:@"fadeDownTimeVisualRep"];
-}
 
-- (void)postWaitTimerFired:(NSTimer*)theTimer{
-	[self willChangeValueForKey:@"postWaitVisualRep"];
-	postWaitRunningTime = [[theTimer fireDate] timeIntervalSinceDate:postWaitTimerStartDate];
-	
-	if (postWaitRunningTime >= [[self valueForKey:@"postWait"] doubleValue]) {
-		[postWaitTimer invalidate];
-		postWaitRunningTime = 0;
-		[self performFollow];
-		if(![fadeTimer isValid] && ![fadeDownTimer isValid] ){
-			[self finishedRunning];
-		}
-	}
-	[self didChangeValueForKey:@"postWaitVisualRep"];
-}
+	[self updateOutput ];
 
+}
 
 
 #pragma mark CoreData

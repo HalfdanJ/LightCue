@@ -34,6 +34,12 @@
 //	NSLog(@"Change %@",change);
 }
 
+
+
+-(IBAction)performGo:(id) sender{
+	[cueController go:sender];
+}
+
 //Prepopulate new document
 - (id)initWithType:(NSString *)typeName error:(NSError **)outError{
 	self = [super initWithType:typeName error:outError];

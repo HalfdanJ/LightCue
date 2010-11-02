@@ -15,7 +15,6 @@
 @interface CueController : NSResponder <NSTableViewDelegate, NSTableViewDataSource, NSOutlineViewDelegate, NSOutlineViewDataSource> {
 	IBOutlet CueTreeController * cueTreeController;
 	IBOutlet NSPersistentDocument * document;
-//	IBOutlet NSTableView * cueTable;
 	IBOutlet NSOutlineView * cueOutline;
 	IBOutlet NSView * graphView;
 	

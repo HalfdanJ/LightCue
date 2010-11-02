@@ -31,7 +31,16 @@
 		DD0AD2F812060A500001C420 /* CueGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD0AD2F712060A500001C420 /* CueGroupModel.m */; };
 		DD1861A111E65095008B4F27 /* CueTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1861A011E65095008B4F27 /* CueTimeCell.m */; };
 		DD18642011E73700008B4F27 /* LightCueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18641F11E73700008B4F27 /* LightCueModel.m */; };
-		DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2E85D011C572EF00B3EFF3 /* CueTableView.m */; };
+		DD2DBA68127833A6001C58AC /* libprotobuf.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2DBA67127833A6001C58AC /* libprotobuf.dylib */; };
+		DD2DBA6A127833B3001C58AC /* libola.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2DBA69127833B3001C58AC /* libola.dylib */; };
+		DD2DBA6C127833C0001C58AC /* libolacommon.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2DBA6B127833C0001C58AC /* libolacommon.dylib */; };
+		DD2DBA7112783413001C58AC /* OlaController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD2DBA7012783413001C58AC /* OlaController.mm */; };
+		DD3A08331208C1C100250889 /* NSArray_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A082D1208C1C100250889 /* NSArray_Extensions.m */; };
+		DD3A08341208C1C100250889 /* NSTreeController_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A082E1208C1C100250889 /* NSTreeController_Extensions.m */; };
+		DD3A08351208C1C100250889 /* NSTreeNode_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A082F1208C1C100250889 /* NSTreeNode_Extensions.m */; };
+		DD3A08361208C1C100250889 /* NSIndexPath_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A08301208C1C100250889 /* NSIndexPath_Extensions.m */; };
+		DD3A08371208C1C100250889 /* ESTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A08311208C1C100250889 /* ESTreeController.m */; };
+		DD3A08381208C1C100250889 /* ESOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3A08321208C1C100250889 /* ESOutlineView.m */; };
 		DD3A368312036BDC00797754 /* followArrow1.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368012036BDC00797754 /* followArrow1.png */; };
 		DD3A368412036BDC00797754 /* followArrow2.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368112036BDC00797754 /* followArrow2.png */; };
 		DD3A368512036BDC00797754 /* followArrow3.png in Resources */ = {isa = PBXBuildFile; fileRef = DD3A368212036BDC00797754 /* followArrow3.png */; };
@@ -46,8 +55,18 @@
 		DD3E886011EFAF1100442BA7 /* orangeDot.PNG in Resources */ = {isa = PBXBuildFile; fileRef = DD3E885D11EFAF1100442BA7 /* orangeDot.PNG */; };
 		DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */; };
 		DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */; };
-		DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD85425911F4A43F00D9A974 /* SerialDeviceController.m */; };
+		DD40BFFE12722FA30049E253 /* followTableArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = DD40BFFD12722FA30049E253 /* followTableArrow.png */; };
+		DD40C0F012724A740049E253 /* NSTreeController-DMExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD40C0EF12724A740049E253 /* NSTreeController-DMExtensions.m */; };
+		DD7E1A6A127F4E5C00B1D735 /* DmxController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD7E1A69127F4E5C00B1D735 /* DmxController.mm */; };
+		DD7E1AF9127F59CE00B1D735 /* OlaConfigurator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7E1AF8127F59CE00B1D735 /* OlaConfigurator.cpp */; };
+		DD7E1B05127F5A3900B1D735 /* ola-artnet.h in Sources */ = {isa = PBXBuildFile; fileRef = DD7E1B04127F5A3900B1D735 /* ola-artnet.h */; };
+		DD7E1B3D127F5C3800B1D735 /* libolaartnetconf.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7E1B3C127F5C3800B1D735 /* libolaartnetconf.dylib */; };
+		DD7E1B41127F5C4D00B1D735 /* libolausbproconf.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7E1B40127F5C4D00B1D735 /* libolausbproconf.dylib */; };
+		DD7E1B52127F5D2900B1D735 /* ola-usbpro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7E1B51127F5D2900B1D735 /* ola-usbpro.cpp */; };
+		DD7E1C7912800A6C00B1D735 /* ApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DD7E1C7812800A6C00B1D735 /* ApplicationDelegate.m */; };
 		DD85427C11F4A67A00D9A974 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD85427B11F4A67A00D9A974 /* IOKit.framework */; };
+		DD8BB8CA1274889700EE51C7 /* CueFollowCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8BB8C91274889700EE51C7 /* CueFollowCell.m */; };
+		DD8BB9F61274B41D00EE51C7 /* NSManagedObjectContext-Category.m in Sources */ = {isa = PBXBuildFile; fileRef = DD8BB9F51274B41D00EE51C7 /* NSManagedObjectContext-Category.m */; };
 		DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
 		DDA7030611C2764100132DB5 /* BWToolkitFramework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */; };
 		DDA7031A11C276C200132DB5 /* DeviceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7031911C276C200132DB5 /* DeviceView.m */; };
@@ -63,6 +82,7 @@
 		DDB3292511FC8DD500168794 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB3292411FC8DD500168794 /* GraphView.m */; };
 		DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */; };
 		DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC035A811CBD49B005EBCC6 /* CueController.m */; };
+		DDC182AC120866A4005C3BB0 /* MainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC182AB120866A4005C3BB0 /* MainWindow.m */; };
 		DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */; };
 		DDF2BFF511FDBD0C00928748 /* GraphCueAreaView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF2BFF411FDBD0C00928748 /* GraphCueAreaView.m */; };
 /* End PBXBuildFile section */
@@ -117,8 +137,23 @@
 		DD1861A011E65095008B4F27 /* CueTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTimeCell.m; sourceTree = "<group>"; };
 		DD18641E11E73700008B4F27 /* LightCueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightCueModel.h; sourceTree = "<group>"; };
 		DD18641F11E73700008B4F27 /* LightCueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LightCueModel.m; sourceTree = "<group>"; };
-		DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableView.h; sourceTree = "<group>"; };
-		DD2E85D011C572EF00B3EFF3 /* CueTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableView.m; sourceTree = "<group>"; };
+		DD2DBA67127833A6001C58AC /* libprotobuf.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libprotobuf.dylib; path = usr/local/lib/libprotobuf.dylib; sourceTree = SDKROOT; };
+		DD2DBA69127833B3001C58AC /* libola.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libola.dylib; path = usr/local/lib/libola.dylib; sourceTree = SDKROOT; };
+		DD2DBA6B127833C0001C58AC /* libolacommon.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libolacommon.dylib; path = usr/local/lib/libolacommon.dylib; sourceTree = SDKROOT; };
+		DD2DBA6F12783413001C58AC /* OlaController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OlaController.h; sourceTree = "<group>"; };
+		DD2DBA7012783413001C58AC /* OlaController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OlaController.mm; sourceTree = "<group>"; };
+		DD3A08271208C1BB00250889 /* NSArray_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArray_Extensions.h; sourceTree = "<group>"; };
+		DD3A08281208C1BB00250889 /* NSTreeController_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTreeController_Extensions.h; sourceTree = "<group>"; };
+		DD3A08291208C1BB00250889 /* NSIndexPath_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSIndexPath_Extensions.h; sourceTree = "<group>"; };
+		DD3A082A1208C1BB00250889 /* NSTreeNode_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTreeNode_Extensions.h; sourceTree = "<group>"; };
+		DD3A082B1208C1BB00250889 /* ESTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESTreeController.h; sourceTree = "<group>"; };
+		DD3A082C1208C1BB00250889 /* ESOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESOutlineView.h; sourceTree = "<group>"; };
+		DD3A082D1208C1C100250889 /* NSArray_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSArray_Extensions.m; path = ../../../Downloads/SortedTree/NSArray_Extensions.m; sourceTree = SOURCE_ROOT; };
+		DD3A082E1208C1C100250889 /* NSTreeController_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTreeController_Extensions.m; path = ../../../Downloads/SortedTree/NSTreeController_Extensions.m; sourceTree = SOURCE_ROOT; };
+		DD3A082F1208C1C100250889 /* NSTreeNode_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTreeNode_Extensions.m; path = ../../../Downloads/SortedTree/NSTreeNode_Extensions.m; sourceTree = SOURCE_ROOT; };
+		DD3A08301208C1C100250889 /* NSIndexPath_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSIndexPath_Extensions.m; path = ../../../Downloads/SortedTree/NSIndexPath_Extensions.m; sourceTree = SOURCE_ROOT; };
+		DD3A08311208C1C100250889 /* ESTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESTreeController.m; path = ../../../Downloads/SortedTree/ESTreeController.m; sourceTree = SOURCE_ROOT; };
+		DD3A08321208C1C100250889 /* ESOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESOutlineView.m; path = ../../../Downloads/SortedTree/ESOutlineView.m; sourceTree = SOURCE_ROOT; };
 		DD3A368012036BDC00797754 /* followArrow1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow1.png; path = Resources/followArrow1.png; sourceTree = "<group>"; };
 		DD3A368112036BDC00797754 /* followArrow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow2.png; path = Resources/followArrow2.png; sourceTree = "<group>"; };
 		DD3A368212036BDC00797754 /* followArrow3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followArrow3.png; path = Resources/followArrow3.png; sourceTree = "<group>"; };
@@ -139,10 +174,25 @@
 		DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueDeviceRelationModel.m; sourceTree = "<group>"; };
 		DD3E8A5611F2150800442BA7 /* CueTableTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueTableTextCell.h; sourceTree = "<group>"; };
 		DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueTableTextCell.m; sourceTree = "<group>"; };
-		DD85425811F4A43F00D9A974 /* SerialDeviceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerialDeviceController.h; sourceTree = "<group>"; };
-		DD85425911F4A43F00D9A974 /* SerialDeviceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerialDeviceController.m; sourceTree = "<group>"; };
-		DD85426111F4A54700D9A974 /* pro_driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pro_driver.h; sourceTree = "<group>"; };
+		DD40BFFD12722FA30049E253 /* followTableArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = followTableArrow.png; path = Resources/followTableArrow.png; sourceTree = "<group>"; };
+		DD40C0EE12724A740049E253 /* NSTreeController-DMExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController-DMExtensions.h"; sourceTree = "<group>"; };
+		DD40C0EF12724A740049E253 /* NSTreeController-DMExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController-DMExtensions.m"; sourceTree = "<group>"; };
+		DD7E1A68127F4E5C00B1D735 /* DmxController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DmxController.h; sourceTree = "<group>"; };
+		DD7E1A69127F4E5C00B1D735 /* DmxController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DmxController.mm; sourceTree = "<group>"; };
+		DD7E1AF7127F59CE00B1D735 /* OlaConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OlaConfigurator.h; sourceTree = "<group>"; };
+		DD7E1AF8127F59CE00B1D735 /* OlaConfigurator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OlaConfigurator.cpp; sourceTree = "<group>"; };
+		DD7E1B04127F5A3900B1D735 /* ola-artnet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ola-artnet.h"; sourceTree = "<group>"; };
+		DD7E1B3C127F5C3800B1D735 /* libolaartnetconf.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libolaartnetconf.dylib; path = /usr/local/lib/libolaartnetconf.dylib; sourceTree = "<absolute>"; };
+		DD7E1B40127F5C4D00B1D735 /* libolausbproconf.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libolausbproconf.dylib; path = /usr/local/lib/libolausbproconf.dylib; sourceTree = "<absolute>"; };
+		DD7E1B50127F5D2900B1D735 /* ola-usbpro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ola-usbpro.h"; sourceTree = "<group>"; };
+		DD7E1B51127F5D2900B1D735 /* ola-usbpro.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ola-usbpro.cpp"; sourceTree = "<group>"; };
+		DD7E1C7712800A6C00B1D735 /* ApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationDelegate.h; sourceTree = "<group>"; };
+		DD7E1C7812800A6C00B1D735 /* ApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationDelegate.m; sourceTree = "<group>"; };
 		DD85427B11F4A67A00D9A974 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		DD8BB8C81274889700EE51C7 /* CueFollowCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueFollowCell.h; sourceTree = "<group>"; };
+		DD8BB8C91274889700EE51C7 /* CueFollowCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueFollowCell.m; sourceTree = "<group>"; };
+		DD8BB9F41274B41D00EE51C7 /* NSManagedObjectContext-Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext-Category.h"; sourceTree = "<group>"; };
+		DD8BB9F51274B41D00EE51C7 /* NSManagedObjectContext-Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext-Category.m"; sourceTree = "<group>"; };
 		DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BWToolkitFramework.framework; sourceTree = "<group>"; };
 		DDA7031811C276C200132DB5 /* DeviceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceView.h; sourceTree = "<group>"; };
 		DDA7031911C276C200132DB5 /* DeviceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceView.m; sourceTree = "<group>"; };
@@ -171,6 +221,8 @@
 		DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFormatter.h; sourceTree = "<group>"; };
 		DDC035A711CBD49B005EBCC6 /* CueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueController.h; sourceTree = "<group>"; };
 		DDC035A811CBD49B005EBCC6 /* CueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueController.m; sourceTree = "<group>"; };
+		DDC182AA120866A4005C3BB0 /* MainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
+		DDC182AB120866A4005C3BB0 /* MainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainWindow.m; sourceTree = "<group>"; };
 		DDF0AB0611EB538C002729B4 /* CueDevicePropertyRelationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueDevicePropertyRelationModel.h; sourceTree = "<group>"; };
 		DDF0AB0711EB538C002729B4 /* CueDevicePropertyRelationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueDevicePropertyRelationModel.m; sourceTree = "<group>"; };
 		DDF2BFF311FDBD0C00928748 /* GraphCueAreaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphCueAreaView.h; sourceTree = "<group>"; };
@@ -185,6 +237,11 @@
 				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
 				DDA702CE11C275F900132DB5 /* BWToolkitFramework.framework in Frameworks */,
 				DD85427C11F4A67A00D9A974 /* IOKit.framework in Frameworks */,
+				DD2DBA68127833A6001C58AC /* libprotobuf.dylib in Frameworks */,
+				DD2DBA6A127833B3001C58AC /* libola.dylib in Frameworks */,
+				DD2DBA6C127833C0001C58AC /* libolacommon.dylib in Frameworks */,
+				DD7E1B3D127F5C3800B1D735 /* libolaartnetconf.dylib in Frameworks */,
+				DD7E1B41127F5C4D00B1D735 /* libolausbproconf.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,9 +291,14 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				DD85425711F4A42F00D9A974 /* SerialDevice */,
+				DD7E1A71127F50F200B1D735 /* OLA */,
+				DD2DBA6F12783413001C58AC /* OlaController.h */,
+				DD2DBA7012783413001C58AC /* OlaController.mm */,
 				2A37F4AEFDCFA73011CA2CEA /* ShowDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* ShowDocument.m */,
+				DD3A08211208C1A100250889 /* Helpers */,
+				DDC182AA120866A4005C3BB0 /* MainWindow.h */,
+				DDC182AB120866A4005C3BB0 /* MainWindow.m */,
 				DDA7043511C2829200132DB5 /* ViewController.h */,
 				DDA7043611C2829200132DB5 /* ViewController.m */,
 				DD18641C11E736D1008B4F27 /* Cue */,
@@ -250,6 +312,8 @@
 				DDC0334911CBABB9005EBCC6 /* TimeFormatter.h */,
 				DDC0334811CBABB9005EBCC6 /* TimeFormatter.m */,
 				DD3A39C41205A4B700797754 /* PasteboardTypes.h */,
+				DD7E1C7712800A6C00B1D735 /* ApplicationDelegate.h */,
+				DD7E1C7812800A6C00B1D735 /* ApplicationDelegate.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -269,6 +333,7 @@
 				DD3A37C1120377DD00797754 /* prewait_01.png */,
 				DD3A37C2120377DD00797754 /* prewait_02.png */,
 				DD3A37C3120377DD00797754 /* prewait_03.png */,
+				DD40BFFD12722FA30049E253 /* followTableArrow.png */,
 				DD3A368012036BDC00797754 /* followArrow1.png */,
 				DD3A368112036BDC00797754 /* followArrow2.png */,
 				DD3A368212036BDC00797754 /* followArrow3.png */,
@@ -291,6 +356,11 @@
 				DDA702CD11C275F900132DB5 /* BWToolkitFramework.framework */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
+				DD2DBA67127833A6001C58AC /* libprotobuf.dylib */,
+				DD2DBA69127833B3001C58AC /* libola.dylib */,
+				DD2DBA6B127833C0001C58AC /* libolacommon.dylib */,
+				DD7E1B3C127F5C3800B1D735 /* libolaartnetconf.dylib */,
+				DD7E1B40127F5C4D00B1D735 /* libolausbproconf.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -321,10 +391,8 @@
 				DDC035A811CBD49B005EBCC6 /* CueController.m */,
 				DD3A39B01205A2F000797754 /* CueOutlineView.h */,
 				DD3A39B11205A2F000797754 /* CueOutlineView.m */,
-				DD2E85CF11C572EF00B3EFF3 /* CueTableView.h */,
-				DD2E85D011C572EF00B3EFF3 /* CueTableView.m */,
-				DD18619F11E65095008B4F27 /* CueTimeCell.h */,
-				DD1861A011E65095008B4F27 /* CueTimeCell.m */,
+				DD3A3B1E1205BF9900797754 /* CueTreeController.h */,
+				DD3A3B1F1205BF9900797754 /* CueTreeController.m */,
 				DD3A38CF1204348E00797754 /* CueModel.h */,
 				DD3A38D01204348E00797754 /* CueModel.m */,
 				DD18641E11E73700008B4F27 /* LightCueModel.h */,
@@ -337,20 +405,49 @@
 				DD3E892B11F0507D00442BA7 /* CueDeviceRelationModel.m */,
 				DD3E8A5611F2150800442BA7 /* CueTableTextCell.h */,
 				DD3E8A5711F2150800442BA7 /* CueTableTextCell.m */,
-				DD3A3B1E1205BF9900797754 /* CueTreeController.h */,
-				DD3A3B1F1205BF9900797754 /* CueTreeController.m */,
+				DD18619F11E65095008B4F27 /* CueTimeCell.h */,
+				DD1861A011E65095008B4F27 /* CueTimeCell.m */,
+				DD8BB8C81274889700EE51C7 /* CueFollowCell.h */,
+				DD8BB8C91274889700EE51C7 /* CueFollowCell.m */,
 			);
 			name = Cue;
 			sourceTree = "<group>";
 		};
-		DD85425711F4A42F00D9A974 /* SerialDevice */ = {
+		DD3A08211208C1A100250889 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				DD85426111F4A54700D9A974 /* pro_driver.h */,
-				DD85425811F4A43F00D9A974 /* SerialDeviceController.h */,
-				DD85425911F4A43F00D9A974 /* SerialDeviceController.m */,
+				DD3A08271208C1BB00250889 /* NSArray_Extensions.h */,
+				DD3A08281208C1BB00250889 /* NSTreeController_Extensions.h */,
+				DD3A08291208C1BB00250889 /* NSIndexPath_Extensions.h */,
+				DD3A082A1208C1BB00250889 /* NSTreeNode_Extensions.h */,
+				DD3A082B1208C1BB00250889 /* ESTreeController.h */,
+				DD3A082C1208C1BB00250889 /* ESOutlineView.h */,
+				DD3A082D1208C1C100250889 /* NSArray_Extensions.m */,
+				DD3A082E1208C1C100250889 /* NSTreeController_Extensions.m */,
+				DD3A082F1208C1C100250889 /* NSTreeNode_Extensions.m */,
+				DD3A08301208C1C100250889 /* NSIndexPath_Extensions.m */,
+				DD3A08311208C1C100250889 /* ESTreeController.m */,
+				DD3A08321208C1C100250889 /* ESOutlineView.m */,
+				DD40C0EE12724A740049E253 /* NSTreeController-DMExtensions.h */,
+				DD40C0EF12724A740049E253 /* NSTreeController-DMExtensions.m */,
+				DD8BB9F41274B41D00EE51C7 /* NSManagedObjectContext-Category.h */,
+				DD8BB9F51274B41D00EE51C7 /* NSManagedObjectContext-Category.m */,
 			);
-			name = SerialDevice;
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		DD7E1A71127F50F200B1D735 /* OLA */ = {
+			isa = PBXGroup;
+			children = (
+				DD7E1A68127F4E5C00B1D735 /* DmxController.h */,
+				DD7E1A69127F4E5C00B1D735 /* DmxController.mm */,
+				DD7E1AF7127F59CE00B1D735 /* OlaConfigurator.h */,
+				DD7E1AF8127F59CE00B1D735 /* OlaConfigurator.cpp */,
+				DD7E1B04127F5A3900B1D735 /* ola-artnet.h */,
+				DD7E1B50127F5D2900B1D735 /* ola-usbpro.h */,
+				DD7E1B51127F5D2900B1D735 /* ola-usbpro.cpp */,
+			);
+			name = OLA;
 			sourceTree = "<group>";
 		};
 		DDA7031611C276B000132DB5 /* Device */ = {
@@ -483,6 +580,7 @@
 				DD3A37C4120377DD00797754 /* prewait_01.png in Resources */,
 				DD3A37C5120377DD00797754 /* prewait_02.png in Resources */,
 				DD3A37C6120377DD00797754 /* prewait_03.png in Resources */,
+				DD40BFFE12722FA30049E253 /* followTableArrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +604,6 @@
 				DDA7043711C2829200132DB5 /* ViewController.m in Sources */,
 				DDA7051611C28C2100132DB5 /* DevicesController.m in Sources */,
 				DDA7055811C2908C00132DB5 /* DevicePropertyModel.m in Sources */,
-				DD2E85D111C572EF00B3EFF3 /* CueTableView.m in Sources */,
 				DD009C4911C97AE60011552A /* ThemedScroller.m in Sources */,
 				DDC0334A11CBABB9005EBCC6 /* TimeFormatter.m in Sources */,
 				DDC035A911CBD49B005EBCC6 /* CueController.m in Sources */,
@@ -515,13 +612,28 @@
 				DDF0AB0811EB538C002729B4 /* CueDevicePropertyRelationModel.m in Sources */,
 				DD3E892C11F0507D00442BA7 /* CueDeviceRelationModel.m in Sources */,
 				DD3E8A5811F2150800442BA7 /* CueTableTextCell.m in Sources */,
-				DD85425A11F4A43F00D9A974 /* SerialDeviceController.m in Sources */,
 				DDB3292511FC8DD500168794 /* GraphView.m in Sources */,
 				DDF2BFF511FDBD0C00928748 /* GraphCueAreaView.m in Sources */,
 				DD3A38D11204348E00797754 /* CueModel.m in Sources */,
 				DD3A39B21205A2F000797754 /* CueOutlineView.m in Sources */,
 				DD3A3B201205BF9900797754 /* CueTreeController.m in Sources */,
 				DD0AD2F812060A500001C420 /* CueGroupModel.m in Sources */,
+				DDC182AC120866A4005C3BB0 /* MainWindow.m in Sources */,
+				DD3A08331208C1C100250889 /* NSArray_Extensions.m in Sources */,
+				DD3A08341208C1C100250889 /* NSTreeController_Extensions.m in Sources */,
+				DD3A08351208C1C100250889 /* NSTreeNode_Extensions.m in Sources */,
+				DD3A08361208C1C100250889 /* NSIndexPath_Extensions.m in Sources */,
+				DD3A08371208C1C100250889 /* ESTreeController.m in Sources */,
+				DD3A08381208C1C100250889 /* ESOutlineView.m in Sources */,
+				DD40C0F012724A740049E253 /* NSTreeController-DMExtensions.m in Sources */,
+				DD8BB8CA1274889700EE51C7 /* CueFollowCell.m in Sources */,
+				DD8BB9F61274B41D00EE51C7 /* NSManagedObjectContext-Category.m in Sources */,
+				DD2DBA7112783413001C58AC /* OlaController.mm in Sources */,
+				DD7E1A6A127F4E5C00B1D735 /* DmxController.mm in Sources */,
+				DD7E1AF9127F59CE00B1D735 /* OlaConfigurator.cpp in Sources */,
+				DD7E1B05127F5A3900B1D735 /* ola-artnet.h in Sources */,
+				DD7E1B52127F5D2900B1D735 /* ola-usbpro.cpp in Sources */,
+				DD7E1C7912800A6C00B1D735 /* ApplicationDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,12 +721,13 @@
 		26FC0AAA0875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
@@ -626,10 +739,11 @@
 		26FC0AAB0875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;

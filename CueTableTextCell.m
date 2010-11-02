@@ -10,8 +10,7 @@
 
 
 @implementation CueTableTextCell
-@synthesize followBoxSegment;
-
+/*
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView{
 	if(followBoxSegment > 0){
 		NSRect drawSquare = cellFrame;
@@ -59,5 +58,5 @@
 	}
 	
 }
-
+*/
 @end

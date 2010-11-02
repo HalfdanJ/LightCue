@@ -8,10 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import <BWToolkitFramework/BWToolkitFramework.h>
+#import "CueController.h"
 
 @interface ShowDocument : NSPersistentDocument {
 	IBOutlet NSArrayController * devicesArrayController;
 	IBOutlet NSArrayController * groupsArrayController;
+	
+	IBOutlet CueController * cueController;
 }
 
 @end

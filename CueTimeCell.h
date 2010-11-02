@@ -13,7 +13,9 @@
 	BOOL running;
 	double runningTime;
 	double totalTime;
+	BOOL hidden;
 }
+@property (readwrite) BOOL hidden;
 @property (readwrite) BOOL running;
 @property (readwrite)double runningTime;
 @property (readwrite)double totalTime;

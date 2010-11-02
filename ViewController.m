@@ -15,8 +15,6 @@
 -(void)awakeFromNib{
 	[devicesCollectionView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
 	[groupsCollectionView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
-	
-
 }
 
 - (BOOL)collectionView:(NSCollectionView *)cv writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard

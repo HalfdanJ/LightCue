@@ -10,7 +10,7 @@
 
 @class DeviceModel;
 @class LightCueModel;
-
+@class CueModel;
 
 @interface DevicePropertyModel : NSManagedObject {
 	//For easy binding, simply a link to the selected cue in the cue list
@@ -27,9 +27,13 @@
 	//YES if the device is used in a cue that is currently running
 	BOOL isRunning;
 	
-
+	//User has changed the value, and not saved it yet
+	BOOL unsavedChanges;
+	
+	NSNumber * restoreOutputValue;
+	
 }
-
+//The user set value
 -(float)floatValue;
 
 //Finds a cueDevicePropertyRelation for the cue if one
@@ -40,22 +44,24 @@
 
 
 //tracks the property backwards from the cue to find the first occurance, and returns the value
-- (NSNumber*) valueInCue:(LightCueModel*)cue;
+- (NSNumber*) valueInCue:(CueModel*)cue;
 
 //Returns if the property is being set in the cue (Blue color)
-- (BOOL) propertySetInCue:(LightCueModel*)cue;
+- (BOOL) propertySetInCue:(CueModel*)cue;
 
 //Returns if the property is being set in the cue, and is currently live  (Yellow color)
-- (BOOL) propertyLiveInCue:(LightCueModel*)cue;
+- (BOOL) propertyLiveInCue:(CueModel*)cue;
 
 //Clears the value (for deselection)
 - (void) clear;
 
-//set the value, and creates relations to the selected cue etc...
+//set the value from the dim changer
 - (void) setValueAndProcess:(NSNumber *)val;
 
-@property (readwrite, retain) LightCueModel * selectedCue;
-@property (readwrite, retain) LightCueModel * activeCue;
+- (void) storeValue;
+
+@property (readwrite, retain) CueModel * selectedCue;
+@property (readwrite, retain) CueModel * activeCue;
 
 
 @property (readonly, retain) NSNumber* valueInSelectedCue;
@@ -70,6 +76,8 @@
 @property (readwrite, retain) NSManagedObject * lastModifier;
 @property (readwrite, retain) NSManagedObject * mutexHolder;
 @property (readwrite) BOOL isRunning;
+@property (readwrite) BOOL unsavedChanges;
+
 
 @end
 

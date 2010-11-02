@@ -10,8 +10,5 @@
 
 
 @interface CueTableTextCell : NSTextFieldCell {
-	int followBoxSegment;
 }
-@property (readwrite) int followBoxSegment;
-
 @end

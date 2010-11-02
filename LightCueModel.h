@@ -16,30 +16,12 @@
 	double fadeDownPercent;
 }
 
-- (IBAction) go;
-- (IBAction) stop;
-
-
-- (void) startPreWait;
-- (void) startFade;
-- (void) startFadeDown;
-- (void) startPostWait;
-
-- (void)preWaitTimerFired:(NSTimer*)theTimer;
-- (void)fadeTimerFired:(NSTimer*)theTimer;
-- (void)fadeDownTimerFired:(NSTimer*)theTimer;
-- (void)postWaitTimerFired:(NSTimer*)theTimer;
-
-- (void) finishedRunning;
-- (void) performFollow;
 
 
 
 
 
-+ (NSArray *)keysToBeCopied;
-- (NSDictionary *)dictionaryRepresentation;
-- (NSString *)stringDescription;
+
 
 
 @property (readonly) BOOL running;

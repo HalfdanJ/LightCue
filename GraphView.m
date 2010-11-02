@@ -295,11 +295,11 @@
 	NSMutableArray * shownDictCues = [NSMutableArray array];
 	
 	if([cueSelection count] == 1 && [[cueSelection lastObject] isKindOfClass:[LightCueModel class]]){		
-		LightCueModel * selectedCue = [cueSelection lastObject];		
+		CueModel * selectedCue = [cueSelection lastObject];		
 		
-		LightCueModel * prevCue = selectedCue;		
-		while (prevCue != nil && [[prevCue previousCue] follow]) {
-			prevCue = [prevCue previousCue];	
+		CueModel * prevCue = selectedCue;		
+		while (prevCue != nil && [[prevCue previousRunCue] follow]) {
+			prevCue = [prevCue previousRunCue];	
 			NSMutableDictionary * prev = [NSMutableDictionary dictionary];
 			[prev setObject:prevCue forKey:@"cueModel"];
 			[shownDictCues insertObject:prev atIndex:0];
@@ -314,7 +314,7 @@
 		[shownDictCues addObject:selected];
 		
 		
-		LightCueModel * nextCue = [selectedCue nextCue];
+		CueModel * nextCue = [selectedCue nextRunCue];
 		while (nextCue != nil && [selectedCue follow]) {
 			if(nextCue != nil){
 				NSMutableDictionary * next = [NSMutableDictionary dictionary];
@@ -322,7 +322,7 @@
 				[shownDictCues addObject:next];
 			}
 			selectedCue = nextCue;
-			nextCue = [nextCue nextCue];			
+			nextCue = [nextCue nextRunCue];			
 		}
 		
 	}	

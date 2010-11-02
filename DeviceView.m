@@ -16,11 +16,12 @@
 
 @implementation DeviceView
 
-@synthesize dimmerOutputValue, dimmerValue, deviceName, selectedCue, inSelectedCue, isRunning, isLive;
+@synthesize dimmerOutputValue, dimmerValue, deviceName, selectedCue, inSelectedCue, isRunning, isLive, isChanged, dimmerValueInCue;
 
 -(void) awakeFromNib{
 	[self setFrame:NSMakeRect(0, 0, VIEW_SIZE, VIEW_SIZE)];
 	deviceNumber = 0;
+	dimmerOutputValue = [NSNumber numberWithInt:0];
 }
 
 
@@ -44,8 +45,7 @@
 	
 	
 	NSColor * dimColor = [NSColor colorWithDeviceRed:56/255.0 green:117/255.0 blue:215/255.0 alpha:0.5];
-	NSColor * greenColor = [NSColor colorWithDeviceRed:15/255.0 green:215/255.0 blue:0/255.0 alpha:1];
-	
+	NSColor * greenColor = [NSColor colorWithDeviceRed:15/255.0 green:215/255.0 blue:0/255.0 alpha:1];	
 	NSColor * orangeColor = [NSColor colorWithDeviceRed:255/255.0 green:210/255.0 blue:0/255.0 alpha:1];
 	
 	
@@ -80,11 +80,14 @@
 	
 	
 	//
-	// Output value background
+	// cue value background
 	//
 	
 	NSBezierPath* dimBackgroundPath = [NSBezierPath bezierPathWithRect:NSMakeRect(VIEW_SIZE*(2.0/3.0), PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2))];	
 	[[NSColor colorWithCalibratedWhite:0.17 alpha:1.0] set];	
+	if(inSelectedCue){
+		[[dimColor colorWithAlphaComponent:0.2] set];
+	}
 	[dimBackgroundPath fill];
 	
 	
@@ -93,40 +96,41 @@
 	//
 	
 	if(dimmerValue != nil){
-		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE*2.0/3.0-PADDING, (VIEW_SIZE-PADDING*2)*[dimmerValue floatValue]/255)];	
+		float val = [dimmerValue floatValue];
+		if(!isChanged){
+			[[[NSColor whiteColor] colorWithAlphaComponent:0.3] set];	
+			val = [dimmerOutputValue floatValue];
+
+		}  else {
+			[[orangeColor colorWithAlphaComponent:0.4] set];
+		} 
+		if(isRunning){
+			[[greenColor colorWithAlphaComponent:0.85] set];				
+		}
 		
-		/*if(inSelectedCue){
-		 NSBezierPath* dimSelectionLines = [NSBezierPath bezierPath];	
-		 for(int i=0;i<100;i+=5){
-		 [dimSelectionLines moveToPoint:NSMakePoint(0, i)];
-		 [dimSelectionLines lineToPoint:NSMakePoint(i,0)];				
-		 }
-		 
-		 [[[NSColor whiteColor] colorWithAlphaComponent:0.3] set];	
-		 [dimSelectionLines stroke];
-		 }*/
+		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(PADDING, PADDING, VIEW_SIZE*2.0/3.0-PADDING, (VIEW_SIZE-PADDING*2)*val/255)];	
 		
-		[[[NSColor whiteColor] colorWithAlphaComponent:0.3] set];	
 		[dimPath fill];
 		
-		if(inSelectedCue){
+		/*if(inSelectedCue){
 			[[dimColor colorWithAlphaComponent:0.4] set];
 			[dimPath fill];			
-		}		
+		}*/		
 	}
 	
 	
 	//
-	//Device output dim
+	//Device cue dim
 	//
 	
-	if(dimmerOutputValue != nil){		
-		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(VIEW_SIZE*(2.0/3.0), PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerOutputValue floatValue]/255)];	
-		if(isRunning){
-			[[greenColor colorWithAlphaComponent:0.85] set];				
-		} else if(isLive){
+	if(dimmerValueInCue != nil){		
+		NSBezierPath* dimPath = [NSBezierPath bezierPathWithRect:NSMakeRect(VIEW_SIZE*(2.0/3.0), PADDING, VIEW_SIZE-PADDING*2, (VIEW_SIZE-PADDING*2)*[dimmerValueInCue floatValue]/255)];	
+		if(inSelectedCue){
+			[[dimColor colorWithAlphaComponent:0.65] set];
+		}
+		/*else if(isLive){
 			[[orangeColor colorWithAlphaComponent:0.65] set];					
-		} else {
+		}*/ else {
 			[[NSColor colorWithCalibratedWhite:0.3 alpha:1.0]set];	
 		}		
 		[dimPath fill];
@@ -170,12 +174,20 @@
 	 
 	 }
 	 else*/ 
-	if(inSelectedCue){
+	/*if(inSelectedCue){
 		strokeColor = dimColor;
 		baseAlpha = 0.8;
 		overAlpa = 1.0;
 		selectedAlpha = 1.0;
 		[boundryPath setLineWidth:3.0];		 
+	}*/
+	
+	if(isChanged){
+		strokeColor = orangeColor;
+		baseAlpha = 0.6;
+		overAlpa = 1.0;
+		selectedAlpha = 1.0;
+		[boundryPath setLineWidth:2.0];		 
 	}
 	
 	[[strokeColor colorWithAlphaComponent:baseAlpha] set];		
@@ -246,6 +258,10 @@
 	[self setNeedsDisplay:YES];
 }
 
+-(void) setDimmerValueInCue:(NSNumber *)v{
+	dimmerValueInCue = v;
+	[self setNeedsDisplay:YES];
+}
 
 -(void) setDimmerOutputValue:(NSNumber *)v{
 	dimmerOutputValue = v ;
@@ -282,6 +298,11 @@
 	[self setNeedsDisplay:YES];	
 }
 
+-(void) setIsChanged:(BOOL)b{
+	isChanged = b;
+	[self setNeedsDisplay:YES];
+}
+
 @end
 
 
@@ -293,9 +314,6 @@
 
 @implementation DeviceViewItem
 
-- (void) awakeFromNib {
-}
-
 -(void) setRepresentedObject:(id)representedObject{
 	if(representedObject == nil)
 		return;
@@ -304,13 +322,16 @@
 	DeviceView * devview = (DeviceView*)[self view];
 		
 	[devview bind:@"deviceNumber" toObject:representedObject withKeyPath:@"deviceNumber" options:nil];
-	[devview bind:@"dimmerValue" toObject:representedObject withKeyPath:@"dimmer.valueInSelectedCue" options:nil];
+	[devview bind:@"dimmerValue" toObject:representedObject withKeyPath:@"dimmer.value" options:nil];
+	[devview bind:@"dimmerValueInCue" toObject:representedObject withKeyPath:@"dimmer.valueInSelectedCue" options:nil];
 	[devview bind:@"dimmerOutputValue" toObject:representedObject withKeyPath:@"dimmer.outputValue" options:nil];
 	[devview bind:@"deviceName" toObject:representedObject withKeyPath:@"name" options:nil];
 	[devview bind:@"selectedCue" toObject:representedObject withKeyPath:@"selectedCue" options:nil];
 	[devview bind:@"inSelectedCue" toObject:representedObject withKeyPath:@"propertySetInSelectedCue" options:nil];
 	[devview bind:@"isRunning" toObject:representedObject withKeyPath:@"isRunning" options:nil];
 	[devview bind:@"isLive" toObject:representedObject withKeyPath:@"dimmer.propertyLiveInSelectedCue" options:nil];
+	[devview bind:@"isChanged" toObject:representedObject withKeyPath:@"dimmer.unsavedChanges" options:nil];
+	
 	
 }
 
@@ -321,12 +342,8 @@
 }
 
 - (void)setSelected:(BOOL)flag {
-	
     [super setSelected: flag];
 	[((DeviceView*)[self view]) setSelected:flag];
-	
-	
-	
 }
 
 

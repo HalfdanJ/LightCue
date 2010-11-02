@@ -58,11 +58,34 @@
 @property (nonatomic, retain) NSNumber * fadeDownTime;
 @property (nonatomic, retain) CueModel * parent;
 
+
 //Usefull functions
 - (double) duration;
 - (BOOL) running;
 
+- (IBAction) go;
+- (IBAction) stop;
 
+-(int)childCount;
+-(NSArray*) childrenFlattened;
+	
++ (NSArray *)keysToBeCopied;
+- (NSDictionary *)dictionaryRepresentation;
+- (NSString *)stringDescription;
+
+- (void) startPreWait;
+- (void) startFade;
+- (void) startFadeDown;
+- (void) startPostWait;
+- (void) finishedRunning;
+- (void) performFollow;
+
+- (void)preWaitTimerFired:(NSTimer*)theTimer;
+- (void)fadeTimerFired:(NSTimer*)theTimer;
+- (void)fadeDownTimerFired:(NSTimer*)theTimer;
+- (void)postWaitTimerFired:(NSTimer*)theTimer;
+
+-(BOOL) isGroup;
 
 - (BOOL)follow;
 - (void)setFollow:(BOOL)value;
@@ -70,5 +93,7 @@
 - (CueModel*) nextCue;
 - (CueModel*) previousCue;
 
-@end
+- (CueModel*) nextRunCue;
+- (CueModel*) previousRunCue;
 
+@end

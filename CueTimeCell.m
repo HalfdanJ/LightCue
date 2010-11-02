@@ -12,6 +12,8 @@
 @implementation CueTimeCell
 
 @synthesize running, runningTime, totalTime;
+@synthesize hidden;
+
 
 //-(void) setObjectValue:(id)obj{		
 //	NSLog(@"Set obj value %@",obj);
@@ -42,32 +44,34 @@
 
 
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView{
-	[super drawWithFrame:cellFrame inView:controlView];
-	
-	if([self running]){
+	if(!hidden){
 		
-		NSBezierPath* thePath = [NSBezierPath bezierPath];	
-		NSRect frameRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+1, cellFrame.size.width, cellFrame.size.height-4);
-		[thePath appendBezierPathWithRect:frameRect];
+		[super drawWithFrame:cellFrame inView:controlView];
 		
-		[thePath setLineWidth:1];
-		
-		[[NSColor greenColor] set];	
-		[thePath stroke];
-		
-		if([[self objectValue] doubleValue] > 0){
-			NSBezierPath* thePath2 = [NSBezierPath bezierPath];	
-			NSRect frameRect2 = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+1, cellFrame.size.width*(1-(totalTime-runningTime)/totalTime), cellFrame.size.height-4);
-			[thePath2 appendBezierPathWithRect:frameRect2];
+		if([self running]){
 			
+			NSBezierPath* thePath = [NSBezierPath bezierPath];	
+			NSRect frameRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+1, cellFrame.size.width, cellFrame.size.height-4);
+			[thePath appendBezierPathWithRect:frameRect];
 			
-			//Fill
-			[[[NSColor greenColor] colorWithAlphaComponent:00.4] set];	
+			[thePath setLineWidth:1];
 			
-			[thePath2 fill];
+			[[NSColor greenColor] set];	
+			[thePath stroke];
 			
+			if([[self objectValue] doubleValue] > 0){
+				NSBezierPath* thePath2 = [NSBezierPath bezierPath];	
+				NSRect frameRect2 = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y+1, cellFrame.size.width*(1-(totalTime-runningTime)/totalTime), cellFrame.size.height-4);
+				[thePath2 appendBezierPathWithRect:frameRect2];
+				
+				
+				//Fill
+				[[[NSColor greenColor] colorWithAlphaComponent:00.4] set];	
+				
+				[thePath2 fill];
+				
+			}
 		}
 	}
-	
 }
 @end
